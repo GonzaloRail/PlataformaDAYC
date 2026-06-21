@@ -1,0 +1,195 @@
+.gdq-display {
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.gdq-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.gdq-icon {
+  font-size: 2.5rem;
+}
+
+.gdq-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.gdq-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gdq-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.gdq-label-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.gdq-age-info {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.age-label {
+  color: #6b7280;
+}
+
+.age-value {
+  font-weight: 600;
+  color: #111827;
+}
+
+.gdq-bar {
+  margin-bottom: 1rem;
+}
+
+.gdq-bar-track {
+  position: relative;
+  height: 12px;
+  background: linear-gradient(to right, 
+    #dc2626 0%, 
+    #dc2626 53%, 
+    #fbbf24 53%, 
+    #fbbf24 60%, 
+    #22c55e 60%, 
+    #22c55e 73%, 
+    #22c55e 100%
+  );
+  border-radius: 6px;
+  margin-bottom: 0.25rem;
+}
+
+.gdq-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px 0 0 6px;
+}
+
+.gdq-bar-marker {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 20px;
+  background: white;
+}
+
+.gdq-bar-marker.gdq-80 { left: 53%; }
+.gdq-bar-marker.gdq-90 { left: 60%; }
+.gdq-bar-marker.gdq-110 { left: 73%; }
+
+.gdq-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.625rem;
+  color: #9ca3af;
+}
+
+.gdq-text-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.gdq-exceptional .gdq-number,
+.gdq-exceptional .gdq-label-text { color: #7c3aed; }
+.gdq-superior .gdq-number,
+.gdq-superior .gdq-label-text { color: #059669; }
+.gdq-average .gdq-number,
+.gdq-average .gdq-label-text { color: #2563eb; }
+.gdq-low .gdq-number,
+.gdq-low .gdq-label-text { color: #d97706; }
+.gdq-very-low .gdq-number,
+.gdq-very-low .gdq-label-text { color: #dc2626; }
+
+.gdq-card {
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.gdq-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gdq-card .gdq-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.gdq-card .gdq-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.gdq-card .gdq-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.gdq-card.gdq-exceptional { border-color: #7c3aed; background: #f5f3ff; }
+.gdq-card.gdq-exceptional .gdq-value { color: #7c3aed; }
+
+.gdq-card.gdq-superior { border-color: #059669; background: #ecfdf5; }
+.gdq-card.gdq-superior .gdq-value { color: #059669; }
+
+.gdq-card.gdq-average { border-color: #2563eb; background: #eff6ff; }
+.gdq-card.gdq-average .gdq-value { color: #2563eb; }
+
+.gdq-card.gdq-low { border-color: #d97706; background: #fffbeb; }
+.gdq-card.gdq-low .gdq-value { color: #d97706; }
+
+.gdq-card.gdq-very-low { border-color: #dc2626; background: #fef2f2; }
+.gdq-card.gdq-very-low .gdq-value { color: #dc2626; }
+
+.gdq-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.gdq-badge-value {
+  font-weight: 700;
+}
+
+.gdq-badge-label {
+  font-weight: 500;
+}
+
+.gdq-badge.gdq-exceptional { background: #f5f3ff; color: #7c3aed; }
+.gdq-badge.gdq-superior { background: #ecfdf5; color: #059669; }
+.gdq-badge.gdq-average { background: #eff6ff; color: #2563eb; }
+.gdq-badge.gdq-low { background: #fffbeb; color: #d97706; }
+.gdq-badge.gdq-very-low { background: #fef2f2; color: #dc2626; }

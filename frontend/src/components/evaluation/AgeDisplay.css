@@ -1,0 +1,136 @@
+.age-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.age-main {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.age-icon {
+  font-size: 1.25rem;
+}
+
+.age-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.age-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.age-breakdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.age-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+}
+
+.unit-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.unit-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.age-separator {
+  font-size: 1.25rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.age-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.meta-item {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.meta-label {
+  color: #6b7280;
+}
+
+.meta-value {
+  font-weight: 600;
+  color: #111827;
+}
+
+.meta-category {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.category-early {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.category-preschool {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.category-late {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.school {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.age-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  background: #f3f4f6;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.age-badge-icon {
+  font-size: 0.875rem;
+}
+
+.age-badge-text {
+  font-weight: 500;
+  color: #374151;
+}
+
+.age-compact {
+  font-weight: 500;
+  color: #374151;
+}

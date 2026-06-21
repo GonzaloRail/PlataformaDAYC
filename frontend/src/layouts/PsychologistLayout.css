@@ -1,0 +1,175 @@
+.psych-shell {
+  --psych-sidebar-width: 292px;
+  --psych-topbar-height: 78px;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: var(--psych-sidebar-width) minmax(0, 1fr);
+  background: transparent;
+}
+
+.psych-shell.sidebar-collapsed { --psych-sidebar-width: 96px; }
+
+.psych-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.05rem;
+  border-right: 1px solid rgba(255,255,255,0.56);
+  background:
+    linear-gradient(180deg, rgba(255,250,244,0.84), rgba(232,246,244,0.84)),
+    radial-gradient(circle at 30% 0%, rgba(255,138,101,0.18), transparent 18rem);
+  backdrop-filter: blur(24px);
+  box-shadow: 18px 0 44px rgba(24, 50, 71, 0.08);
+  z-index: 50;
+}
+
+.psych-sidebar-top { display: flex; align-items: flex-start; gap: 0.65rem; }
+
+.psych-sidebar-brand {
+  flex: 1;
+  padding: 1rem;
+  border: 1px solid rgba(255,255,255,0.74);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.64);
+  box-shadow: var(--shadow-xs);
+}
+
+.psych-sidebar-brand h1 {
+  margin: 0.25rem 0 0;
+  font-size: 1.18rem;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--color-matisse-900);
+  font-weight: 1000;
+}
+
+.psych-layout-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--color-accent-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 1000;
+}
+
+.psych-sidebar-collapse {
+  min-width: 42px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,0.76);
+  background: rgba(255,255,255,0.64);
+}
+
+.psych-nav { display: flex; flex-direction: column; gap: 0.48rem; }
+
+.psych-nav-link {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.72rem;
+  padding: 0.72rem 0.84rem;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  color: var(--color-matisse-800);
+  text-decoration: none;
+  font-weight: 950;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+
+.psych-nav-link:hover {
+  transform: translateX(3px);
+  background: rgba(255,255,255,0.58);
+  border-color: rgba(24,50,71,0.08);
+}
+
+.psych-nav-link.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), #0b4653);
+  border-color: rgba(15,107,122,0.28);
+  box-shadow: 0 18px 36px rgba(15, 107, 122, 0.22);
+}
+
+.sidebar-collapsed .psych-sidebar-brand h1,
+.sidebar-collapsed .psych-layout-kicker,
+.sidebar-collapsed .psych-nav-link span,
+.sidebar-collapsed .psych-sidebar-footer { display: none; }
+
+.sidebar-collapsed .psych-sidebar-top { justify-content: center; }
+.sidebar-collapsed .psych-sidebar-brand { display: none; }
+.sidebar-collapsed .psych-nav-link { justify-content: center; padding: 0.76rem; }
+
+.psych-sidebar-footer {
+  margin-top: auto;
+  border: 1px solid rgba(255,255,255,0.74);
+  border-radius: 22px;
+  padding: 1rem;
+  background: rgba(255,255,255,0.64);
+  box-shadow: var(--shadow-xs);
+}
+
+.psych-sidebar-user-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+
+.psych-sidebar-user-name {
+  margin: 0.28rem 0 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 950;
+  color: var(--color-matisse-900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.psych-main-area { min-width: 0; }
+
+.psych-topbar {
+  height: var(--psych-topbar-height);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 0.85rem 1.35rem;
+  border-bottom: 1px solid rgba(255,255,255,0.62);
+  background: rgba(255, 250, 244, 0.62);
+  backdrop-filter: blur(20px);
+}
+
+.psych-topbar-context { min-width: 0; }
+.psych-topbar-kicker { margin: 0; font-size: 0.72rem; font-weight: 950; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent-strong); }
+.psych-topbar-title { margin: 0.18rem 0 0; font-size: 1.1rem; font-weight: 1000; letter-spacing: -0.02em; color: var(--color-matisse-900); }
+.psych-layout-main { min-width: 0; }
+.psych-menu-toggle { display: none; }
+.psych-sidebar-backdrop { display: none; }
+
+@media (max-width: 1100px) {
+  .psych-shell { grid-template-columns: minmax(0, 1fr); }
+  .psych-shell.sidebar-collapsed { --psych-sidebar-width: 292px; }
+  .psych-sidebar { position: fixed; left: 0; transform: translateX(-104%); transition: transform 200ms ease; width: min(84vw, var(--psych-sidebar-width)); box-shadow: var(--shadow-lg); }
+  .psych-sidebar.open { transform: translateX(0); }
+  .sidebar-collapsed .psych-sidebar-brand,
+  .sidebar-collapsed .psych-layout-kicker,
+  .sidebar-collapsed .psych-nav-link span,
+  .sidebar-collapsed .psych-sidebar-footer { display: revert; }
+  .sidebar-collapsed .psych-sidebar-top { justify-content: flex-start; }
+  .sidebar-collapsed .psych-nav-link { justify-content: flex-start; padding: 0.72rem 0.84rem; }
+  .psych-menu-toggle { display: inline-flex; }
+  .psych-sidebar-collapse { display: none; }
+  .psych-sidebar-backdrop { position: fixed; inset: 0; border: none; background: rgba(24, 50, 71, 0.36); display: block; z-index: 45; }
+}
+
+@media (max-width: 760px) {
+  .psych-topbar { --psych-topbar-height: 82px; height: var(--psych-topbar-height); padding: 0.7rem 0.9rem; }
+}

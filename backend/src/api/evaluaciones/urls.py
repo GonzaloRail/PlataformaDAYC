@@ -1,0 +1,36 @@
+"""URL configuration for evaluaciones API"""
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.crear_evaluación, name='crear_evaluación'),
+    path('join/', views.join_evaluación, name='join_evaluación'),
+    path('session/<str:session_code>/state/', views.session_state, name='session_state'),
+    path('session/<str:session_code>/complete-child-data/', views.complete_child_data, name='complete_child_data'),
+    path('session/<str:session_code>/consent/', views.accept_consent, name='accept_consent'),
+    path('session/<str:session_code>/start/', views.start_child_session, name='start_child_session'),
+    path('session/<str:session_code>/finish/', views.finish_child_session, name='finish_child_session'),
+    path('session/<str:session_code>/current-task/', views.tarea_actual_por_session, name='tarea_actual_por_session'),
+    path('session/<str:session_code>/respuesta/', views.registrar_respuesta_por_session, name='registrar_respuesta_por_session'),
+    path('<uuid:pk>/', views.detalle_evaluación, name='detalle_evaluación'),
+    path('<uuid:pk>/current-task/', views.tarea_actual, name='tarea_actual'),
+    path('<uuid:pk>/respuesta/', views.registrar_respuesta, name='registrar_respuesta'),
+    path('<uuid:pk>/items/<str:item_id>/auto-result/', views.registrar_auto_result, name='registrar_auto_result'),
+    path('<uuid:pk>/items/<str:item_id>/events/', views.registrar_evento_item, name='registrar_evento_item'),
+    path('<uuid:pk>/items/<str:item_id>/evidence/', views.manejar_evidencia_item, name='manejar_evidencia_item'),
+    path('evidencias/<uuid:evidence_id>/download/', views.descargar_evidencia, name='descargar_evidencia'),
+    path('<uuid:pk>/review/', views.review_overview, name='review_overview'),
+    path('<uuid:pk>/review/pending/', views.review_pending, name='review_pending'),
+    path('<uuid:pk>/items/<str:item_id>/review/', views.review_item, name='review_item'),
+    path('<uuid:pk>/review/complete/', views.review_complete, name='review_complete'),
+    path('<uuid:pk>/respuestas/', views.listar_respuestas, name='listar_respuestas'),
+    path('<uuid:pk>/progress/', views.progreso_evaluación, name='progreso_evaluación'),
+    path('<uuid:pk>/score/', views.calcular_puntuación, name='calcular_puntuación'),
+    path('<uuid:pk>/score/preliminary/', views.calcular_puntuación_preliminar, name='calcular_puntuación_preliminar'),
+    path('<uuid:pk>/score/validated/', views.calcular_puntuación_validada, name='calcular_puntuación_validada'),
+    path('<uuid:pk>/score/comparison/', views.comparación_resultados, name='comparación_resultados'),
+    path('<uuid:pk>/reporte-pdf/', views.reporte_pdf, name='reporte_pdf'),
+    path('<uuid:pk>/resultados/', views.listar_resultados, name='listar_resultados'),
+    path('<uuid:pk>/resultados/<uuid:rid>/', views.ajustar_resultado, name='ajustar_resultado'),
+    path('<uuid:pk>/reglas-status/', views.reglas_status, name='reglas_status'),
+]

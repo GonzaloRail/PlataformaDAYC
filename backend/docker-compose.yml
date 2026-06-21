@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    container_name: prototipo_dayc_db
+    restart: always
+    environment:
+      POSTGRES_DB: prototipo_dayc
+      POSTGRES_USER: gonzalo123
+      POSTGRES_PASSWORD: gonzalo123
+    ports:
+      - "5433:5432"
+    volumes:
+      - prototipo_dayc_data:/var/lib/postgresql/data
+
+volumes:
+  prototipo_dayc_data:

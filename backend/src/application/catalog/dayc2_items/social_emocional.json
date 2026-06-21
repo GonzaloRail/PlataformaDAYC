@@ -1,0 +1,538 @@
+[
+  {
+    "id": "SOCIAL_EMOCIONAL_030",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 30,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se separa de sus padres en ambiente familiar sin llorar",
+    "descripcion_general": "Se separa de sus padres en ambiente familiar sin llorar"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_031",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 31,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Canta canciones familiares con un adulto",
+    "descripcion_general": "Canta canciones familiares con un adulto"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_032",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 32,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Saluda espontáneamente a persona familiar",
+    "descripcion_general": "Saluda espontáneamente a persona familiar"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_033",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 33,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Usualmente sabe esperar su turno",
+    "descripcion_general": "Usualmente sabe esperar su turno"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_034",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 34,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "En grupo realiza actividad solitaria observando a otros",
+    "descripcion_general": "En grupo realiza actividad solitaria observando a otros"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_035",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 35,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se ríe ante combinaciones de eventos incongruentes",
+    "descripcion_general": "Se ríe ante combinaciones de eventos incongruentes"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_036",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 36,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Pide ayuda cuando tiene dificultad",
+    "descripcion_general": "Pide ayuda cuando tiene dificultad"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_037",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 37,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se muestra orgulloso de sus realizaciones",
+    "descripcion_general": "Se muestra orgulloso de sus realizaciones"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_038",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 38,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Afirma si es niño o niña",
+    "descripcion_general": "Afirma si es niño o niña"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_039",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 39,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Juega en juegos grupales con reglas simples",
+    "descripcion_general": "Juega en juegos grupales con reglas simples"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_040",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 40,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Juega a disfrazarse",
+    "descripcion_general": "Juega a disfrazarse"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_041",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 41,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Llama la atención repitiendo rimas, canciones o bailes",
+    "descripcion_general": "Llama la atención repitiendo rimas, canciones o bailes"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_042",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 42,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Habla de sus propios sentimientos",
+    "descripcion_general": "Habla de sus propios sentimientos"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_043",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 43,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Cambia de actividad cuando lo indica profesor o padre",
+    "descripcion_general": "Cambia de actividad cuando lo indica profesor o padre"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_044",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 44,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Selecciona sus propios amigos",
+    "descripcion_general": "Selecciona sus propios amigos"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_045",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 45,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Espera su turno en juegos grupales",
+    "descripcion_general": "Espera su turno en juegos grupales"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_046",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 46,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Conoce y sigue las reglas del salón de clase",
+    "descripcion_general": "Conoce y sigue las reglas del salón de clase"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_047",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 47,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Obtiene atención de compañeros de manera apropiada",
+    "descripcion_general": "Obtiene atención de compañeros de manera apropiada"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_048",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 48,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Comprende las reglas de un juego justo",
+    "descripcion_general": "Comprende las reglas de un juego justo"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_049",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 49,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Gusta de los juegos competitivos",
+    "descripcion_general": "Gusta de los juegos competitivos"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_050",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 50,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Explica las reglas de juego a otros",
+    "descripcion_general": "Explica las reglas de juego a otros"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_051",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 51,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Pide antes de levantar pertenencias de otros",
+    "descripcion_general": "Pide antes de levantar pertenencias de otros"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_052",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 52,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Acepta bromas suaves sin inquietarse demasiado",
+    "descripcion_general": "Acepta bromas suaves sin inquietarse demasiado"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_053",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 53,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Trabaja solo en actividad doméstica 20–30 minutos",
+    "descripcion_general": "Trabaja solo en actividad doméstica 20–30 minutos"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_054",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 54,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Expresa enojo con palabras, no con acción física",
+    "descripcion_general": "Expresa enojo con palabras, no con acción física"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_055",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 55,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Establece una meta y realiza la actividad",
+    "descripcion_general": "Establece una meta y realiza la actividad"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_056",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 56,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Acepta crítica válida sin llorar ni rehusarse",
+    "descripcion_general": "Acepta crítica válida sin llorar ni rehusarse"
+  },
+  {
+    "id": "SOCIAL_EMOCIONAL_057",
+    "area": "SOCIAL_EMOCIONAL",
+    "numero": 57,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Responde al teléfono y recuerda un mensaje simple",
+    "descripcion_general": "Responde al teléfono y recuerda un mensaje simple"
+  }
+]

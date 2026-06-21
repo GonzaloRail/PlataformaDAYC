@@ -1,0 +1,22 @@
+.view-state {
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+  display: grid;
+  gap: 0.8rem;
+  place-items: center;
+}
+
+.view-state-loading {
+  background: #f8fafc;
+}
+
+.view-state-empty {
+  background: #faf7ef;
+}
+
+.view-state-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+}

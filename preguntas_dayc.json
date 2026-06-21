@@ -1,0 +1,1817 @@
+{
+  "Cognitivo": [
+    {
+      "item": 1,
+      "mes": "0m+",
+      "pregunta": "Mueve la mano hacia la boca"
+    },
+    {
+      "item": 2,
+      "mes": "0m+",
+      "pregunta": "Observa objeto que se mueve dentro de su línea de visión"
+    },
+    {
+      "item": 3,
+      "mes": "0m+",
+      "pregunta": "Mira de acá para allá entre dos objetos"
+    },
+    {
+      "item": 4,
+      "mes": "0m+",
+      "pregunta": "Sostiene juguete en la mano 10-15 segundos"
+    },
+    {
+      "item": 5,
+      "mes": "0m+",
+      "pregunta": "Echa mirada alternativa mano–objeto o mano–mano"
+    },
+    {
+      "item": 6,
+      "mes": "0m+",
+      "pregunta": "Repite movimientos de brazo/pierna para provocar una acción"
+    },
+    {
+      "item": 7,
+      "mes": "0m+",
+      "pregunta": "Se pone los juguetes a la boca"
+    },
+    {
+      "item": 8,
+      "mes": "0m+",
+      "pregunta": "Explora objetos de diversas maneras (visual, tácil, golpeando)"
+    },
+    {
+      "item": 9,
+      "mes": "0m+",
+      "pregunta": "Jala la ropa de su cara"
+    },
+    {
+      "item": 10,
+      "mes": "0m+",
+      "pregunta": "Imita acciones familiares después de que el cuidador las hace"
+    },
+    {
+      "item": 11,
+      "mes": "0m+",
+      "pregunta": "Encuentra un objeto parcialmente oculto"
+    },
+    {
+      "item": 12,
+      "mes": "0m+",
+      "pregunta": "Intencionalmente deja caer un objeto y observa cómo cae"
+    },
+    {
+      "item": 13,
+      "mes": "0m+",
+      "pregunta": "Recupera objeto escondido debajo o detrás de una barrera"
+    },
+    {
+      "item": 14,
+      "mes": "0m+",
+      "pregunta": "Toca al adulto para que continúe un juego o acción"
+    },
+    {
+      "item": 15,
+      "mes": "12m+",
+      "pregunta": "Transfiere objeto de una mano a otra para coger uno nuevo"
+    },
+    {
+      "item": 16,
+      "mes": "12m+",
+      "pregunta": "Da un objeto a un adulto para que repita una acción"
+    },
+    {
+      "item": 17,
+      "mes": "12m+",
+      "pregunta": "Imita el garabateo"
+    },
+    {
+      "item": 18,
+      "mes": "12m+",
+      "pregunta": "Demuestra entendimiento de relaciones funcionales"
+    },
+    {
+      "item": 19,
+      "mes": "12m+",
+      "pregunta": "Intenta hacer funcionar un juguete después de ver a alguien"
+    },
+    {
+      "item": 20,
+      "mes": "24m+",
+      "pregunta": "Hace demostraciones de acciones cotidianas (pretende tomar de una taza)"
+    },
+    {
+      "item": 21,
+      "mes": "24m+",
+      "pregunta": "Coloca objeto pequeño dentro de un depósito pequeño"
+    },
+    {
+      "item": 22,
+      "mes": "24m+",
+      "pregunta": "Hace rodar juguetes que tienen ruedas"
+    },
+    {
+      "item": 23,
+      "mes": "24m+",
+      "pregunta": "Maneja 3-4 juguetes, ubica los anteriores cuando llega uno nuevo"
+    },
+    {
+      "item": 24,
+      "mes": "24m+",
+      "pregunta": "Mira figuras de cuentos nombrando o señalando objetos"
+    },
+    {
+      "item": 25,
+      "mes": "24m+",
+      "pregunta": "Espontáneamente nombra objetos"
+    },
+    {
+      "item": 26,
+      "mes": "24m+",
+      "pregunta": "Empareja un objeto con su figura"
+    },
+    {
+      "item": 27,
+      "mes": "24m+",
+      "pregunta": "Realiza secuencias de acción en el juego"
+    },
+    {
+      "item": 28,
+      "mes": "24m+",
+      "pregunta": "Usa objetos pretendidos en el juego"
+    },
+    {
+      "item": 29,
+      "mes": "24m+",
+      "pregunta": "Comprende 'uno' y 'todo'"
+    },
+    {
+      "item": 30,
+      "mes": "36m+",
+      "pregunta": "Apila de 6 a 7 cubos"
+    },
+    {
+      "item": 31,
+      "mes": "36m+",
+      "pregunta": "Empareja formas simples: círculo, cuadrado, triángulo"
+    },
+    {
+      "item": 32,
+      "mes": "36m+",
+      "pregunta": "Responde a 'uno' y 'uno más'"
+    },
+    {
+      "item": 33,
+      "mes": "36m+",
+      "pregunta": "Coloca medidas graduadas en orden (cajas, anillos por tamaño)"
+    },
+    {
+      "item": 34,
+      "mes": "36m+",
+      "pregunta": "Empareja objetos por color, forma y medida"
+    },
+    {
+      "item": 35,
+      "mes": "36m+",
+      "pregunta": "Repite juegos de dedos con palabras y acciones"
+    },
+    {
+      "item": 36,
+      "mes": "36m+",
+      "pregunta": "Cuenta de memoria hasta 5"
+    },
+    {
+      "item": 37,
+      "mes": "36m+",
+      "pregunta": "Empareja objetos de la misma función"
+    },
+    {
+      "item": 38,
+      "mes": "36m+",
+      "pregunta": "Dice si un objeto es 'pesado' o 'liviano'"
+    },
+    {
+      "item": 39,
+      "mes": "36m+",
+      "pregunta": "Cuenta más de 5 objetos"
+    },
+    {
+      "item": 40,
+      "mes": "36m+",
+      "pregunta": "Construye puente con 3 cubos: según modelo"
+    },
+    {
+      "item": 41,
+      "mes": "36m+",
+      "pregunta": "Comprende 'igual' y 'diferente'"
+    },
+    {
+      "item": 42,
+      "mes": "36m+",
+      "pregunta": "Clasifica objetos por un criterio (forma o color)"
+    },
+    {
+      "item": 43,
+      "mes": "36m+",
+      "pregunta": "Comprende el concepto del número 3"
+    },
+    {
+      "item": 44,
+      "mes": "36m+",
+      "pregunta": "Comprende 'más', 'menos', 'igual'"
+    },
+    {
+      "item": 45,
+      "mes": "48m+",
+      "pregunta": "Imita el dibujo de una cara"
+    },
+    {
+      "item": 46,
+      "mes": "48m+",
+      "pregunta": "Clasifica objetos en categorías (juguetes, animales)"
+    },
+    {
+      "item": 47,
+      "mes": "48m+",
+      "pregunta": "Identifica objetos que no pertenecen a un grupo"
+    },
+    {
+      "item": 48,
+      "mes": "48m+",
+      "pregunta": "Conoce secuencia de lectura: izq-der, arriba-abajo"
+    },
+    {
+      "item": 49,
+      "mes": "48m+",
+      "pregunta": "Clasifica objetos considerando más de una forma"
+    },
+    {
+      "item": 50,
+      "mes": "48m+",
+      "pregunta": "Construye pirámide de 6 cubos: según modelo"
+    },
+    {
+      "item": 51,
+      "mes": "48m+",
+      "pregunta": "Identifica 'primero', 'último', 'al medio'"
+    },
+    {
+      "item": 52,
+      "mes": "48m+",
+      "pregunta": "Narra historia de un libro de figuras"
+    },
+    {
+      "item": 53,
+      "mes": "48m+",
+      "pregunta": "Identifica el más grande de dos números"
+    },
+    {
+      "item": 54,
+      "mes": "48m+",
+      "pregunta": "Dibuja figura de palotes"
+    },
+    {
+      "item": 55,
+      "mes": "48m+",
+      "pregunta": "Identifica características abstractas (vivo/no vivo, real/creencia)"
+    },
+    {
+      "item": 56,
+      "mes": "48m+",
+      "pregunta": "Copia su propio nombre"
+    },
+    {
+      "item": 57,
+      "mes": "48m+",
+      "pregunta": "Predice lo que ocurrirá en la historia"
+    },
+    {
+      "item": 58,
+      "mes": "5a+",
+      "pregunta": "Señala objetos a la 'mitad' o 'completos'"
+    },
+    {
+      "item": 59,
+      "mes": "5a+",
+      "pregunta": "Nombra la mayoría de las letras del abecedario"
+    },
+    {
+      "item": 60,
+      "mes": "5a+",
+      "pregunta": "Coloca tres figuras en secuencia para contar historia"
+    },
+    {
+      "item": 61,
+      "mes": "5a+",
+      "pregunta": "Empareja número de ítems con serie de números exactos"
+    },
+    {
+      "item": 62,
+      "mes": "5a+",
+      "pregunta": "Comprende el concepto de 'cero'"
+    },
+    {
+      "item": 63,
+      "mes": "5a+",
+      "pregunta": "Dibuja persona con 6 partes reconocibles"
+    },
+    {
+      "item": 64,
+      "mes": "5a+",
+      "pregunta": "Escribe primer nombre en forma legible"
+    },
+    {
+      "item": 65,
+      "mes": "5a+",
+      "pregunta": "Dibuja objetos identificables sin modelo"
+    },
+    {
+      "item": 66,
+      "mes": "5a+",
+      "pregunta": "Cuenta hasta 20 objetos"
+    },
+    {
+      "item": 67,
+      "mes": "5a+",
+      "pregunta": "Dice el mes y el día de su nacimiento"
+    },
+    {
+      "item": 68,
+      "mes": "5a+",
+      "pregunta": "Ordena cartas numeradas en secuencia"
+    },
+    {
+      "item": 69,
+      "mes": "5a+",
+      "pregunta": "Dice el nombre de su calle y su ciudad"
+    },
+    {
+      "item": 70,
+      "mes": "5a+",
+      "pregunta": "Nombra los días de la semana en orden"
+    },
+    {
+      "item": 71,
+      "mes": "5a+",
+      "pregunta": "Sabe los días que anteceden y siguen"
+    },
+    {
+      "item": 72,
+      "mes": "5a+",
+      "pregunta": "Señala el nombre de las monedas"
+    },
+    {
+      "item": 73,
+      "mes": "5a+",
+      "pregunta": "Sabe los números que anteceden y siguen"
+    },
+    {
+      "item": 74,
+      "mes": "5a+",
+      "pregunta": "Escribe su nombre y apellido de memoria"
+    },
+    {
+      "item": 75,
+      "mes": "5a+",
+      "pregunta": "Calcula problemas de adición y sustracción de un dígito"
+    },
+    {
+      "item": 76,
+      "mes": "5a+",
+      "pregunta": "Cuenta de memoria del 1 al 100"
+    },
+    {
+      "item": 77,
+      "mes": "5a+",
+      "pregunta": "Escribe números del 1 al 19 sin modelo"
+    },
+    {
+      "item": 78,
+      "mes": "5a+",
+      "pregunta": "Lee diez palabras impresas"
+    }
+  ],
+  "Comunicación": [
+    {
+      "item": 1,
+      "mes": "0m+",
+      "pregunta": "Reacciona a ruidos fuertes (parpadeo, movimiento, quietud)"
+    },
+    {
+      "item": 2,
+      "mes": "0m+",
+      "pregunta": "Voltea la cabeza hacia la voz cuando le hablan"
+    },
+    {
+      "item": 3,
+      "mes": "0m+",
+      "pregunta": "Hace ruidos además de llorar (arrullar, gorgotear)"
+    },
+    {
+      "item": 4,
+      "mes": "0m+",
+      "pregunta": "Sonríe a la persona que está hablando o haciendo gestos"
+    },
+    {
+      "item": 5,
+      "mes": "0m+",
+      "pregunta": "Produce gorgoteo vocal en respuesta a voz tranquilizante"
+    },
+    {
+      "item": 6,
+      "mes": "0m+",
+      "pregunta": "Tiene diferentes llantos para dolor, hambre e incomodidad"
+    },
+    {
+      "item": 7,
+      "mes": "0m+",
+      "pregunta": "Produce sonidos de vocales aisladas (ah, eh, uh)"
+    },
+    {
+      "item": 8,
+      "mes": "0m+",
+      "pregunta": "Ríe en alta voz"
+    },
+    {
+      "item": 9,
+      "mes": "0m+",
+      "pregunta": "Produce consonantes /k/, /g/, /h/"
+    },
+    {
+      "item": 10,
+      "mes": "0m+",
+      "pregunta": "Voltea a mirar hacia el ruido"
+    },
+    {
+      "item": 11,
+      "mes": "0m+",
+      "pregunta": "Produce el sonido de dos sílabas repetidamente (a-ba, da-da)"
+    },
+    {
+      "item": 12,
+      "mes": "0m+",
+      "pregunta": "Se detiene en su actividad cuando lo llaman por su nombre"
+    },
+    {
+      "item": 13,
+      "mes": "0m+",
+      "pregunta": "Produce consonantes /b/, /m/, /w/, /d/, /n/, /r/"
+    },
+    {
+      "item": 14,
+      "mes": "0m+",
+      "pregunta": "Responde con gestos apropiados a 'arriba', 'adiós', u otras rutinas"
+    },
+    {
+      "item": 15,
+      "mes": "12m+",
+      "pregunta": "Se detiene brevemente cuando le dicen 'no'"
+    },
+    {
+      "item": 16,
+      "mes": "12m+",
+      "pregunta": "Produce uniones de consonantes dobles (ba-ba, da-da)"
+    },
+    {
+      "item": 17,
+      "mes": "12m+",
+      "pregunta": "Usa patrones de inflexión al vocalizar (tono de pregunta)"
+    },
+    {
+      "item": 18,
+      "mes": "12m+",
+      "pregunta": "Mueve el cuerpo cuando hay música"
+    },
+    {
+      "item": 19,
+      "mes": "12m+",
+      "pregunta": "Dice 'mamá' o 'papá' en forma discriminada"
+    },
+    {
+      "item": 20,
+      "mes": "12m+",
+      "pregunta": "Localiza objetos familiares cuando se le solicita"
+    },
+    {
+      "item": 21,
+      "mes": "12m+",
+      "pregunta": "Sigue órdenes habladas simples"
+    },
+    {
+      "item": 22,
+      "mes": "12m+",
+      "pregunta": "Señala personas familiares, animales y juguetes cuando se le pregunta"
+    },
+    {
+      "item": 23,
+      "mes": "12m+",
+      "pregunta": "Responde a preguntas sobre 'dónde'"
+    },
+    {
+      "item": 24,
+      "mes": "12m+",
+      "pregunta": "Sigue direcciones para ubicar objeto 'dentro' o 'sobre'"
+    },
+    {
+      "item": 25,
+      "mes": "12m+",
+      "pregunta": "Usa una palabra o sonido para pedir (ej. para beber)"
+    },
+    {
+      "item": 26,
+      "mes": "12m+",
+      "pregunta": "Usa espontáneamente saludos o despedidas"
+    },
+    {
+      "item": 27,
+      "mes": "12m+",
+      "pregunta": "Cumple instrucciones dobles relacionadas"
+    },
+    {
+      "item": 28,
+      "mes": "12m+",
+      "pregunta": "Señala 3 partes del cuerpo cuando se le solicita"
+    },
+    {
+      "item": 29,
+      "mes": "12m+",
+      "pregunta": "Dice una palabra que expresa un pensamiento completo"
+    },
+    {
+      "item": 30,
+      "mes": "24m+",
+      "pregunta": "Usa por lo menos 5 palabras espontáneamente"
+    },
+    {
+      "item": 31,
+      "mes": "24m+",
+      "pregunta": "Identifica personajes u objetos vistos en TV"
+    },
+    {
+      "item": 32,
+      "mes": "24m+",
+      "pregunta": "Rechaza algo diciendo 'no'"
+    },
+    {
+      "item": 33,
+      "mes": "24m+",
+      "pregunta": "Identifica 'sí' o 'no' en respuesta a preguntas"
+    },
+    {
+      "item": 34,
+      "mes": "24m+",
+      "pregunta": "Conoce los nombres de sus compañeros de juego"
+    },
+    {
+      "item": 35,
+      "mes": "24m+",
+      "pregunta": "Comprende los posesivos ('mío', 'tuyo', 'suyo')"
+    },
+    {
+      "item": 36,
+      "mes": "24m+",
+      "pregunta": "Produce algunas frases de dos palabras"
+    },
+    {
+      "item": 37,
+      "mes": "24m+",
+      "pregunta": "Señala 6 partes del cuerpo cuando se le pregunta"
+    },
+    {
+      "item": 38,
+      "mes": "24m+",
+      "pregunta": "Señala 15 o más figuras de objetos comunes cuando se les nombra"
+    },
+    {
+      "item": 39,
+      "mes": "24m+",
+      "pregunta": "Usa de 10 a 15 palabras espontáneamente"
+    },
+    {
+      "item": 40,
+      "mes": "24m+",
+      "pregunta": "Susurra"
+    },
+    {
+      "item": 41,
+      "mes": "24m+",
+      "pregunta": "Nombra 8 o más figuras de objetos familiares"
+    },
+    {
+      "item": 42,
+      "mes": "24m+",
+      "pregunta": "Señala objetos comunes descritos por su uso"
+    },
+    {
+      "item": 43,
+      "mes": "24m+",
+      "pregunta": "Distingue 'grande' y 'pequeño'"
+    },
+    {
+      "item": 44,
+      "mes": "24m+",
+      "pregunta": "Lleva a cabo órdenes dobles no relacionadas"
+    },
+    {
+      "item": 45,
+      "mes": "36m+",
+      "pregunta": "Cumple instrucciones con 'al lado' o 'debajo'"
+    },
+    {
+      "item": 46,
+      "mes": "36m+",
+      "pregunta": "Usa por lo menos 50 palabras distintas espontáneamente"
+    },
+    {
+      "item": 47,
+      "mes": "36m+",
+      "pregunta": "Usa oraciones con tres palabras"
+    },
+    {
+      "item": 48,
+      "mes": "36m+",
+      "pregunta": "Demuestra entendimiento de oraciones pasivas"
+    },
+    {
+      "item": 49,
+      "mes": "36m+",
+      "pregunta": "Describe lo que está haciendo"
+    },
+    {
+      "item": 50,
+      "mes": "48m+",
+      "pregunta": "Hace preguntas con 'qué' o 'dónde'"
+    },
+    {
+      "item": 51,
+      "mes": "48m+",
+      "pregunta": "Usa algunos plurales"
+    },
+    {
+      "item": 52,
+      "mes": "48m+",
+      "pregunta": "Dice si dos palabras riman"
+    },
+    {
+      "item": 53,
+      "mes": "48m+",
+      "pregunta": "Responde a preguntas sobre 'quién' y 'de quién'"
+    },
+    {
+      "item": 54,
+      "mes": "48m+",
+      "pregunta": "Da su nombre completo cuando se le pregunta"
+    },
+    {
+      "item": 55,
+      "mes": "48m+",
+      "pregunta": "Hace preguntas con 'cuándo', 'por qué', 'cuántos'"
+    },
+    {
+      "item": 56,
+      "mes": "48m+",
+      "pregunta": "Comprende 'enfrente de' y 'detrás'"
+    },
+    {
+      "item": 57,
+      "mes": "48m+",
+      "pregunta": "Cambia de conversación dependiendo del oyente"
+    },
+    {
+      "item": 58,
+      "mes": "48m+",
+      "pregunta": "Usa de 300 a 1000 palabras espontáneamente"
+    },
+    {
+      "item": 59,
+      "mes": "48m+",
+      "pregunta": "Sigue órdenes de 3 pasos no relacionados"
+    },
+    {
+      "item": 60,
+      "mes": "48m+",
+      "pregunta": "Completa analogías verbales simples"
+    },
+    {
+      "item": 61,
+      "mes": "48m+",
+      "pregunta": "Usa comparativos (grande, más grande, el más grande)"
+    },
+    {
+      "item": 62,
+      "mes": "48m+",
+      "pregunta": "Define 2 palabras simples"
+    },
+    {
+      "item": 63,
+      "mes": "48m+",
+      "pregunta": "Hace oraciones de causa y efecto"
+    },
+    {
+      "item": 64,
+      "mes": "48m+",
+      "pregunta": "Responde a '¿Qué pasa si...'"
+    },
+    {
+      "item": 65,
+      "mes": "48m+",
+      "pregunta": "Define 5 palabras simples"
+    },
+    {
+      "item": 66,
+      "mes": "48m+",
+      "pregunta": "Cuenta historias familiares sin guiarse por figuras"
+    },
+    {
+      "item": 67,
+      "mes": "48m+",
+      "pregunta": "Responde preguntas integrales cuando se le contó una historia"
+    },
+    {
+      "item": 68,
+      "mes": "48m+",
+      "pregunta": "Define 10 palabras simples"
+    },
+    {
+      "item": 69,
+      "mes": "48m+",
+      "pregunta": "Comprende las estaciones del año y sus actividades"
+    },
+    {
+      "item": 70,
+      "mes": "48m+",
+      "pregunta": "Responde a preguntas de conceptos de tiempo"
+    },
+    {
+      "item": 71,
+      "mes": "48m+",
+      "pregunta": "Establece semejanzas y diferencias entre objetos"
+    },
+    {
+      "item": 72,
+      "mes": "48m+",
+      "pregunta": "Responde a 'Dime lo contrario de...'"
+    },
+    {
+      "item": 73,
+      "mes": "48m+",
+      "pregunta": "Cuenta bromas sencillas"
+    },
+    {
+      "item": 74,
+      "mes": "48m+",
+      "pregunta": "Identifica izquierda y derecha en su propio cuerpo"
+    },
+    {
+      "item": 75,
+      "mes": "48m+",
+      "pregunta": "Usa comparativos irregulares (bueno, mejor, lo mejor)"
+    },
+    {
+      "item": 76,
+      "mes": "48m+",
+      "pregunta": "Usa 'ayer' y 'mañana' con significado"
+    }
+  ],
+  "Social-emocional": [
+    {
+      "item": 1,
+      "mes": "0m+",
+      "pregunta": "Para de llorar cuando se le habla, levanta o conforta"
+    },
+    {
+      "item": 2,
+      "mes": "0m+",
+      "pregunta": "Mira la cara del adulto por varios segundos"
+    },
+    {
+      "item": 3,
+      "mes": "0m+",
+      "pregunta": "Interactúa sonriendo y arrullando"
+    },
+    {
+      "item": 4,
+      "mes": "0m+",
+      "pregunta": "Reconoce caras/objetos familiares y reacciona"
+    },
+    {
+      "item": 5,
+      "mes": "0m+",
+      "pregunta": "Expresa sentimientos (enojo, cansancio, excitación, hambre)"
+    },
+    {
+      "item": 6,
+      "mes": "0m+",
+      "pregunta": "Se tranquiliza (deja de llorar)"
+    },
+    {
+      "item": 7,
+      "mes": "0m+",
+      "pregunta": "Conoce diferencia entre cuidadores y extraños"
+    },
+    {
+      "item": 8,
+      "mes": "0m+",
+      "pregunta": "Juega solo por períodos cortos (5–10 segundos)"
+    },
+    {
+      "item": 9,
+      "mes": "0m+",
+      "pregunta": "Mira a la persona que dice su nombre y vocaliza"
+    },
+    {
+      "item": 10,
+      "mes": "12m+",
+      "pregunta": "Extiende los brazos a personas familiares"
+    },
+    {
+      "item": 11,
+      "mes": "12m+",
+      "pregunta": "Responde diferente a niños y adultos"
+    },
+    {
+      "item": 12,
+      "mes": "12m+",
+      "pregunta": "Imita expresiones faciales, acciones y sonidos"
+    },
+    {
+      "item": 13,
+      "mes": "12m+",
+      "pregunta": "Se reconoce en el espejo"
+    },
+    {
+      "item": 14,
+      "mes": "12m+",
+      "pregunta": "Juega juegos simples (peekaboo, aplaudir)"
+    },
+    {
+      "item": 15,
+      "mes": "12m+",
+      "pregunta": "Manifiesta ansiedad al separarse de su cuidador"
+    },
+    {
+      "item": 16,
+      "mes": "12m+",
+      "pregunta": "Expresa afecto (abrazando, acariciando, apoyando la cabeza)"
+    },
+    {
+      "item": 17,
+      "mes": "12m+",
+      "pregunta": "Dependencia especial con cuidador principal"
+    },
+    {
+      "item": 18,
+      "mes": "12m+",
+      "pregunta": "Ríe ante eventos incongruentes"
+    },
+    {
+      "item": 19,
+      "mes": "12m+",
+      "pregunta": "Rechaza terminantemente las órdenes"
+    },
+    {
+      "item": 20,
+      "mes": "24m+",
+      "pregunta": "Comienza a funcionar solo, recurre al padre por seguridad"
+    },
+    {
+      "item": 21,
+      "mes": "24m+",
+      "pregunta": "Trae juguetes para compartirlos con el cuidador"
+    },
+    {
+      "item": 22,
+      "mes": "24m+",
+      "pregunta": "Tiene dificultad para compartir con otros niños"
+    },
+    {
+      "item": 23,
+      "mes": "24m+",
+      "pregunta": "Hace rabietas cuando está frustrado"
+    },
+    {
+      "item": 24,
+      "mes": "24m+",
+      "pregunta": "Insiste en hacer cosas sin ayuda (comer, ponerse ropa)"
+    },
+    {
+      "item": 25,
+      "mes": "24m+",
+      "pregunta": "Manifiesta independencia (corre delante, rechaza la mano)"
+    },
+    {
+      "item": 26,
+      "mes": "24m+",
+      "pregunta": "Juega bien por breve tiempo en grupos de 2–3 niños"
+    },
+    {
+      "item": 27,
+      "mes": "24m+",
+      "pregunta": "Intenta consolar a otros que están angustiados"
+    },
+    {
+      "item": 28,
+      "mes": "24m+",
+      "pregunta": "Disfruta de simples creencias (juego simbólico)"
+    },
+    {
+      "item": 29,
+      "mes": "24m+",
+      "pregunta": "Dice 'por favor' y 'gracias'"
+    },
+    {
+      "item": 30,
+      "mes": "36m+",
+      "pregunta": "Se separa de sus padres en ambiente familiar sin llorar"
+    },
+    {
+      "item": 31,
+      "mes": "36m+",
+      "pregunta": "Canta canciones familiares con un adulto"
+    },
+    {
+      "item": 32,
+      "mes": "36m+",
+      "pregunta": "Saluda espontáneamente a persona familiar"
+    },
+    {
+      "item": 33,
+      "mes": "36m+",
+      "pregunta": "Usualmente sabe esperar su turno"
+    },
+    {
+      "item": 34,
+      "mes": "36m+",
+      "pregunta": "En grupo realiza actividad solitaria observando a otros"
+    },
+    {
+      "item": 35,
+      "mes": "36m+",
+      "pregunta": "Se ríe ante combinaciones de eventos incongruentes"
+    },
+    {
+      "item": 36,
+      "mes": "36m+",
+      "pregunta": "Pide ayuda cuando tiene dificultad"
+    },
+    {
+      "item": 37,
+      "mes": "36m+",
+      "pregunta": "Se muestra orgulloso de sus realizaciones"
+    },
+    {
+      "item": 38,
+      "mes": "36m+",
+      "pregunta": "Afirma si es niño o niña"
+    },
+    {
+      "item": 39,
+      "mes": "48m+",
+      "pregunta": "Juega en juegos grupales con reglas simples"
+    },
+    {
+      "item": 40,
+      "mes": "48m+",
+      "pregunta": "Juega a disfrazarse"
+    },
+    {
+      "item": 41,
+      "mes": "48m+",
+      "pregunta": "Llama la atención repitiendo rimas, canciones o bailes"
+    },
+    {
+      "item": 42,
+      "mes": "48m+",
+      "pregunta": "Habla de sus propios sentimientos"
+    },
+    {
+      "item": 43,
+      "mes": "48m+",
+      "pregunta": "Cambia de actividad cuando lo indica profesor o padre"
+    },
+    {
+      "item": 44,
+      "mes": "48m+",
+      "pregunta": "Selecciona sus propios amigos"
+    },
+    {
+      "item": 45,
+      "mes": "48m+",
+      "pregunta": "Espera su turno en juegos grupales"
+    },
+    {
+      "item": 46,
+      "mes": "48m+",
+      "pregunta": "Conoce y sigue las reglas del salón de clase"
+    },
+    {
+      "item": 47,
+      "mes": "48m+",
+      "pregunta": "Obtiene atención de compañeros de manera apropiada"
+    },
+    {
+      "item": 48,
+      "mes": "48m+",
+      "pregunta": "Comprende las reglas de un juego justo"
+    },
+    {
+      "item": 49,
+      "mes": "48m+",
+      "pregunta": "Gusta de los juegos competitivos"
+    },
+    {
+      "item": 50,
+      "mes": "48m+",
+      "pregunta": "Explica las reglas de juego a otros"
+    },
+    {
+      "item": 51,
+      "mes": "48m+",
+      "pregunta": "Pide antes de levantar pertenencias de otros"
+    },
+    {
+      "item": 52,
+      "mes": "48m+",
+      "pregunta": "Acepta bromas suaves sin inquietarse demasiado"
+    },
+    {
+      "item": 53,
+      "mes": "48m+",
+      "pregunta": "Trabaja solo en actividad doméstica 20–30 minutos"
+    },
+    {
+      "item": 54,
+      "mes": "48m+",
+      "pregunta": "Expresa enojo con palabras, no con acción física"
+    },
+    {
+      "item": 55,
+      "mes": "48m+",
+      "pregunta": "Establece una meta y realiza la actividad"
+    },
+    {
+      "item": 56,
+      "mes": "48m+",
+      "pregunta": "Acepta crítica válida sin llorar ni rehusarse"
+    },
+    {
+      "item": 57,
+      "mes": "48m+",
+      "pregunta": "Responde al teléfono y recuerda un mensaje simple"
+    }
+  ],
+  "Físico": [
+    {
+      "item": 1,
+      "mes": "0m+",
+      "pregunta": "Extiende ambas piernas cuando está de estómago"
+    },
+    {
+      "item": 2,
+      "mes": "0m+",
+      "pregunta": "Cierra los dedos al aplicar presión suave en la palma"
+    },
+    {
+      "item": 3,
+      "mes": "0m+",
+      "pregunta": "Patea recíprocamente echado de espaldas"
+    },
+    {
+      "item": 4,
+      "mes": "0m+",
+      "pregunta": "Se voltea de un lado hacia atrás"
+    },
+    {
+      "item": 5,
+      "mes": "0m+",
+      "pregunta": "Sostiene algo de su peso sobre las piernas cuando se le para"
+    },
+    {
+      "item": 6,
+      "mes": "0m+",
+      "pregunta": "Levanta la cabeza con apoyo de antebrazos (boca abajo)"
+    },
+    {
+      "item": 7,
+      "mes": "0m+",
+      "pregunta": "Mantiene la cabeza en línea con el cuerpo al sentarlo"
+    },
+    {
+      "item": 8,
+      "mes": "0m+",
+      "pregunta": "Alarga la mano pero no puede tocar el objeto"
+    },
+    {
+      "item": 9,
+      "mes": "0m+",
+      "pregunta": "Agarra objetos entre los dedos y la palma"
+    },
+    {
+      "item": 10,
+      "mes": "0m+",
+      "pregunta": "Junta las manos echado de espalda"
+    },
+    {
+      "item": 11,
+      "mes": "0m+",
+      "pregunta": "Se sienta con apoyo"
+    },
+    {
+      "item": 12,
+      "mes": "0m+",
+      "pregunta": "Se voltea de atrás hacia un lado"
+    },
+    {
+      "item": 13,
+      "mes": "0m+",
+      "pregunta": "Agarra un objeto pequeño en cada mano al mismo tiempo"
+    },
+    {
+      "item": 14,
+      "mes": "0m+",
+      "pregunta": "Alcanza con la mano y agarra un objeto"
+    },
+    {
+      "item": 15,
+      "mes": "0m+",
+      "pregunta": "Abre la mano anticipándose al contacto"
+    },
+    {
+      "item": 16,
+      "mes": "0m+",
+      "pregunta": "Se voltea de posición de espaldas a posición de estómago"
+    },
+    {
+      "item": 17,
+      "mes": "0m+",
+      "pregunta": "De estómago, extiende brazos y piernas"
+    },
+    {
+      "item": 18,
+      "mes": "0m+",
+      "pregunta": "Extiende una mano mientras sostiene peso en el otro antebrazo"
+    },
+    {
+      "item": 19,
+      "mes": "0m+",
+      "pregunta": "Echado de espaldas lleva los pies a la boca"
+    },
+    {
+      "item": 20,
+      "mes": "0m+",
+      "pregunta": "Pasa un objeto de una mano a la otra"
+    },
+    {
+      "item": 21,
+      "mes": "0m+",
+      "pregunta": "Agarra objeto usando dedos, pulgar y palma"
+    },
+    {
+      "item": 22,
+      "mes": "0m+",
+      "pregunta": "Rebota cuando está parado y lo sostiene un adulto"
+    },
+    {
+      "item": 23,
+      "mes": "0m+",
+      "pregunta": "Se sienta solo por 30 segundos mientras juega"
+    },
+    {
+      "item": 24,
+      "mes": "0m+",
+      "pregunta": "Se impulsa para sentarse agarrándose de los dedos del adulto"
+    },
+    {
+      "item": 25,
+      "mes": "0m+",
+      "pregunta": "Mueve el cuerpo para alcanzar un objeto"
+    },
+    {
+      "item": 26,
+      "mes": "0m+",
+      "pregunta": "Hace movimientos de rastrillo para recoger objeto pequeño"
+    },
+    {
+      "item": 27,
+      "mes": "0m+",
+      "pregunta": "Usa los brazos para avanzar sobre la barriga"
+    },
+    {
+      "item": 28,
+      "mes": "0m+",
+      "pregunta": "Se sienta solo firmemente sobre amplia base de apoyo"
+    },
+    {
+      "item": 29,
+      "mes": "0m+",
+      "pregunta": "Se para solo sosteniéndose de algo"
+    },
+    {
+      "item": 30,
+      "mes": "0m+",
+      "pregunta": "Desde sentado, gira 90° para recuperar un objeto"
+    },
+    {
+      "item": 31,
+      "mes": "0m+",
+      "pregunta": "Camina 3 o más pasos con ayuda"
+    },
+    {
+      "item": 32,
+      "mes": "0m+",
+      "pregunta": "Se impulsa para pararse"
+    },
+    {
+      "item": 33,
+      "mes": "0m+",
+      "pregunta": "Extiende brazos para protegerse al caerse"
+    },
+    {
+      "item": 34,
+      "mes": "0m+",
+      "pregunta": "Golpea dos objetos juntos"
+    },
+    {
+      "item": 35,
+      "mes": "12m+",
+      "pregunta": "Se impulsa hacia delante para sentarse sin ayuda"
+    },
+    {
+      "item": 36,
+      "mes": "12m+",
+      "pregunta": "Recoge objeto pequeño con pulgar e índice (pinza fina)"
+    },
+    {
+      "item": 37,
+      "mes": "12m+",
+      "pregunta": "Camina agarrándose de los muebles"
+    },
+    {
+      "item": 38,
+      "mes": "12m+",
+      "pregunta": "Persigue objeto con la mirada manteniendo posición sentado"
+    },
+    {
+      "item": 39,
+      "mes": "12m+",
+      "pregunta": "Se para o se sienta de modo controlado"
+    },
+    {
+      "item": 40,
+      "mes": "12m+",
+      "pregunta": "Empuja con el dedo índice"
+    },
+    {
+      "item": 41,
+      "mes": "12m+",
+      "pregunta": "Camina sosteniéndose de una mano"
+    },
+    {
+      "item": 42,
+      "mes": "12m+",
+      "pregunta": "Empuja o tira juguetes mientras camina"
+    },
+    {
+      "item": 43,
+      "mes": "12m+",
+      "pregunta": "Camina sin agarrarse (puede caerse fácilmente)"
+    },
+    {
+      "item": 44,
+      "mes": "12m+",
+      "pregunta": "Comienza a caminar y se detiene"
+    },
+    {
+      "item": 45,
+      "mes": "24m+",
+      "pregunta": "Se inclina parado y vuelve a erguirse sin perder equilibrio"
+    },
+    {
+      "item": 46,
+      "mes": "24m+",
+      "pregunta": "Agarra crayola empuñando con pulgar arriba"
+    },
+    {
+      "item": 47,
+      "mes": "24m+",
+      "pregunta": "Baja las gradas volteado"
+    },
+    {
+      "item": 48,
+      "mes": "24m+",
+      "pregunta": "Se agacha durante el juego"
+    },
+    {
+      "item": 49,
+      "mes": "24m+",
+      "pregunta": "Corre (o camina rápido)"
+    },
+    {
+      "item": 50,
+      "mes": "24m+",
+      "pregunta": "Garabatea espontáneamente"
+    },
+    {
+      "item": 51,
+      "mes": "24m+",
+      "pregunta": "Lanza una pelota con relativa exactitud"
+    },
+    {
+      "item": 52,
+      "mes": "24m+",
+      "pregunta": "Sube y baja gradas con dos pies en cada peldaño"
+    },
+    {
+      "item": 53,
+      "mes": "24m+",
+      "pregunta": "Agarra crayola con dedos (pulgar hacia abajo en antebrazo rotado)"
+    },
+    {
+      "item": 54,
+      "mes": "24m+",
+      "pregunta": "Usa la mano libre para sostener el papel al dibujar"
+    },
+    {
+      "item": 55,
+      "mes": "36m+",
+      "pregunta": "Camina hacia atrás"
+    },
+    {
+      "item": 56,
+      "mes": "36m+",
+      "pregunta": "Usa una mano consistentemente en la mayoría de actividades"
+    },
+    {
+      "item": 57,
+      "mes": "36m+",
+      "pregunta": "Sube gradas alternando los pies agarrándose"
+    },
+    {
+      "item": 58,
+      "mes": "36m+",
+      "pregunta": "Escala un poco con equipo de juego"
+    },
+    {
+      "item": 59,
+      "mes": "36m+",
+      "pregunta": "Imita trazos circulares, verticales y horizontales"
+    },
+    {
+      "item": 60,
+      "mes": "36m+",
+      "pregunta": "Sostiene el lápiz entre los dos primeros dedos y el pulgar"
+    },
+    {
+      "item": 61,
+      "mes": "36m+",
+      "pregunta": "Usa movimientos verticales, horizontales y circulares al dibujar"
+    },
+    {
+      "item": 62,
+      "mes": "36m+",
+      "pregunta": "Camina balanceando brazos y piernas de manera coordinada"
+    },
+    {
+      "item": 63,
+      "mes": "36m+",
+      "pregunta": "Coge la pelota bloqueándola contra el pecho"
+    },
+    {
+      "item": 64,
+      "mes": "36m+",
+      "pregunta": "Hace varios recortes de papel usando tijeras"
+    },
+    {
+      "item": 65,
+      "mes": "48m+",
+      "pregunta": "Salta de un pie varios pasos"
+    },
+    {
+      "item": 66,
+      "mes": "48m+",
+      "pregunta": "Da vuelcos (voltereta)"
+    },
+    {
+      "item": 67,
+      "mes": "48m+",
+      "pregunta": "Camina empleando talón y dedos sin perder equilibrio"
+    },
+    {
+      "item": 68,
+      "mes": "48m+",
+      "pregunta": "Copia una cruz"
+    },
+    {
+      "item": 69,
+      "mes": "48m+",
+      "pregunta": "Se balancea sobre un pie durante 5–10 segundos"
+    },
+    {
+      "item": 70,
+      "mes": "48m+",
+      "pregunta": "Salta sobre objetos de más de 6 pulgadas de alto, aterrizando con ambos pies"
+    },
+    {
+      "item": 71,
+      "mes": "48m+",
+      "pregunta": "Corta con tijeras siguiendo una línea"
+    },
+    {
+      "item": 72,
+      "mes": "48m+",
+      "pregunta": "Copia un cuadrado"
+    },
+    {
+      "item": 73,
+      "mes": "48m+",
+      "pregunta": "Copia un rectángulo"
+    },
+    {
+      "item": 74,
+      "mes": "48m+",
+      "pregunta": "Galopa guiándose con un pie y transfiriendo peso suavemente"
+    },
+    {
+      "item": 75,
+      "mes": "48m+",
+      "pregunta": "Se balancea en columpio manteniendo ímpetu con las piernas"
+    },
+    {
+      "item": 76,
+      "mes": "48m+",
+      "pregunta": "Da botes y coge la pelota de tenis"
+    },
+    {
+      "item": 77,
+      "mes": "48m+",
+      "pregunta": "Colorea dentro de las líneas"
+    },
+    {
+      "item": 78,
+      "mes": "48m+",
+      "pregunta": "Corta figuras geométricas simples con tijeras"
+    },
+    {
+      "item": 79,
+      "mes": "48m+",
+      "pregunta": "Brinca alternando los pies manteniendo equilibrio"
+    },
+    {
+      "item": 80,
+      "mes": "48m+",
+      "pregunta": "Toca rápidamente cada dedo con su pulgar"
+    },
+    {
+      "item": 81,
+      "mes": "48m+",
+      "pregunta": "Salta en un pie en línea recta sin perder equilibrio"
+    },
+    {
+      "item": 82,
+      "mes": "48m+",
+      "pregunta": "Coloca clips en el papel"
+    },
+    {
+      "item": 83,
+      "mes": "48m+",
+      "pregunta": "Da tres vuelcos consecutivos"
+    },
+    {
+      "item": 84,
+      "mes": "48m+",
+      "pregunta": "Engoma con cuidado"
+    },
+    {
+      "item": 85,
+      "mes": "48m+",
+      "pregunta": "Copia figura de diamante con líneas derechas conectadas"
+    },
+    {
+      "item": 86,
+      "mes": "48m+",
+      "pregunta": "Deja caer la pelota y la patea antes de que toque el piso"
+    },
+    {
+      "item": 87,
+      "mes": "48m+",
+      "pregunta": "Salta a la soga solo"
+    }
+  ],
+  "Adaptativo": [
+    {
+      "item": 1,
+      "mes": "0m+",
+      "pregunta": "Le gusta el baño, ojos abiertos y placer en agua tibia"
+    },
+    {
+      "item": 2,
+      "mes": "0m+",
+      "pregunta": "Abre la boca anticipándose a la alimentación al ver el pecho/botella"
+    },
+    {
+      "item": 3,
+      "mes": "0m+",
+      "pregunta": "Expresa disgusto cuando se le saca la ropa por la cabeza"
+    },
+    {
+      "item": 4,
+      "mes": "0m+",
+      "pregunta": "Duerme por intervalos de 4 a 10 horas"
+    },
+    {
+      "item": 5,
+      "mes": "0m+",
+      "pregunta": "Duerme durante la noche con 2–3 siestas de día"
+    },
+    {
+      "item": 6,
+      "mes": "0m+",
+      "pregunta": "Usa la lengua para rechazar alimentos sólidos"
+    },
+    {
+      "item": 7,
+      "mes": "0m+",
+      "pregunta": "Sostiene la botella para auto-alimentarse"
+    },
+    {
+      "item": 8,
+      "mes": "0m+",
+      "pregunta": "Cierra los labios cuando pasa los alimentos"
+    },
+    {
+      "item": 9,
+      "mes": "0m+",
+      "pregunta": "Se lleva a la boca los alimentos con la mano"
+    },
+    {
+      "item": 10,
+      "mes": "12m+",
+      "pregunta": "Toma de la taza con ayuda del adulto"
+    },
+    {
+      "item": 11,
+      "mes": "12m+",
+      "pregunta": "Manifiesta agrado o desagrado por alimentos"
+    },
+    {
+      "item": 12,
+      "mes": "12m+",
+      "pregunta": "Se quita las medias"
+    },
+    {
+      "item": 13,
+      "mes": "12m+",
+      "pregunta": "Se alimenta con los dedos"
+    },
+    {
+      "item": 14,
+      "mes": "12m+",
+      "pregunta": "Se incomoda y protesta cuando necesita cambio de pañal"
+    },
+    {
+      "item": 15,
+      "mes": "12m+",
+      "pregunta": "Duerme toda la noche con una siesta de día"
+    },
+    {
+      "item": 16,
+      "mes": "12m+",
+      "pregunta": "Coopera para vestirse (ayuda a poner brazos en mangas)"
+    },
+    {
+      "item": 17,
+      "mes": "12m+",
+      "pregunta": "Mastica alimentos con textura"
+    },
+    {
+      "item": 18,
+      "mes": "12m+",
+      "pregunta": "Voluntariamente deja que le limpien la nariz"
+    },
+    {
+      "item": 19,
+      "mes": "12m+",
+      "pregunta": "Se lava los dientes con ayuda"
+    },
+    {
+      "item": 20,
+      "mes": "24m+",
+      "pregunta": "Intenta lavarse la cara y las manos"
+    },
+    {
+      "item": 21,
+      "mes": "24m+",
+      "pregunta": "Absorbe líquido usando una cañita"
+    },
+    {
+      "item": 22,
+      "mes": "24m+",
+      "pregunta": "Ayuda con tareas familiares simples"
+    },
+    {
+      "item": 23,
+      "mes": "24m+",
+      "pregunta": "Se saca ropas anchas sin ayuda"
+    },
+    {
+      "item": 24,
+      "mes": "24m+",
+      "pregunta": "Se pone ropa sencilla (sombrero, zapatos, medias)"
+    },
+    {
+      "item": 25,
+      "mes": "24m+",
+      "pregunta": "Indica que quiere ir al baño la mayoría de veces"
+    },
+    {
+      "item": 26,
+      "mes": "24m+",
+      "pregunta": "Abre la puerta dando vuelta a la manija"
+    },
+    {
+      "item": 27,
+      "mes": "24m+",
+      "pregunta": "Come toda la comida con la cuchara independientemente"
+    },
+    {
+      "item": 28,
+      "mes": "24m+",
+      "pregunta": "Se sienta en el retrete al menos 1 minuto bajo supervisión"
+    },
+    {
+      "item": 29,
+      "mes": "24m+",
+      "pregunta": "Se limpia la nariz"
+    },
+    {
+      "item": 30,
+      "mes": "36m+",
+      "pregunta": "Cuelga la ropa en el perchero"
+    },
+    {
+      "item": 31,
+      "mes": "36m+",
+      "pregunta": "Duerme toda la noche sin siestas de día"
+    },
+    {
+      "item": 32,
+      "mes": "36m+",
+      "pregunta": "Avisa a tiempo su necesidad de ir al baño"
+    },
+    {
+      "item": 33,
+      "mes": "36m+",
+      "pregunta": "Se lava y se seca manos y cara sin ayuda"
+    },
+    {
+      "item": 34,
+      "mes": "36m+",
+      "pregunta": "Sirve la leche y el jugo con algo de ayuda"
+    },
+    {
+      "item": 35,
+      "mes": "36m+",
+      "pregunta": "Bebe de la fuente de agua independientemente"
+    },
+    {
+      "item": 36,
+      "mes": "36m+",
+      "pregunta": "Obtiene el agua del caño sin ayuda"
+    },
+    {
+      "item": 37,
+      "mes": "36m+",
+      "pregunta": "Asume responsabilidad en el baño, puede requerir ayuda para limpiarse"
+    },
+    {
+      "item": 38,
+      "mes": "36m+",
+      "pregunta": "Limpia lo que ha ensuciado y maneja su propia ropa"
+    },
+    {
+      "item": 39,
+      "mes": "36m+",
+      "pregunta": "Manipula botones grandes y cierres"
+    },
+    {
+      "item": 40,
+      "mes": "48m+",
+      "pregunta": "Pone la mesa con ayuda (platos, vasos, bandejas)"
+    },
+    {
+      "item": 41,
+      "mes": "48m+",
+      "pregunta": "Usa todos los utensilios de comida"
+    },
+    {
+      "item": 42,
+      "mes": "48m+",
+      "pregunta": "Duerme toda la noche sin mojarse"
+    },
+    {
+      "item": 43,
+      "mes": "48m+",
+      "pregunta": "Se cepilla los dientes independientemente"
+    },
+    {
+      "item": 44,
+      "mes": "48m+",
+      "pregunta": "Se viste completamente (incluye cierres y broches)"
+    },
+    {
+      "item": 45,
+      "mes": "48m+",
+      "pregunta": "Se tapa la boca y nariz cuando tose o estornuda"
+    },
+    {
+      "item": 46,
+      "mes": "48m+",
+      "pregunta": "Se sirve en la mesa (puede necesitar que sostengan el plato)"
+    },
+    {
+      "item": 47,
+      "mes": "48m+",
+      "pregunta": "Se cierra la cremallera eficientemente"
+    },
+    {
+      "item": 48,
+      "mes": "48m+",
+      "pregunta": "Se pone los zapatos en el pie correcto sin ayuda"
+    },
+    {
+      "item": 49,
+      "mes": "48m+",
+      "pregunta": "Quiere privacidad en el baño frecuentemente"
+    },
+    {
+      "item": 50,
+      "mes": "48m+",
+      "pregunta": "Se pone el cinturón de seguridad solo"
+    },
+    {
+      "item": 51,
+      "mes": "48m+",
+      "pregunta": "Usa el cuchillo para esparcir mantequilla/mermelada"
+    },
+    {
+      "item": 52,
+      "mes": "48m+",
+      "pregunta": "Cruza la calle con seguridad"
+    },
+    {
+      "item": 53,
+      "mes": "48m+",
+      "pregunta": "Planea ir al baño antes de comenzar una actividad"
+    },
+    {
+      "item": 54,
+      "mes": "48m+",
+      "pregunta": "Se suena la nariz sin que se le recuerde"
+    },
+    {
+      "item": 55,
+      "mes": "48m+",
+      "pregunta": "Elige la ropa apropiada según temperatura y ocasión"
+    },
+    {
+      "item": 56,
+      "mes": "48m+",
+      "pregunta": "Cuelga la ropa en un colgador"
+    },
+    {
+      "item": 57,
+      "mes": "48m+",
+      "pregunta": "Se cepilla y peina el cabello con buenos resultados"
+    },
+    {
+      "item": 58,
+      "mes": "48m+",
+      "pregunta": "Arregla su cama (puede necesitar recordatorio)"
+    },
+    {
+      "item": 59,
+      "mes": "48m+",
+      "pregunta": "Hace un desayuno o almuerzo simple"
+    },
+    {
+      "item": 60,
+      "mes": "48m+",
+      "pregunta": "Pone y limpia la mesa sin ayuda"
+    },
+    {
+      "item": 61,
+      "mes": "48m+",
+      "pregunta": "Se amarra las hileras del zapato sin ayuda"
+    },
+    {
+      "item": 62,
+      "mes": "48m+",
+      "pregunta": "Ajusta la temperatura del agua para ducha o baño"
+    },
+    {
+      "item": 63,
+      "mes": "48m+",
+      "pregunta": "Manipula botones grandes y cierres"
+    }
+  ]
+}

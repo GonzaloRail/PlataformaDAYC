@@ -1,0 +1,16 @@
+.download-pdf-button {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.download-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.pdf-icon {
+  font-size: 1.125rem;
+}

@@ -1,0 +1,662 @@
+[
+  {
+    "id": "DESARROLLO_FISICO_055",
+    "area": "DESARROLLO_FISICO",
+    "numero": 55,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Camina hacia atrás",
+    "descripcion_general": "Camina hacia atrás"
+  },
+  {
+    "id": "DESARROLLO_FISICO_056",
+    "area": "DESARROLLO_FISICO",
+    "numero": 56,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Usa una mano consistentemente en la mayoría de actividades",
+    "descripcion_general": "Usa una mano consistentemente en la mayoría de actividades"
+  },
+  {
+    "id": "DESARROLLO_FISICO_057",
+    "area": "DESARROLLO_FISICO",
+    "numero": 57,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Sube gradas alternando los pies agarrándose",
+    "descripcion_general": "Sube gradas alternando los pies agarrándose"
+  },
+  {
+    "id": "DESARROLLO_FISICO_058",
+    "area": "DESARROLLO_FISICO",
+    "numero": 58,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Escala un poco con equipo de juego",
+    "descripcion_general": "Escala un poco con equipo de juego"
+  },
+  {
+    "id": "DESARROLLO_FISICO_059",
+    "area": "DESARROLLO_FISICO",
+    "numero": 59,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Imita trazos circulares, verticales y horizontales",
+    "descripcion_general": "Imita trazos circulares, verticales y horizontales"
+  },
+  {
+    "id": "DESARROLLO_FISICO_060",
+    "area": "DESARROLLO_FISICO",
+    "numero": 60,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Sostiene el lápiz entre los dos primeros dedos y el pulgar",
+    "descripcion_general": "Sostiene el lápiz entre los dos primeros dedos y el pulgar"
+  },
+  {
+    "id": "DESARROLLO_FISICO_061",
+    "area": "DESARROLLO_FISICO",
+    "numero": 61,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Usa movimientos verticales, horizontales y circulares al dibujar",
+    "descripcion_general": "Usa movimientos verticales, horizontales y circulares al dibujar"
+  },
+  {
+    "id": "DESARROLLO_FISICO_062",
+    "area": "DESARROLLO_FISICO",
+    "numero": 62,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Camina balanceando brazos y piernas de manera coordinada",
+    "descripcion_general": "Camina balanceando brazos y piernas de manera coordinada"
+  },
+  {
+    "id": "DESARROLLO_FISICO_063",
+    "area": "DESARROLLO_FISICO",
+    "numero": 63,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Coge la pelota bloqueándola contra el pecho",
+    "descripcion_general": "Coge la pelota bloqueándola contra el pecho"
+  },
+  {
+    "id": "DESARROLLO_FISICO_064",
+    "area": "DESARROLLO_FISICO",
+    "numero": 64,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Hace varios recortes de papel usando tijeras",
+    "descripcion_general": "Hace varios recortes de papel usando tijeras"
+  },
+  {
+    "id": "DESARROLLO_FISICO_065",
+    "area": "DESARROLLO_FISICO",
+    "numero": 65,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Salta de un pie varios pasos",
+    "descripcion_general": "Salta de un pie varios pasos"
+  },
+  {
+    "id": "DESARROLLO_FISICO_066",
+    "area": "DESARROLLO_FISICO",
+    "numero": 66,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Da vuelcos (voltereta)",
+    "descripcion_general": "Da vuelcos (voltereta)"
+  },
+  {
+    "id": "DESARROLLO_FISICO_067",
+    "area": "DESARROLLO_FISICO",
+    "numero": 67,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Camina empleando talón y dedos sin perder equilibrio",
+    "descripcion_general": "Camina empleando talón y dedos sin perder equilibrio"
+  },
+  {
+    "id": "DESARROLLO_FISICO_068",
+    "area": "DESARROLLO_FISICO",
+    "numero": 68,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Copia una cruz",
+    "descripcion_general": "Copia una cruz"
+  },
+  {
+    "id": "DESARROLLO_FISICO_069",
+    "area": "DESARROLLO_FISICO",
+    "numero": 69,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se balancea sobre un pie durante 5–10 segundos",
+    "descripcion_general": "Se balancea sobre un pie durante 5–10 segundos"
+  },
+  {
+    "id": "DESARROLLO_FISICO_070",
+    "area": "DESARROLLO_FISICO",
+    "numero": 70,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Salta sobre objetos de más de 6 pulgadas de alto, aterrizando con ambos pies",
+    "descripcion_general": "Salta sobre objetos de más de 6 pulgadas de alto, aterrizando con ambos pies"
+  },
+  {
+    "id": "DESARROLLO_FISICO_071",
+    "area": "DESARROLLO_FISICO",
+    "numero": 71,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Corta con tijeras siguiendo una línea",
+    "descripcion_general": "Corta con tijeras siguiendo una línea"
+  },
+  {
+    "id": "DESARROLLO_FISICO_072",
+    "area": "DESARROLLO_FISICO",
+    "numero": 72,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Copia un cuadrado",
+    "descripcion_general": "Copia un cuadrado"
+  },
+  {
+    "id": "DESARROLLO_FISICO_073",
+    "area": "DESARROLLO_FISICO",
+    "numero": 73,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Copia un rectángulo",
+    "descripcion_general": "Copia un rectángulo"
+  },
+  {
+    "id": "DESARROLLO_FISICO_074",
+    "area": "DESARROLLO_FISICO",
+    "numero": 74,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Galopa guiándose con un pie y transfiriendo peso suavemente",
+    "descripcion_general": "Galopa guiándose con un pie y transfiriendo peso suavemente"
+  },
+  {
+    "id": "DESARROLLO_FISICO_075",
+    "area": "DESARROLLO_FISICO",
+    "numero": 75,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se balancea en columpio manteniendo ímpetu con las piernas",
+    "descripcion_general": "Se balancea en columpio manteniendo ímpetu con las piernas"
+  },
+  {
+    "id": "DESARROLLO_FISICO_076",
+    "area": "DESARROLLO_FISICO",
+    "numero": 76,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Da botes y coge la pelota de tenis",
+    "descripcion_general": "Da botes y coge la pelota de tenis"
+  },
+  {
+    "id": "DESARROLLO_FISICO_077",
+    "area": "DESARROLLO_FISICO",
+    "numero": 77,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Colorea dentro de las líneas",
+    "descripcion_general": "Colorea dentro de las líneas"
+  },
+  {
+    "id": "DESARROLLO_FISICO_078",
+    "area": "DESARROLLO_FISICO",
+    "numero": 78,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Corta figuras geométricas simples con tijeras",
+    "descripcion_general": "Corta figuras geométricas simples con tijeras"
+  },
+  {
+    "id": "DESARROLLO_FISICO_079",
+    "area": "DESARROLLO_FISICO",
+    "numero": 79,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Brinca alternando los pies manteniendo equilibrio",
+    "descripcion_general": "Brinca alternando los pies manteniendo equilibrio"
+  },
+  {
+    "id": "DESARROLLO_FISICO_080",
+    "area": "DESARROLLO_FISICO",
+    "numero": 80,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Toca rápidamente cada dedo con su pulgar",
+    "descripcion_general": "Toca rápidamente cada dedo con su pulgar"
+  },
+  {
+    "id": "DESARROLLO_FISICO_081",
+    "area": "DESARROLLO_FISICO",
+    "numero": 81,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Salta en un pie en línea recta sin perder equilibrio",
+    "descripcion_general": "Salta en un pie en línea recta sin perder equilibrio"
+  },
+  {
+    "id": "DESARROLLO_FISICO_082",
+    "area": "DESARROLLO_FISICO",
+    "numero": 82,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Coloca clips en el papel",
+    "descripcion_general": "Coloca clips en el papel"
+  },
+  {
+    "id": "DESARROLLO_FISICO_083",
+    "area": "DESARROLLO_FISICO",
+    "numero": 83,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Da tres vuelcos consecutivos",
+    "descripcion_general": "Da tres vuelcos consecutivos"
+  },
+  {
+    "id": "DESARROLLO_FISICO_084",
+    "area": "DESARROLLO_FISICO",
+    "numero": 84,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Engoma con cuidado",
+    "descripcion_general": "Engoma con cuidado"
+  },
+  {
+    "id": "DESARROLLO_FISICO_085",
+    "area": "DESARROLLO_FISICO",
+    "numero": 85,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Copia figura de diamante con líneas derechas conectadas",
+    "descripcion_general": "Copia figura de diamante con líneas derechas conectadas"
+  },
+  {
+    "id": "DESARROLLO_FISICO_086",
+    "area": "DESARROLLO_FISICO",
+    "numero": 86,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Deja caer la pelota y la patea antes de que toque el piso",
+    "descripcion_general": "Deja caer la pelota y la patea antes de que toque el piso"
+  },
+  {
+    "id": "DESARROLLO_FISICO_087",
+    "area": "DESARROLLO_FISICO",
+    "numero": 87,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Salta a la soga solo",
+    "descripcion_general": "Salta a la soga solo"
+  }
+]

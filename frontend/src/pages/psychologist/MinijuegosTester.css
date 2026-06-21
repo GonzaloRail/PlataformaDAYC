@@ -1,0 +1,126 @@
+.minijuegos-tester {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: clamp(1rem, 4vw, 2.4rem);
+}
+
+.minijuegos-tester-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.5rem;
+  border-radius: 30px;
+  background:
+    linear-gradient(135deg, rgba(255,250,244,0.82), rgba(234,248,246,0.72)),
+    radial-gradient(circle at 90% 15%, rgba(255,138,101,0.18), transparent 18rem);
+  border: 1px solid rgba(255,255,255,0.74);
+  box-shadow: var(--shadow-sm);
+}
+
+.minijuegos-tester-header h3 {
+  margin: 0;
+  color: var(--color-matisse-900);
+  font-size: clamp(1.8rem, 4vw, 3.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+  font-weight: 1000;
+}
+
+.minijuegos-tester-header p {
+  margin: 0.85rem 0 0;
+  color: var(--color-text-soft);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.minijuegos-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.2rem;
+}
+
+.area-tabs,
+.status-filter { display: flex; gap: 0.55rem; flex-wrap: wrap; }
+
+.area-tab,
+.status-filter button {
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.58);
+  color: var(--color-matisse-800);
+  padding: 0.58rem 0.92rem;
+  font-size: 0.82rem;
+  font-weight: 1000;
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.area-tab:hover,
+.status-filter button:hover { transform: translateY(-2px); }
+.area-tab.is-active,
+.status-filter .is-active { background: linear-gradient(135deg, var(--color-primary), #0b4653); color: #fff; }
+
+.minijuegos-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+
+.minijuego-row {
+  border: 1px solid rgba(255,255,255,0.72);
+  border-radius: 26px;
+  box-shadow: var(--shadow-sm);
+  background: rgba(255,255,255,0.58);
+}
+
+.minijuego-row .card-content { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: center; }
+.minijuego-row:hover { border-color: rgba(65,198,170,0.44); box-shadow: var(--shadow-md); }
+.minijuego-row-clickable { cursor: pointer; }
+.minijuego-row-main { display: flex; flex-direction: column; gap: 0.82rem; }
+.minijuego-row-top,
+.minijuego-test-summary { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+.minijuego-row-actions { display: none; }
+
+.minijuego-area,
+.minijuego-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.38rem 0.72rem;
+  font-size: 0.72rem;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.minijuego-area { background: rgba(85,104,216,0.12); color: #3344a0; }
+.minijuego-status-ready { background: rgba(65,198,170,0.18); color: #176b5f; }
+.minijuego-status-placeholder { background: rgba(227,155,38,0.18); color: #8b5615; }
+
+.minijuego-row h4,
+.minijuego-test-summary h3 { margin: 0; color: var(--color-matisse-900); font-size: 1.18rem; line-height: 1.18; font-weight: 1000; letter-spacing: -0.035em; }
+.minijuego-row p,
+.minijuego-test-summary p { margin: 0; color: var(--color-text-soft); font-size: 0.94rem; line-height: 1.55; font-weight: 700; }
+.minijuego-row code,
+.minijuego-test-summary code { display: inline-flex; width: fit-content; border-radius: 10px; background: rgba(15,107,122,0.08); color: var(--color-matisse-800); padding: 0.42rem 0.6rem; font-size: 0.8rem; font-weight: 950; }
+.minijuego-warning { color: var(--color-danger); font-size: 0.82rem; font-weight: 900; }
+
+.minijuego-test-modal { display: flex; flex-direction: column; gap: 0; min-height: calc(100vh - 88px); }
+.minijuego-test-stage { min-height: calc(100vh - 88px); height: calc(100vh - 88px); overflow: hidden; border: 0; border-radius: 0; background: transparent; padding: 0; }
+.evaluation-session-preview { min-height: 100%; }
+.minijuego-answer pre { overflow: auto; margin: 0.75rem 0 0; border-radius: 14px; background: #102a35; color: #f6f9fc; padding: 1rem; font-size: 0.82rem; }
+
+@media (max-width: 1024px) {
+  .minijuegos-list { grid-template-columns: 1fr; }
+  .minijuegos-toolbar { align-items: flex-start; }
+}
+
+@media (max-width: 640px) {
+  .minijuegos-tester-header { border-radius: 22px; padding: 1.1rem; }
+  .minijuego-row-top,
+  .minijuego-test-summary { flex-direction: column; }
+}

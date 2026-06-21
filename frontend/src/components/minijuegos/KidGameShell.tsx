@@ -1,0 +1,49 @@
+import { ReactNode } from 'react';
+import './KidGameShell.css';
+
+interface KidGameShellProps {
+  title: string;
+  subtitle: string;
+  progressLabel?: string;
+  mascotMessage?: string;
+  playArea: ReactNode;
+  actions?: ReactNode;
+  footer?: ReactNode;
+}
+
+export default function KidGameShell({
+  title,
+  subtitle,
+  progressLabel,
+  mascotMessage,
+  playArea,
+  actions,
+  footer,
+}: KidGameShellProps) {
+  return (
+    <section className="kid-shell" role="group" aria-label={title}>
+      <div className="kid-shell-bg" aria-hidden="true" />
+
+      <header className="kid-shell-header">
+        <div className="kid-shell-heading">
+          <p className="kid-shell-eyebrow">Miniaventura</p>
+          <h2>{title}</h2>
+          <p className="kid-shell-subtitle">{subtitle}</p>
+        </div>
+        {progressLabel && <span className="kid-shell-progress">{progressLabel}</span>}
+      </header>
+
+      {mascotMessage && (
+        <div className="kid-shell-mascot" role="status" aria-live="polite">
+          <span className="kid-shell-mascot-icon" aria-hidden="true" />
+          <p>{mascotMessage}</p>
+        </div>
+      )}
+
+      <main className="kid-shell-play">{playArea}</main>
+      {actions ? <div className="kid-shell-actions">{actions}</div> : null}
+
+      {footer && <footer className="kid-shell-footer">{footer}</footer>}
+    </section>
+  );
+}

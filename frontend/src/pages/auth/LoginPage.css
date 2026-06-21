@@ -1,0 +1,165 @@
+.login-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 3vw, 2rem);
+  background:
+    radial-gradient(circle at 12% 16%, rgba(255, 138, 101, 0.24) 0 13rem, transparent 30rem),
+    radial-gradient(circle at 88% 76%, rgba(65, 198, 170, 0.28) 0 15rem, transparent 32rem),
+    linear-gradient(135deg, #fff6ec 0%, #f7f0e7 44%, #e5f5f4 100%);
+}
+
+.login-content {
+  position: relative;
+  width: min(100%, 1080px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 470px);
+  gap: clamp(1rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.login-content::before {
+  content: "Evaluación infantil asistida";
+  position: absolute;
+  left: 0;
+  top: -2.6rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(24,50,71,0.1);
+  color: var(--color-matisse-800);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.login-header {
+  color: var(--color-text);
+  max-width: 520px;
+}
+
+.login-header h1 {
+  margin: 0;
+  font-size: clamp(4.2rem, 12vw, 9rem);
+  line-height: 0.82;
+  letter-spacing: -0.085em;
+  font-weight: 1000;
+  color: var(--color-matisse-900);
+  text-shadow: 0 24px 44px rgba(15, 52, 64, 0.14);
+}
+
+.login-header h1::after {
+  content: "";
+  display: block;
+  width: min(72%, 340px);
+  height: 16px;
+  margin-top: 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-mint));
+}
+
+.login-header p {
+  margin: 1.4rem 0 0;
+  color: #405b67;
+  font-size: clamp(1.2rem, 2.6vw, 2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  max-width: 13ch;
+}
+
+.login-card {
+  position: relative;
+  border-radius: 34px;
+  padding: clamp(1.3rem, 3vw, 2rem);
+  background: rgba(255, 250, 244, 0.82);
+  border: 1px solid rgba(255,255,255,0.74);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(22px);
+}
+
+.login-card::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 25px;
+  border: 1px dashed rgba(15, 107, 122, 0.18);
+  pointer-events: none;
+}
+
+.login-card h2 {
+  position: relative;
+  margin: 0;
+  font-size: clamp(1.55rem, 4vw, 2.15rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--color-matisse-900);
+  font-weight: 1000;
+}
+
+.login-subtitle {
+  position: relative;
+  margin: 0.72rem 0 1.3rem;
+  color: var(--color-text-soft);
+  font-size: 0.96rem;
+  line-height: 1.48;
+}
+
+.form-group { margin-bottom: 0.95rem; }
+
+.password-toggle {
+  margin-top: 0.4rem;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 0.84rem;
+  font-weight: 900;
+  padding: 0.22rem 0.12rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.password-toggle:hover { color: var(--color-accent-strong); }
+.password-toggle:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+.login-error,
+.login-success {
+  font-size: 0.86rem;
+  margin: 0.75rem 0 0.95rem;
+  border-radius: 14px;
+  padding: 0.72rem 0.86rem;
+  border: 1px solid;
+  font-weight: 800;
+}
+
+.login-error { color: #8a2020; background: #fff0ed; border-color: #efbbb4; }
+.login-success { color: #1f5d53; background: #e9f8f4; border-color: #abe2d6; }
+
+.auth-switch {
+  margin-top: 0.82rem;
+  width: 100%;
+}
+
+.login-footer {
+  grid-column: 2;
+  text-align: center;
+  color: var(--color-text-soft);
+  margin-top: 1rem;
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+@media (max-width: 850px) {
+  .login-content { grid-template-columns: 1fr; gap: 1.2rem; }
+  .login-content::before { position: static; width: fit-content; margin-bottom: 0.4rem; }
+  .login-header { text-align: center; margin: 0 auto; }
+  .login-header h1::after { margin-left: auto; margin-right: auto; }
+  .login-header p { max-width: none; margin-left: auto; margin-right: auto; font-size: 1.1rem; }
+  .login-footer { grid-column: auto; }
+}
+
+@media (max-width: 480px) {
+  .login-page { padding: 0.85rem; }
+  .login-card { padding: 1.05rem; border-radius: 24px; }
+  .login-card::before { display: none; }
+}

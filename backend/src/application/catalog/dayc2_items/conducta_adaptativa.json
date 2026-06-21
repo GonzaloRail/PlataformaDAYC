@@ -1,0 +1,648 @@
+[
+  {
+    "id": "CONDUCTA_ADAPTATIVA_030",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 30,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Cuelga la ropa en el perchero",
+    "descripcion_general": "Cuelga la ropa en el perchero"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_031",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 31,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Duerme toda la noche sin siestas de día",
+    "descripcion_general": "Duerme toda la noche sin siestas de día"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_032",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 32,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Avisa a tiempo su necesidad de ir al baño",
+    "descripcion_general": "Avisa a tiempo su necesidad de ir al baño"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_033",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 33,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se lava y se seca manos y cara sin ayuda",
+    "descripcion_general": "Se lava y se seca manos y cara sin ayuda"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_034",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 34,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Sirve la leche y el jugo con algo de ayuda",
+    "descripcion_general": "Sirve la leche y el jugo con algo de ayuda"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_035",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 35,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Bebe de la fuente de agua independientemente",
+    "descripcion_general": "Bebe de la fuente de agua independientemente"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_036",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 36,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Obtiene el agua del caño sin ayuda",
+    "descripcion_general": "Obtiene el agua del caño sin ayuda"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_037",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 37,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Asume responsabilidad en el baño, puede requerir ayuda para limpiarse",
+    "descripcion_general": "Asume responsabilidad en el baño, puede requerir ayuda para limpiarse"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_038",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 38,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Limpia lo que ha ensuciado y maneja su propia ropa",
+    "descripcion_general": "Limpia lo que ha ensuciado y maneja su propia ropa"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_039",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 39,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Manipula botones grandes y cierres",
+    "descripcion_general": "Manipula botones grandes y cierres"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_040",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 40,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Pone la mesa con ayuda (platos, vasos, bandejas)",
+    "descripcion_general": "Pone la mesa con ayuda (platos, vasos, bandejas)"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_041",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 41,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Usa todos los utensilios de comida",
+    "descripcion_general": "Usa todos los utensilios de comida"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_042",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 42,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Duerme toda la noche sin mojarse",
+    "descripcion_general": "Duerme toda la noche sin mojarse"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_043",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 43,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se cepilla los dientes independientemente",
+    "descripcion_general": "Se cepilla los dientes independientemente"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_044",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 44,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se viste completamente (incluye cierres y broches)",
+    "descripcion_general": "Se viste completamente (incluye cierres y broches)"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_045",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 45,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se tapa la boca y nariz cuando tose o estornuda",
+    "descripcion_general": "Se tapa la boca y nariz cuando tose o estornuda"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_046",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 46,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se sirve en la mesa (puede necesitar que sostengan el plato)",
+    "descripcion_general": "Se sirve en la mesa (puede necesitar que sostengan el plato)"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_047",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 47,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se cierra la cremallera eficientemente",
+    "descripcion_general": "Se cierra la cremallera eficientemente"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_048",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 48,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se pone los zapatos en el pie correcto sin ayuda",
+    "descripcion_general": "Se pone los zapatos en el pie correcto sin ayuda"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_049",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 49,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Quiere privacidad en el baño frecuentemente",
+    "descripcion_general": "Quiere privacidad en el baño frecuentemente"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_050",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 50,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se pone el cinturón de seguridad solo",
+    "descripcion_general": "Se pone el cinturón de seguridad solo"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_051",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 51,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Usa el cuchillo para esparcir mantequilla/mermelada",
+    "descripcion_general": "Usa el cuchillo para esparcir mantequilla/mermelada"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_052",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 52,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Cruza la calle con seguridad",
+    "descripcion_general": "Cruza la calle con seguridad"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_053",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 53,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Planea ir al baño antes de comenzar una actividad",
+    "descripcion_general": "Planea ir al baño antes de comenzar una actividad"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_054",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 54,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se suena la nariz sin que se le recuerde",
+    "descripcion_general": "Se suena la nariz sin que se le recuerde"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_055",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 55,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Elige la ropa apropiada según temperatura y ocasión",
+    "descripcion_general": "Elige la ropa apropiada según temperatura y ocasión"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_056",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 56,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Cuelga la ropa en un colgador",
+    "descripcion_general": "Cuelga la ropa en un colgador"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_057",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 57,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se cepilla y peina el cabello con buenos resultados",
+    "descripcion_general": "Se cepilla y peina el cabello con buenos resultados"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_058",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 58,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Arregla su cama (puede necesitar recordatorio)",
+    "descripcion_general": "Arregla su cama (puede necesitar recordatorio)"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_059",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 59,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Hace un desayuno o almuerzo simple",
+    "descripcion_general": "Hace un desayuno o almuerzo simple"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_060",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 60,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Pone y limpia la mesa sin ayuda",
+    "descripcion_general": "Pone y limpia la mesa sin ayuda"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_061",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 61,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Se amarra las hileras del zapato sin ayuda",
+    "descripcion_general": "Se amarra las hileras del zapato sin ayuda"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_062",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 62,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Ajusta la temperatura del agua para ducha o baño",
+    "descripcion_general": "Ajusta la temperatura del agua para ducha o baño"
+  },
+  {
+    "id": "CONDUCTA_ADAPTATIVA_063",
+    "area": "CONDUCTA_ADAPTATIVA",
+    "numero": 63,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Manipula botones grandes y cierres",
+    "descripcion_general": "Manipula botones grandes y cierres"
+  }
+]

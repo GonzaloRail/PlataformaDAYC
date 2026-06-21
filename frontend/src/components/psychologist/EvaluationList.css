@@ -1,0 +1,35 @@
+.evaluation-list { display: flex; flex-direction: column; gap: 0.78rem; }
+
+.list-loading,
+.list-empty {
+  padding: 1.6rem;
+  text-align: center;
+  color: var(--color-text-soft);
+  background: rgba(255,255,255,0.56);
+  border-radius: 18px;
+  border: 1px solid var(--color-line);
+}
+
+.evaluation-card {
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.72);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.58);
+  box-shadow: var(--shadow-xs);
+}
+
+.evaluation-card:hover { border-color: rgba(65,198,170,0.42); background: rgba(255,255,255,0.82); }
+
+.evaluation-card-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
+.evaluation-card-header .nino-name { font-weight: 1000; color: var(--color-matisse-900); }
+
+.badge { padding: 0.34rem 0.68rem; border-radius: 999px; font-size: 0.7rem; font-weight: 1000; letter-spacing: 0.04em; text-transform: uppercase; }
+.badge-info { background: rgba(85,104,216,0.13); color: #3344a0; }
+.badge-warning { background: rgba(227,155,38,0.18); color: #8b5615; }
+.badge-success { background: rgba(65,198,170,0.18); color: #176b5f; }
+.badge-danger { background: rgba(217,74,72,0.14); color: #943231; }
+
+.evaluation-card-info { display: flex; flex-wrap: wrap; gap: 0.8rem 1rem; font-size: 0.88rem; }
+.info-item { display: flex; gap: 0.3rem; }
+.info-label { color: var(--color-text-soft); font-weight: 800; }
+.info-value { color: var(--color-text); font-weight: 950; }

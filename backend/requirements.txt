@@ -1,0 +1,18 @@
+# DAYC-2 Backend Dependencies
+django>=5.0
+djangorestframework>=3.14
+psycopg2-binary>=2.9
+pydantic>=2.0
+python-dotenv>=1.0
+gunicorn>=21.0
+django-cors-headers>=4.0
+channels>=4.0
+
+# PDF Generation
+weasyprint>=60.0
+
+# Development
+pytest>=7.0
+pytest-django>=4.5
+black>=23.0
+flake8>=6.0

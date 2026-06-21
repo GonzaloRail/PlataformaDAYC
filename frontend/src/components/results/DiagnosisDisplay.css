@@ -1,0 +1,227 @@
+.diagnosis-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.diagnosis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.diagnosis-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.diagnosis-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.model-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.model-badge.gemini {
+  background: #4285f4;
+  color: white;
+}
+
+.model-badge.claude {
+  background: #d97706;
+  color: white;
+}
+
+.edited-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.gdq-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.gdq-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gdq-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+.gdq-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+}
+
+.gdq-level {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.gdq-excellent {
+  color: #10b981;
+}
+
+.gdq-average {
+  color: #3b82f6;
+}
+
+.gdq-low {
+  color: #f59e0b;
+}
+
+.gdq-very-low {
+  color: #ef4444;
+}
+
+.diagnosis-content {
+  margin-bottom: 24px;
+}
+
+.diagnosis-content h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #374151;
+}
+
+.diagnosis-text {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  border-left: 4px solid #6366f1;
+}
+
+.diagnosis-text p {
+  margin: 0 0 8px 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.diagnosis-text p:last-child {
+  margin-bottom: 0;
+}
+
+.activities-section {
+  margin-bottom: 20px;
+}
+
+.activities-section h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #374151;
+}
+
+.activities-hint {
+  margin: 0 0 16px 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.activity-card {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
+  padding: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.activity-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.activity-icon {
+  font-size: 20px;
+}
+
+.activity-number {
+  background: #0ea5e9;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.activity-title {
+  margin: 0 0 8px 0;
+  font-size: 15px;
+  color: #0369a1;
+}
+
+.activity-description {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.activity-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.diagnosis-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.edit-button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-button:hover {
+  background: #4338ca;
+}

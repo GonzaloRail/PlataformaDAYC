@@ -1,0 +1,979 @@
+[
+  {
+    "id": "COGNITIVO_030",
+    "area": "COGNITIVO",
+    "numero": 30,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Apila de 6 a 7 cubos",
+    "descripcion_general": "Apila de 6 a 7 cubos"
+  },
+  {
+    "id": "COGNITIVO_031",
+    "area": "COGNITIVO",
+    "numero": 31,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Empareja formas simples: círculo, cuadrado, triángulo",
+    "descripcion_general": "Empareja formas simples: círculo, cuadrado, triángulo"
+  },
+  {
+    "id": "COGNITIVO_032",
+    "area": "COGNITIVO",
+    "numero": 32,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Responde a 'uno' y 'uno más'",
+    "descripcion_general": "Responde a 'uno' y 'uno más'"
+  },
+  {
+    "id": "COGNITIVO_033",
+    "area": "COGNITIVO",
+    "numero": 33,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Coloca medidas graduadas en orden (cajas, anillos por tamaño)",
+    "descripcion_general": "Coloca medidas graduadas en orden (cajas, anillos por tamaño)"
+  },
+  {
+    "id": "COGNITIVO_034",
+    "area": "COGNITIVO",
+    "numero": 34,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Empareja objetos por color, forma y medida",
+    "descripcion_general": "Empareja objetos por color, forma y medida"
+  },
+  {
+    "id": "COGNITIVO_035",
+    "area": "COGNITIVO",
+    "numero": 35,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Repite juegos de dedos con palabras y acciones",
+    "descripcion_general": "Repite juegos de dedos con palabras y acciones"
+  },
+  {
+    "id": "COGNITIVO_036",
+    "area": "COGNITIVO",
+    "numero": 36,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Cuenta de memoria hasta 5",
+    "descripcion_general": "Cuenta de memoria hasta 5"
+  },
+  {
+    "id": "COGNITIVO_037",
+    "area": "COGNITIVO",
+    "numero": 37,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Empareja objetos de la misma función",
+    "descripcion_general": "Empareja objetos de la misma función"
+  },
+  {
+    "id": "COGNITIVO_038",
+    "area": "COGNITIVO",
+    "numero": 38,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Dice si un objeto es 'pesado' o 'liviano'",
+    "descripcion_general": "Dice si un objeto es 'pesado' o 'liviano'"
+  },
+  {
+    "id": "COGNITIVO_039",
+    "area": "COGNITIVO",
+    "numero": 39,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Cuenta más de 5 objetos",
+    "descripcion_general": "Cuenta más de 5 objetos"
+  },
+  {
+    "id": "COGNITIVO_040",
+    "area": "COGNITIVO",
+    "numero": 40,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Construye puente con 3 cubos: según modelo",
+    "descripcion_general": "Construye puente con 3 cubos: según modelo"
+  },
+  {
+    "id": "COGNITIVO_041",
+    "area": "COGNITIVO",
+    "numero": 41,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Comprende 'igual' y 'diferente'",
+    "descripcion_general": "Comprende 'igual' y 'diferente'"
+  },
+  {
+    "id": "COGNITIVO_042",
+    "area": "COGNITIVO",
+    "numero": 42,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Clasifica objetos por un criterio (forma o color)",
+    "descripcion_general": "Clasifica objetos por un criterio (forma o color)"
+  },
+  {
+    "id": "COGNITIVO_043",
+    "area": "COGNITIVO",
+    "numero": 43,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Comprende el concepto del número 3",
+    "descripcion_general": "Comprende el concepto del número 3"
+  },
+  {
+    "id": "COGNITIVO_044",
+    "area": "COGNITIVO",
+    "numero": 44,
+    "edad_inicio_min_meses": 36,
+    "edad_inicio_max_meses": 47,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Comprende 'más', 'menos', 'igual'",
+    "descripcion_general": "Comprende 'más', 'menos', 'igual'"
+  },
+  {
+    "id": "COGNITIVO_045",
+    "area": "COGNITIVO",
+    "numero": 45,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "MANUAL_GUIADO",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Imita el dibujo de una cara",
+    "descripcion_general": "Imita el dibujo de una cara"
+  },
+  {
+    "id": "COGNITIVO_046",
+    "area": "COGNITIVO",
+    "numero": 46,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Clasifica objetos en categorías (juguetes, animales)",
+    "descripcion_general": "Clasifica objetos en categorías (juguetes, animales)"
+  },
+  {
+    "id": "COGNITIVO_047",
+    "area": "COGNITIVO",
+    "numero": 47,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Identifica objetos que no pertenecen a un grupo",
+    "descripcion_general": "Identifica objetos que no pertenecen a un grupo"
+  },
+  {
+    "id": "COGNITIVO_048",
+    "area": "COGNITIVO",
+    "numero": 48,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Conoce secuencia de lectura: izq-der, arriba-abajo",
+    "descripcion_general": "Conoce secuencia de lectura: izq-der, arriba-abajo"
+  },
+  {
+    "id": "COGNITIVO_049",
+    "area": "COGNITIVO",
+    "numero": 49,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Clasifica objetos considerando más de una forma",
+    "descripcion_general": "Clasifica objetos considerando más de una forma"
+  },
+  {
+    "id": "COGNITIVO_050",
+    "area": "COGNITIVO",
+    "numero": 50,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Construye pirámide de 6 cubos: según modelo",
+    "descripcion_general": "Construye pirámide de 6 cubos: según modelo"
+  },
+  {
+    "id": "COGNITIVO_051",
+    "area": "COGNITIVO",
+    "numero": 51,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Identifica 'primero', 'último', 'al medio'",
+    "descripcion_general": "Identifica 'primero', 'último', 'al medio'"
+  },
+  {
+    "id": "COGNITIVO_052",
+    "area": "COGNITIVO",
+    "numero": 52,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Narra historia de un libro de figuras",
+    "descripcion_general": "Narra historia de un libro de figuras"
+  },
+  {
+    "id": "COGNITIVO_053",
+    "area": "COGNITIVO",
+    "numero": 53,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Identifica el más grande de dos números",
+    "descripcion_general": "Identifica el más grande de dos números"
+  },
+  {
+    "id": "COGNITIVO_054",
+    "area": "COGNITIVO",
+    "numero": 54,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Dibuja figura de palotes",
+    "descripcion_general": "Dibuja figura de palotes"
+  },
+  {
+    "id": "COGNITIVO_055",
+    "area": "COGNITIVO",
+    "numero": 55,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Identifica características abstractas (vivo/no vivo, real/creencia)",
+    "descripcion_general": "Identifica características abstractas (vivo/no vivo, real/creencia)"
+  },
+  {
+    "id": "COGNITIVO_056",
+    "area": "COGNITIVO",
+    "numero": 56,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Copia su propio nombre",
+    "descripcion_general": "Copia su propio nombre"
+  },
+  {
+    "id": "COGNITIVO_057",
+    "area": "COGNITIVO",
+    "numero": 57,
+    "edad_inicio_min_meses": 48,
+    "edad_inicio_max_meses": 59,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Predice lo que ocurrirá en la historia",
+    "descripcion_general": "Predice lo que ocurrirá en la historia"
+  },
+  {
+    "id": "COGNITIVO_058",
+    "area": "COGNITIVO",
+    "numero": 58,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Señala objetos a la 'mitad' o 'completos'",
+    "descripcion_general": "Señala objetos a la 'mitad' o 'completos'"
+  },
+  {
+    "id": "COGNITIVO_059",
+    "area": "COGNITIVO",
+    "numero": 59,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Nombra la mayoría de las letras del abecedario",
+    "descripcion_general": "Nombra la mayoría de las letras del abecedario"
+  },
+  {
+    "id": "COGNITIVO_060",
+    "area": "COGNITIVO",
+    "numero": 60,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Coloca tres figuras en secuencia para contar historia",
+    "descripcion_general": "Coloca tres figuras en secuencia para contar historia"
+  },
+  {
+    "id": "COGNITIVO_061",
+    "area": "COGNITIVO",
+    "numero": 61,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Empareja número de ítems con serie de números exactos",
+    "descripcion_general": "Empareja número de ítems con serie de números exactos"
+  },
+  {
+    "id": "COGNITIVO_062",
+    "area": "COGNITIVO",
+    "numero": 62,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Comprende el concepto de 'cero'",
+    "descripcion_general": "Comprende el concepto de 'cero'"
+  },
+  {
+    "id": "COGNITIVO_063",
+    "area": "COGNITIVO",
+    "numero": 63,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Dibuja persona con 6 partes reconocibles",
+    "descripcion_general": "Dibuja persona con 6 partes reconocibles"
+  },
+  {
+    "id": "COGNITIVO_064",
+    "area": "COGNITIVO",
+    "numero": 64,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Escribe primer nombre en forma legible",
+    "descripcion_general": "Escribe primer nombre en forma legible"
+  },
+  {
+    "id": "COGNITIVO_065",
+    "area": "COGNITIVO",
+    "numero": 65,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Dibuja objetos identificables sin modelo",
+    "descripcion_general": "Dibuja objetos identificables sin modelo"
+  },
+  {
+    "id": "COGNITIVO_066",
+    "area": "COGNITIVO",
+    "numero": 66,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Cuenta hasta 20 objetos",
+    "descripcion_general": "Cuenta hasta 20 objetos"
+  },
+  {
+    "id": "COGNITIVO_067",
+    "area": "COGNITIVO",
+    "numero": 67,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Dice el mes y el día de su nacimiento",
+    "descripcion_general": "Dice el mes y el día de su nacimiento"
+  },
+  {
+    "id": "COGNITIVO_068",
+    "area": "COGNITIVO",
+    "numero": 68,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Ordena cartas numeradas en secuencia",
+    "descripcion_general": "Ordena cartas numeradas en secuencia"
+  },
+  {
+    "id": "COGNITIVO_069",
+    "area": "COGNITIVO",
+    "numero": 69,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "PREGUNTA_CUIDADOR",
+    "pantalla_nino": "PANTALLA_NEUTRA",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Dice el nombre de su calle y su ciudad",
+    "descripcion_general": "Dice el nombre de su calle y su ciudad"
+  },
+  {
+    "id": "COGNITIVO_070",
+    "area": "COGNITIVO",
+    "numero": 70,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Nombra los días de la semana en orden",
+    "descripcion_general": "Nombra los días de la semana en orden"
+  },
+  {
+    "id": "COGNITIVO_071",
+    "area": "COGNITIVO",
+    "numero": 71,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Sabe los días que anteceden y siguen",
+    "descripcion_general": "Sabe los días que anteceden y siguen"
+  },
+  {
+    "id": "COGNITIVO_072",
+    "area": "COGNITIVO",
+    "numero": 72,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Señala el nombre de las monedas",
+    "descripcion_general": "Señala el nombre de las monedas"
+  },
+  {
+    "id": "COGNITIVO_073",
+    "area": "COGNITIVO",
+    "numero": 73,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Sabe los números que anteceden y siguen",
+    "descripcion_general": "Sabe los números que anteceden y siguen"
+  },
+  {
+    "id": "COGNITIVO_074",
+    "area": "COGNITIVO",
+    "numero": 74,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Escribe su nombre y apellido de memoria",
+    "descripcion_general": "Escribe su nombre y apellido de memoria"
+  },
+  {
+    "id": "COGNITIVO_075",
+    "area": "COGNITIVO",
+    "numero": 75,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "SCREENSHOT"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Calcula problemas de adición y sustracción de un dígito",
+    "descripcion_general": "Calcula problemas de adición y sustracción de un dígito"
+  },
+  {
+    "id": "COGNITIVO_076",
+    "area": "COGNITIVO",
+    "numero": 76,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Cuenta de memoria del 1 al 100",
+    "descripcion_general": "Cuenta de memoria del 1 al 100"
+  },
+  {
+    "id": "COGNITIVO_077",
+    "area": "COGNITIVO",
+    "numero": 77,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "OBSERVACION_FISICA",
+    "pantalla_nino": "ESPERA_ADULTO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "VIDEO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Escribe números del 1 al 19 sin modelo",
+    "descripcion_general": "Escribe números del 1 al 19 sin modelo"
+  },
+  {
+    "id": "COGNITIVO_078",
+    "area": "COGNITIVO",
+    "numero": 78,
+    "edad_inicio_min_meses": 60,
+    "edad_inicio_max_meses": 143,
+    "modalidad": "EVIDENCIA_DIFERIDA",
+    "pantalla_nino": "ESTIMULO",
+    "gamificable": false,
+    "auto_validable": false,
+    "requiere_evidencia": true,
+    "tipos_evidencia": [
+      "LOG",
+      "AUDIO"
+    ],
+    "actividad_digital": null,
+    "requiere_revision_psicologo": true,
+    "pregunta": "Lee diez palabras impresas",
+    "descripcion_general": "Lee diez palabras impresas"
+  }
+]
