@@ -1,5 +1,6 @@
 """Views for Children API"""
 from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.utils.dateparse import parse_date
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -111,9 +112,13 @@ def listar_niños(request):
         return Response(data)
     
     if request.method == 'POST':
+        fecha_nacimiento = parse_date(request.data['fecha_nacimiento'])
+        if not fecha_nacimiento:
+            return Response({'error': 'Fecha de nacimiento no valida'}, status=status.HTTP_400_BAD_REQUEST)
+
         niño = Niño.objects.create(
             nombre=request.data['nombre'],
-            fecha_nacimiento=request.data['fecha_nacimiento'],
+            fecha_nacimiento=fecha_nacimiento,
             genero=request.data.get('genero'),
             padre_tutor=request.data.get('padre_tutor'),
             escuela=request.data.get('escuela'),
@@ -122,7 +127,17 @@ def listar_niños(request):
             periodo_conoce_nino=request.data.get('periodo_conoce_nino'),
             psychologist=request.user,
         )
-        return Response({'id': str(niño.id), 'nombre': niño.nombre, 'fecha_nacimiento': niño.fecha_nacimiento.isoformat()}, status=status.HTTP_201_CREATED)
+        return Response({
+            'id': str(niño.id),
+            'nombre': niño.nombre,
+            'fecha_nacimiento': niño.fecha_nacimiento.isoformat(),
+            'genero': niño.genero,
+            'padre_tutor': niño.padre_tutor,
+            'escuela': niño.escuela,
+            'nombre_informante': niño.nombre_informante,
+            'relacion_informante': niño.relacion_informante,
+            'periodo_conoce_nino': niño.periodo_conoce_nino,
+        }, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])

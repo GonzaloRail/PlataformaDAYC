@@ -221,7 +221,7 @@ def registrar_auto_result(request, pk, item_id):
     Evidencia.objects.create(
         evaluación=evaluación,
         evaluación_item=evaluación_item,
-        tipo=Evidencia.Tipo.SYSTEM_RESULT,
+        type=Evidencia.Tipo.SYSTEM_RESULT,
         metadata={
             'suggested_result': resultado,
             'confidence': confidence,

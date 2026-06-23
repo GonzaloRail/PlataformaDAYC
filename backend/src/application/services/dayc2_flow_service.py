@@ -45,22 +45,31 @@ class Dayc2FlowService:
             return None
 
         catalog_item = item_catalog_service.get_item(item.item_id) or {}
+        validation_mode = 'ADULT_REQUIRED'
+        if catalog_item.get('auto_validable') and not catalog_item.get('requiere_revision_psicologo', True):
+            validation_mode = 'SYSTEM_AUTO'
+        elif catalog_item.get('auto_validable'):
+            validation_mode = 'SYSTEM_ASSISTED_REVIEW'
+
         return {
             'evaluacion_id': str(evaluación.id),
             'area': item.area,
             'area_index': item_catalog_service.get_area_index(item.area),
             'item_id': item.item_id,
+            'numero_item': catalog_item.get('numero', item.orden),
             'current_task': item.item_id,
             'modalidad': item.modalidad,
             'pantalla_nino': item.pantalla_nino,
             'minijuego': catalog_item.get('actividad_digital') or item.item_id,
             'actividad_digital': catalog_item.get('actividad_digital'),
-            'instrucciones': catalog_item.get('descripcion_general', 'Sigue las instrucciones del adulto acompanante.'),
+            'pregunta': catalog_item.get('pregunta') or catalog_item.get('descripcion_general'),
+            'instrucciones': catalog_item.get('pregunta') or catalog_item.get('descripcion_general', 'Sigue las instrucciones del adulto acompanante.'),
             'tipo_interaction': self._interaction_type(catalog_item),
             'requiere_evidencia': catalog_item.get('requiere_evidencia', True),
             'tipos_evidencia': catalog_item.get('tipos_evidencia', ['LOG']),
             'auto_validable': catalog_item.get('auto_validable', False),
             'requiere_revision_psicologo': item.requires_review,
+            'validation_mode': validation_mode,
             'estado_item': item.estado,
             'estado_evaluacion': evaluación.estado,
         }
