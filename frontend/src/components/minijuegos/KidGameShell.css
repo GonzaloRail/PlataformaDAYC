@@ -20,6 +20,20 @@
   max-width: 100%;
 }
 
+.kid-shell-embedded {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  padding: clamp(0.62rem, 1vw, 0.9rem);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 10% 12%, rgba(255, 220, 172, 0.22), transparent 24rem),
+    radial-gradient(circle at 92% 86%, rgba(65, 198, 170, 0.18), transparent 23rem),
+    rgba(255, 255, 255, 0.66);
+  box-shadow: 0 24px 58px rgba(27, 74, 92, 0.13);
+}
+
 .kid-shell-bg {
   position: absolute;
   inset: 0;
@@ -130,11 +144,25 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
+.kid-shell-embedded .kid-shell-play {
+  margin-top: 0;
+  min-height: 0;
+  height: 100%;
+  padding: clamp(0.72rem, 1.2vw, 1rem);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
 .kid-shell-actions {
   margin-top: 1rem;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.65rem;
+}
+
+.kid-shell-embedded .kid-shell-actions {
+  margin-top: 0.72rem;
+  padding-inline: clamp(0.2rem, 1vw, 0.5rem);
 }
 
 .kid-shell-actions:empty {
@@ -181,6 +209,12 @@
   font-size: 0.88rem;
   color: var(--kid-muted);
   text-align: center;
+}
+
+.kid-shell-embedded .kid-shell-footer {
+  margin-top: 0.45rem;
+  padding-inline: 6.2rem;
+  font-size: 0.82rem;
 }
 
 @media (max-width: 640px) {

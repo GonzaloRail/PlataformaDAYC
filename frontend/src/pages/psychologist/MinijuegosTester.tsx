@@ -1,16 +1,38 @@
 import React, { useState } from 'react';
 import { Modal, Card } from '../../components/ui';
 import { getMinijuego, getMinijuegosCatalog } from '../../components/minijuegos/registry';
-import { MinijuegoLoader } from '../../components/minijuegos/MinijuegoLoader';
-import type { Answer, Item, MinijuegoConfig } from '../../minijuegos/types';
+import { DigitalActivityExperience } from '../../components/child/DigitalActivityExperience';
+import type { EvaluationTask } from '../../types';
 import '../child/EvaluationSession.css';
 import './MinijuegosTester.css';
 
-const fakeItem: Item = {
-  id: 'test-item',
-  area: 'COGNITIVA',
-  nivel: 1,
-  instruccion: 'Prueba si el bebe logra llevarse la mano a la boca.',
+const buildPreviewTask = (id: string, area: string, nombre: string): EvaluationTask => {
+  const idParts = id.split('_');
+  const itemNumber = Number(idParts[idParts.length - 1]);
+  const pregunta = id === 'COGNITIVO_045' ? 'Imita el dibujo de una cara' : nombre;
+
+  return {
+    item_id: id,
+    numero_item: Number.isFinite(itemNumber) ? itemNumber : undefined,
+    minijuego: id,
+    pregunta,
+    instrucciones: pregunta,
+    tipo_interaction: 'mixed',
+    evaluacion_id: 'preview-evaluacion',
+    area,
+    area_index: 0,
+    current_task: id,
+    modalidad: 'INTERACTIVO_ASISTIDO',
+    pantalla_nino: 'ACTIVIDAD',
+    actividad_digital: id,
+    requiere_evidencia: true,
+    tipos_evidencia: ['LOG', 'SCREENSHOT'],
+    auto_validable: false,
+    requiere_revision_psicologo: true,
+    validation_mode: 'ADULT_REQUIRED',
+    estado_item: 'PENDING',
+    estado_evaluacion: 'IN_PROGRESS',
+  };
 };
 
 export const MinijuegosTester: React.FC = () => {
@@ -18,7 +40,7 @@ export const MinijuegosTester: React.FC = () => {
   const areas = ['TODOS', ...Array.from(new Set(minijuegos.map((m) => m.area)))];
   const [selectedArea, setSelectedArea] = useState('TODOS');
   const [open, setOpen] = useState<string | null>(null);
-  const [lastAnswer, setLastAnswer] = useState<Answer | null>(null);
+  const [lastAnswer, setLastAnswer] = useState<Record<string, unknown> | null>(null);
 
   const filteredMinijuegos = minijuegos.filter((minijuego) => {
     const byArea = selectedArea === 'TODOS' || minijuego.area === selectedArea;
@@ -27,14 +49,7 @@ export const MinijuegosTester: React.FC = () => {
 
   const selected = open ? getMinijuego(open) : null;
   const selectedMeta = minijuegos.find((minijuego) => minijuego.id === open);
-  const config: MinijuegoConfig | null = open
-    ? {
-        id: open,
-        area: 'COGNITIVA',
-        nombre: selectedMeta?.nombre ?? open,
-        items: [fakeItem],
-      }
-    : null;
+  const previewTask = open && selectedMeta ? buildPreviewTask(open, selectedMeta.area, selectedMeta.nombre) : null;
 
   return (
     <div className="minijuegos-tester">
@@ -97,25 +112,22 @@ export const MinijuegosTester: React.FC = () => {
         title=""
         size="full"
       >
-        {open && selected && config && selectedMeta && (
+        {open && selected && previewTask && selectedMeta && (
           <div className="minijuego-test-modal">
             <div className="minijuego-test-stage">
-              <div className="evaluation-session evaluation-session-preview">
-                <div className="evaluation-header">
-                  <span className="nino-name">Vista previa: {selectedMeta.nombre}</span>
-                  <span className="progress-info">1/1</span>
-                </div>
-
-                <div className="evaluation-content">
-                  <div className="minijuego-container">
-                    <MinijuegoLoader
-                      config={config}
-                      currentItem={fakeItem}
-                      onAnswer={(answer) => setLastAnswer(answer)}
-                    />
-                  </div>
-                </div>
-              </div>
+              <main className="evaluation-session child-only-session evaluation-session-preview">
+                <header className="child-only-header">
+                  <span>DAYC en juego</span>
+                  <strong>{selectedMeta.area}{previewTask.numero_item ? ` · Ítem ${previewTask.numero_item}` : ''}</strong>
+                </header>
+                <section className="child-only-stage">
+                  <DigitalActivityExperience
+                    task={previewTask}
+                    areaLabel={selectedMeta.area}
+                    onComplete={(resultado, confidence, rawData) => setLastAnswer({ resultado, confidence, rawData })}
+                  />
+                </section>
+              </main>
             </div>
 
             {lastAnswer && (

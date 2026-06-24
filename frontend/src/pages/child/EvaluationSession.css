@@ -100,10 +100,6 @@
   gap: 1rem;
 }
 
-.child-question-flow.has-digital-activity {
-  grid-template-rows: auto minmax(420px, 1fr);
-}
-
 .child-digital-activity-panel {
   min-height: 420px;
   overflow: hidden;

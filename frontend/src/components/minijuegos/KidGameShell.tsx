@@ -5,6 +5,7 @@ import './KidGameShell.css';
 interface KidGameShellProps {
   title: string;
   subtitle: string;
+  variant?: 'standalone' | 'embedded';
   progressLabel?: string;
   mascotMessage?: string;
   playArea: ReactNode;
@@ -15,26 +16,31 @@ interface KidGameShellProps {
 export default function KidGameShell({
   title,
   subtitle,
+  variant = 'standalone',
   progressLabel,
   mascotMessage,
   playArea,
   actions,
   footer,
 }: KidGameShellProps) {
+  const isEmbedded = variant === 'embedded';
+
   return (
-    <section className="kid-shell" role="group" aria-label={title}>
+    <section className={isEmbedded ? 'kid-shell kid-shell-embedded' : 'kid-shell'} role="group" aria-label={title}>
       <div className="kid-shell-bg" aria-hidden="true" />
 
-      <header className="kid-shell-header">
-        <div className="kid-shell-heading">
-          <p className="kid-shell-eyebrow">Miniaventura</p>
-          <h2>{title}</h2>
-          <p className="kid-shell-subtitle">{subtitle}</p>
-        </div>
-        {progressLabel && <span className="kid-shell-progress">{progressLabel}</span>}
-      </header>
+      {!isEmbedded && (
+        <header className="kid-shell-header">
+          <div className="kid-shell-heading">
+            <p className="kid-shell-eyebrow">Miniaventura</p>
+            <h2>{title}</h2>
+            <p className="kid-shell-subtitle">{subtitle}</p>
+          </div>
+          {progressLabel && <span className="kid-shell-progress">{progressLabel}</span>}
+        </header>
+      )}
 
-      {mascotMessage && (
+      {!isEmbedded && mascotMessage && (
         <div className="kid-shell-mascot" role="status" aria-live="polite">
           <PedagogicalMascot className="kid-shell-mascot-animation" />
           <p>{mascotMessage}</p>

@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ChildQuestionPresenter } from '../../components/child/ChildQuestionPresenter'
+import { DigitalActivityExperience } from '../../components/child/DigitalActivityExperience'
 import { PedagogicalMascot } from '../../components/child/PedagogicalMascot'
 import { EvidenceRecorder } from '../../components/evidence/EvidenceRecorder'
-import { DigitalActivityShell } from '../../components/minijuegos/DigitalActivityShell'
-import { getMinijuego } from '../../components/minijuegos/registry'
 import evaluacionesApi from '../../services/evaluacionesApi'
 import type { EvaluationTask, SessionState } from '../../types'
 import './EvaluationSession.css'
@@ -138,7 +137,7 @@ export function EvaluationSession() {
     }
   }
 
-  const digitalEntry = task?.actividad_digital ? getMinijuego(task.actividad_digital) : undefined
+  const hasDigitalActivity = Boolean(task?.actividad_digital)
   const adultUrl = `${window.location.origin}/adult/session/${sessionCode || ''}`
   const currentAreaLabel = task?.area ? areaLabels[task.area] || task.area : 'Actividad'
 
@@ -195,14 +194,13 @@ export function EvaluationSession() {
 
       <section className="child-only-stage">
         {task && (
-          <div className={digitalEntry ? 'child-question-flow has-digital-activity' : 'child-question-flow'}>
-            <ChildQuestionPresenter task={task} areaLabel={currentAreaLabel} hasActivity={Boolean(digitalEntry)} />
-            {digitalEntry && (
-              <section className="child-digital-activity-panel" aria-label="Actividad digital del ítem">
-                <DigitalActivityShell task={task} onComplete={autoAnswer} />
-              </section>
-            )}
-          </div>
+          hasDigitalActivity ? (
+            <DigitalActivityExperience task={task} areaLabel={currentAreaLabel} onComplete={autoAnswer} />
+          ) : (
+            <div className="child-question-flow">
+              <ChildQuestionPresenter task={task} areaLabel={currentAreaLabel} />
+            </div>
+          )
         )}
       </section>
     </main>
