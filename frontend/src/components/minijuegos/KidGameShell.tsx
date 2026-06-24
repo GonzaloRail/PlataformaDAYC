@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { PedagogicalMascot } from '../child/PedagogicalMascot';
 import './KidGameShell.css';
 
 interface KidGameShellProps {
@@ -35,7 +36,7 @@ export default function KidGameShell({
 
       {mascotMessage && (
         <div className="kid-shell-mascot" role="status" aria-live="polite">
-          <span className="kid-shell-mascot-icon" aria-hidden="true" />
+          <PedagogicalMascot className="kid-shell-mascot-animation" />
           <p>{mascotMessage}</p>
         </div>
       )}

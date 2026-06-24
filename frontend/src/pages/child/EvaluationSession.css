@@ -94,6 +94,30 @@
   min-height: calc(100dvh - 88px);
 }
 
+.child-question-flow {
+  min-height: calc(100dvh - 88px);
+  display: grid;
+  gap: 1rem;
+}
+
+.child-question-flow.has-digital-activity {
+  grid-template-rows: auto minmax(420px, 1fr);
+}
+
+.child-digital-activity-panel {
+  min-height: 420px;
+  overflow: hidden;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: 0 24px 58px rgba(27, 74, 92, 0.14);
+}
+
+.child-digital-activity-panel > .digital-activity-shell,
+.child-digital-activity-panel > .digital-activity-shell > * {
+  min-height: 420px;
+}
+
 .child-session-layout {
   min-height: calc(100dvh - 98px);
   display: grid;
@@ -136,6 +160,17 @@
 .child-task-stage-movement { background: linear-gradient(145deg, #eff8ff 0%, #fff1df 100%); }
 .child-task-stage-voice { background: linear-gradient(145deg, #f0f4ff 0%, #fff6e9 100%); }
 .child-task-stage-neutral { background: linear-gradient(145deg, #f7fbfb 0%, #eff6f4 100%); }
+
+.child-stage-mascot {
+  width: clamp(180px, 24vw, 310px);
+  height: clamp(180px, 24vw, 310px);
+  margin-bottom: clamp(0.6rem, 2vw, 1.2rem);
+  filter: drop-shadow(0 24px 26px rgba(21, 78, 59, 0.14));
+}
+
+.child-stage-mascot svg {
+  display: block;
+}
 
 .child-orbit {
   position: absolute;

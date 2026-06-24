@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, LayoutDashboard, LineChart, LogOut, Menu, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, KeyRound, LayoutDashboard, LineChart, LogOut, Menu, X } from 'lucide-react'
 import { Button } from '../components/ui'
 import { store } from '../store'
 import './PsychologistLayout.css'
@@ -20,13 +20,15 @@ export function PsychologistLayout() {
   const currentSection = useMemo(() => {
     if (location.pathname.startsWith('/research')) return 'Metricas y analisis'
     if (location.pathname.startsWith('/psychologist/minijuegos')) return 'Catalogo de minijuegos'
+    if (location.pathname.startsWith('/psychologist/session-access')) return 'Entrada por codigo'
     return 'Panel de evaluaciones'
   }, [location.pathname])
 
   const navItems = [
-    { to: '/psychologist', label: 'Evaluaciones', icon: <LayoutDashboard size={18} /> },
+    { to: '/psychologist', label: 'Evaluaciones', icon: <LayoutDashboard size={18} />, end: true },
     { to: '/psychologist/minijuegos', label: 'Minijuegos', icon: <LayoutDashboard size={18} /> },
     { to: '/research/metrics', label: 'Metricas', icon: <LineChart size={18} /> },
+    { to: '/psychologist/session-access', label: 'Entrada', icon: <KeyRound size={18} /> },
   ]
 
   return (
@@ -53,6 +55,7 @@ export function PsychologistLayout() {
             <NavLink
               key={item.to}
               to={item.to}
+              end={item.end}
               className={({ isActive }) => `psych-nav-link ${isActive ? 'active' : ''}`}
               title={isSidebarCollapsed ? item.label : undefined}
             >

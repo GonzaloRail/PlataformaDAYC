@@ -95,6 +95,33 @@
 .dashboard-main { display: flex; flex-direction: column; gap: 1.2rem; }
 .dashboard-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
 
+.dashboard-toast {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.82rem 0.9rem;
+  border-radius: 18px;
+  border: 1px solid rgba(18, 128, 109, 0.2);
+  background: linear-gradient(135deg, rgba(240, 251, 249, 0.95), rgba(255, 255, 255, 0.86));
+  color: #164653;
+  box-shadow: 0 18px 42px rgba(18, 128, 109, 0.12);
+}
+
+.dashboard-toast span {
+  padding: 0.4rem 0.62rem;
+  border-radius: 999px;
+  background: #12806d;
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dashboard-toast p { margin: 0; font-weight: 900; }
+.dashboard-toast button { border: none; background: transparent; color: #607b87; font: inherit; font-weight: 1000; cursor: pointer; }
+
 .summary-card {
   border: 1px solid rgba(255,255,255,0.74);
   background: rgba(255,250,244,0.74);
@@ -147,6 +174,7 @@
 }
 
 .dashboard-sidebar { position: sticky; top: calc(var(--psych-topbar-height, 78px) + 1.1rem); height: fit-content; }
+.dashboard-sidebar .card.dashboard-panel { overflow: visible; }
 
 .empty-state {
   text-align: center;
@@ -162,6 +190,54 @@
 .form-label { display: block; font-size: 0.84rem; font-weight: 950; color: var(--color-matisse-800); margin-bottom: 0.48rem; }
 .form-select { width: 100%; min-height: 48px; padding: 0.72rem 0.95rem; border: 1px solid var(--color-line-strong); border-radius: 16px; background: rgba(255,255,255,0.82); color: var(--color-text); font-weight: 800; }
 .form-select:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--focus-ring); }
+
+.date-picker-field { position: relative; display: grid; gap: 0.5rem; }
+
+.date-picker-trigger {
+  width: 100%;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.72rem 0.95rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 179, 109, 0.22), transparent 8rem),
+    rgba(255, 255, 255, 0.84);
+  color: var(--color-matisse-900);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.date-picker-trigger span { font-weight: 950; }
+.date-picker-trigger strong { color: var(--color-accent-strong); font-size: 0.82rem; }
+.date-picker-trigger:focus-visible { outline: none; box-shadow: var(--focus-ring), inset 0 1px 0 rgba(255,255,255,0.72); }
+
+.date-picker-popover {
+  position: static;
+  z-index: 30;
+  margin-top: 0.55rem;
+  padding: 0.9rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.78);
+  background: rgba(255, 250, 244, 0.97);
+  box-shadow: 0 26px 64px rgba(27, 74, 92, 0.2);
+  backdrop-filter: blur(18px);
+}
+
+.date-picker-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0.62rem; margin-bottom: 0.75rem; }
+.date-picker-controls select { min-height: 42px; border: 1px solid rgba(15, 107, 122, 0.16); border-radius: 14px; background: #fff; color: var(--color-matisse-900); font: inherit; font-weight: 950; padding: 0 0.7rem; }
+.date-picker-weekdays,
+.date-picker-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.32rem; }
+.date-picker-weekdays { margin-bottom: 0.36rem; color: #607b87; font-size: 0.72rem; font-weight: 1000; text-align: center; }
+.date-picker-grid button { aspect-ratio: 1; border: 1px solid transparent; border-radius: 12px; background: rgba(255,255,255,0.7); color: var(--color-matisse-900); font: inherit; font-weight: 950; cursor: pointer; }
+.date-picker-grid button:hover:not(:disabled) { border-color: rgba(15,107,122,0.2); background: #fff; transform: translateY(-1px); }
+.date-picker-grid button.selected { background: linear-gradient(135deg, var(--color-primary), #0b4653); color: #fff; box-shadow: 0 10px 22px rgba(15,107,122,0.22); }
+.date-picker-grid button:disabled { opacity: 0.36; cursor: not-allowed; }
 
 @media (max-width: 1200px) {
   .dashboard-content { grid-template-columns: 1fr; }

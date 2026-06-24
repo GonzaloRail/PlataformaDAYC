@@ -101,14 +101,16 @@
   backdrop-filter: blur(4px);
 }
 
-.kid-shell-mascot-icon {
-  width: 0.86rem;
-  height: 0.86rem;
-  margin-top: 0.34rem;
-  border-radius: 999px;
+.kid-shell-mascot-animation {
+  width: 58px;
+  height: 58px;
   flex: 0 0 auto;
-  background: linear-gradient(160deg, var(--kid-primary), var(--kid-primary-strong));
-  box-shadow: 0 0 0 4px rgba(224, 122, 47, 0.16);
+  margin-top: -0.35rem;
+  filter: drop-shadow(0 8px 10px rgba(21, 78, 59, 0.14));
+}
+
+.kid-shell-mascot-animation svg {
+  display: block;
 }
 
 .kid-shell-mascot p {

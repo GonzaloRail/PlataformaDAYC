@@ -20,7 +20,8 @@ export const createChildrenStore: StateCreator<RootStore, [], [], NinoState> = (
 
   addNino: async (data) => {
     const nino = await childrenApi.create(data)
-    set((state) => ({ ninos: [...state.ninos, nino] }))
+    const ninos = await childrenApi.list()
+    set({ ninos })
     return nino
   },
 

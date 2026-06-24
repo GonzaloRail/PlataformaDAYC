@@ -16,6 +16,72 @@ const initialNinoForm = {
   escuela: '',
 }
 
+const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+
+const formatDateLabel = (value: string) => {
+  if (!value) return 'Seleccionar fecha'
+  const [year, month, day] = value.split('-')
+  return `${day} ${monthNames[Number(month) - 1]} ${year}`
+}
+
+const toDateValue = (year: number, month: number, day: number) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+
+function BirthDatePicker({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const today = new Date()
+  const selectedDate = value ? new Date(`${value}T00:00:00`) : today
+  const [isOpen, setIsOpen] = useState(false)
+  const [visibleYear, setVisibleYear] = useState(selectedDate.getFullYear())
+  const [visibleMonth, setVisibleMonth] = useState(selectedDate.getMonth())
+  const currentYear = today.getFullYear()
+  const years = Array.from({ length: 16 }, (_, index) => currentYear - index)
+  const firstWeekday = new Date(visibleYear, visibleMonth, 1).getDay()
+  const daysInMonth = new Date(visibleYear, visibleMonth + 1, 0).getDate()
+  const days = Array.from({ length: firstWeekday + daysInMonth }, (_, index) => index < firstWeekday ? null : index - firstWeekday + 1)
+
+  const selectDay = (day: number) => {
+    onChange(toDateValue(visibleYear, visibleMonth, day))
+    setIsOpen(false)
+  }
+
+  return (
+    <div className="date-picker-field">
+      <label className="input-label" htmlFor="birth-date-picker">Fecha de nacimiento</label>
+      <button id="birth-date-picker" type="button" className="date-picker-trigger" onClick={() => setIsOpen((prev) => !prev)}>
+        <span>{formatDateLabel(value)}</span>
+        <strong>{monthNames[visibleMonth]} {visibleYear}</strong>
+      </button>
+      {isOpen && (
+        <div className="date-picker-popover">
+          <div className="date-picker-controls">
+            <select value={visibleMonth} onChange={(event) => setVisibleMonth(Number(event.target.value))} aria-label="Mes">
+              {monthNames.map((month, index) => <option key={month} value={index}>{month}</option>)}
+            </select>
+            <select value={visibleYear} onChange={(event) => setVisibleYear(Number(event.target.value))} aria-label="Año">
+              {years.map((year) => <option key={year} value={year}>{year}</option>)}
+            </select>
+          </div>
+          <div className="date-picker-weekdays" aria-hidden="true">
+            {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}
+          </div>
+          <div className="date-picker-grid">
+            {days.map((day, index) => {
+              if (!day) return <span key={`empty-${index}`} />
+              const dateValue = toDateValue(visibleYear, visibleMonth, day)
+              const isSelected = dateValue === value
+              const isFuture = new Date(visibleYear, visibleMonth, day) > today
+              return (
+                <button key={dateValue} type="button" className={isSelected ? 'selected' : ''} disabled={isFuture} onClick={() => selectDay(day)}>
+                  {day}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function PsychologistDashboard() {
   const ninos = store((state) => state.ninos)
   const evaluaciones = store((state) => state.evaluaciones)
@@ -31,6 +97,7 @@ export function PsychologistDashboard() {
   const [selectedNinoId, setSelectedNinoId] = useState('')
   const [ninoForm, setNinoForm] = useState(initialNinoForm)
   const [error, setError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -68,6 +135,7 @@ export function PsychologistDashboard() {
 
   const handleCreateNino = async (event: React.FormEvent) => {
     event.preventDefault()
+    setSuccessMessage(null)
     if (!ninoForm.nombre.trim() || !ninoForm.fecha_nacimiento) {
       setError('Nombre y fecha de nacimiento son requeridos')
       return
@@ -85,6 +153,7 @@ export function PsychologistDashboard() {
       })
       setNinoForm(initialNinoForm)
       setSelectedNinoId(nino.id)
+      setSuccessMessage(`Niño registrado correctamente: ${nino.nombre}`)
       setActiveTab('nueva')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo registrar el niño')
@@ -150,6 +219,13 @@ export function PsychologistDashboard() {
       <div className="dashboard-content">
         <div className="dashboard-main">
           {error && <ViewState kind="error" message={error} onRetry={() => void loadDashboard()} />}
+          {successMessage && (
+            <div className="dashboard-toast" role="status">
+              <span>Listo</span>
+              <p>{successMessage}</p>
+              <button type="button" onClick={() => setSuccessMessage(null)} aria-label="Cerrar aviso">x</button>
+            </div>
+          )}
 
           <div className="dashboard-summary">
             <Card className="summary-card" padding="sm">
@@ -209,7 +285,7 @@ export function PsychologistDashboard() {
               <h2 className="panel-title">Registrar niño</h2>
               <form onSubmit={handleCreateNino}>
                 <div className="form-group"><Input label="Nombre completo" value={ninoForm.nombre} onChange={(e) => setNinoForm((prev) => ({ ...prev, nombre: e.target.value }))} placeholder="Nombre del niño" /></div>
-                <div className="form-group"><Input label="Fecha de nacimiento" type="date" value={ninoForm.fecha_nacimiento} onChange={(e) => setNinoForm((prev) => ({ ...prev, fecha_nacimiento: e.target.value }))} /></div>
+                <div className="form-group"><BirthDatePicker value={ninoForm.fecha_nacimiento} onChange={(fecha_nacimiento) => setNinoForm((prev) => ({ ...prev, fecha_nacimiento }))} /></div>
                 <div className="form-group"><Input label="Padre o tutor" value={ninoForm.padre_tutor} onChange={(e) => setNinoForm((prev) => ({ ...prev, padre_tutor: e.target.value }))} placeholder="Nombre del tutor" /></div>
                 <div className="form-group"><Input label="Escuela" value={ninoForm.escuela} onChange={(e) => setNinoForm((prev) => ({ ...prev, escuela: e.target.value }))} placeholder="Opcional" /></div>
                 <Button type="submit" fullWidth isLoading={isSubmitting}>Guardar niño</Button>

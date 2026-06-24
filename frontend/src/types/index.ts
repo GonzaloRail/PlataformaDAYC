@@ -88,7 +88,9 @@ export interface EvaluacionWithResults extends Evaluacion {
 
 export interface EvaluationTask {
   item_id: string;
+  numero_item?: number;
   minijuego: string;
+  pregunta?: string | null;
   instrucciones: string;
   tipo_interaction: 'visual' | 'audio' | 'text' | 'mixed' | 'gate';
   evaluacion_id?: string;
@@ -102,6 +104,7 @@ export interface EvaluationTask {
   tipos_evidencia?: string[];
   auto_validable?: boolean;
   requiere_revision_psicologo?: boolean;
+  validation_mode?: 'SYSTEM_AUTO' | 'SYSTEM_ASSISTED_REVIEW' | 'ADULT_REQUIRED';
   estado_item?: string;
   estado_evaluacion?: string;
 }

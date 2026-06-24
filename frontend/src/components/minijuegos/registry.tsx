@@ -1,5 +1,6 @@
 import COGNITIVO_001 from './Cognitivo/COGNITIVO_001';
 import SOCIAL_EMOCIONAL_001 from './Social_Emocional/SOCIAL_EMOCIONAL_001';
+import COGNITIVO_045 from '../../minijuegos/cognitivo/COGNITIVO_045';
 
 
 interface MinijuegoEntry {
@@ -60,6 +61,14 @@ export const minijuegosRegistry: Record<string, MinijuegoEntry> = {
     descripcion: 'Actividad cognitiva en desarrollo.',
     estado: 'placeholder',
     component: Placeholder,
+    fallback: FallbackManual,
+  },
+  COGNITIVO_045: {
+    nombre: 'COGNITIVO_045 Imita una cara',
+    area: 'COGNITIVO',
+    descripcion: 'Cara modelo con lienzo de dibujo para copia asistida.',
+    estado: 'ready',
+    component: COGNITIVO_045,
     fallback: FallbackManual,
   },
   COMUNICACION_001: {

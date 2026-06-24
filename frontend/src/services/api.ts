@@ -13,11 +13,32 @@ class ApiError extends Error {
   }
 }
 
+const extractErrorMessage = (status: number, responseText: string): string => {
+  if (!responseText) return `Error HTTP ${status}`;
+
+  try {
+    const parsed = JSON.parse(responseText) as unknown;
+    if (parsed && typeof parsed === 'object') {
+      const payload = parsed as Record<string, unknown>;
+      const candidate = payload.detail || payload.message || payload.error || Object.values(payload)[0];
+      if (typeof candidate === 'string') return candidate;
+      if (Array.isArray(candidate) && typeof candidate[0] === 'string') return candidate[0];
+    }
+  } catch {
+    // Some backend errors are HTML debug pages; do not expose them in the UI.
+  }
+
+  if (/<[a-z][\s\S]*>/i.test(responseText)) {
+    return status >= 500
+      ? 'El servidor devolvio un error inesperado. Intenta nuevamente.'
+      : 'No se pudo completar la solicitud. Revisa los datos e intenta nuevamente.';
+  }
+
+  return responseText.length > 180 ? responseText.slice(0, 177).trim() + '...' : responseText;
+};
+
 const defaultOptions: RequestOptions = {
   credentials: 'include',
-  headers: {
-    'Content-Type': 'application/json',
-  },
 };
 
 async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
@@ -29,17 +50,18 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
   try {
     const response = await fetch(`${API_BASE}${endpoint}`, {
       ...defaultOptions,
+      cache: 'no-store',
       ...fetchOptions,
       signal: controller.signal,
     });
 
     if (!response.ok) {
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         store.setState({ user: null, isAuthenticated: false });
         throw new ApiError(response.status, 'Unauthorized');
       }
       const errorText = await response.text();
-      throw new ApiError(response.status, errorText || `HTTP ${response.status}`);
+      throw new ApiError(response.status, extractErrorMessage(response.status, errorText));
     }
 
     if (response.status === 204) {
@@ -61,14 +83,29 @@ export const api = {
   get: <T>(endpoint: string, options?: RequestOptions) =>
     request<T>(endpoint, { ...options, method: 'GET' }),
 
-  post: <T>(endpoint: string, data?: unknown, options?: RequestOptions) =>
-    request<T>(endpoint, { ...options, method: 'POST', body: JSON.stringify(data) }),
+  post: <T>(endpoint: string, data?: unknown, options?: RequestOptions) => {
+    const isFormData = data instanceof FormData;
+    const headers = isFormData
+      ? options?.headers
+      : { 'Content-Type': 'application/json', ...(options?.headers || {}) };
+    return request<T>(endpoint, { ...options, headers, method: 'POST', body: isFormData ? data : JSON.stringify(data) });
+  },
 
-  put: <T>(endpoint: string, data?: unknown, options?: RequestOptions) =>
-    request<T>(endpoint, { ...options, method: 'PUT', body: JSON.stringify(data) }),
+  put: <T>(endpoint: string, data?: unknown, options?: RequestOptions) => {
+    const isFormData = data instanceof FormData;
+    const headers = isFormData
+      ? options?.headers
+      : { 'Content-Type': 'application/json', ...(options?.headers || {}) };
+    return request<T>(endpoint, { ...options, headers, method: 'PUT', body: isFormData ? data : JSON.stringify(data) });
+  },
 
-  patch: <T>(endpoint: string, data?: unknown, options?: RequestOptions) =>
-    request<T>(endpoint, { ...options, method: 'PATCH', body: JSON.stringify(data) }),
+  patch: <T>(endpoint: string, data?: unknown, options?: RequestOptions) => {
+    const isFormData = data instanceof FormData;
+    const headers = isFormData
+      ? options?.headers
+      : { 'Content-Type': 'application/json', ...(options?.headers || {}) };
+    return request<T>(endpoint, { ...options, headers, method: 'PATCH', body: isFormData ? data : JSON.stringify(data) });
+  },
 
   delete: <T>(endpoint: string, options?: RequestOptions) =>
     request<T>(endpoint, { ...options, method: 'DELETE' }),

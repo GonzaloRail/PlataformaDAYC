@@ -26,10 +26,7 @@ export const evaluacionesApi = {
     api.get<any[]>(`/api/evaluaciones/${evaluacionId}/items/${itemId}/evidence/`),
   uploadEvidence: (evaluacionId: string, itemId: string, formData: FormData, token?: string) =>
     api.post<{ id: string; type: string }>(`/api/evaluaciones/${evaluacionId}/items/${itemId}/evidence/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-      }
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     }),
   reviewOverview: (evaluacionId: string) => api.get<ReviewOverview>(`/api/evaluaciones/${evaluacionId}/review/`),
   reviewItem: (evaluacionId: string, itemId: string, payload: { final_result: string; psychologist_notes?: string }) =>

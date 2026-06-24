@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { ChildQuestionPresenter } from '../../components/child/ChildQuestionPresenter'
+import { PedagogicalMascot } from '../../components/child/PedagogicalMascot'
 import { EvidenceRecorder } from '../../components/evidence/EvidenceRecorder'
 import { DigitalActivityShell } from '../../components/minijuegos/DigitalActivityShell'
 import { getMinijuego } from '../../components/minijuegos/registry'
@@ -17,48 +19,7 @@ const areaLabels: Record<string, string> = {
   CONDUCTA_ADAPTATIVA: 'Rutinas diarias',
 }
 
-const getChildStage = (task: EvaluationTask | null) => {
-  const modality = task?.modalidad || 'MANUAL_GUIADO'
-  const screen = task?.pantalla_nino || 'INSTRUCCION_SIMPLE'
-
-  if (modality === 'PREGUNTA_CUIDADOR' || screen === 'PANTALLA_NEUTRA') {
-    return {
-      variant: 'neutral',
-      eyebrow: 'Pausa tranquila',
-      title: 'Espera un momento',
-      text: 'El adulto está respondiendo esta parte.',
-      helper: 'Cuando termine, continuaremos con la siguiente actividad.',
-    }
-  }
-
-  if (modality === 'OBSERVACION_FISICA' || screen === 'ESPERA_ADULTO') {
-    return {
-      variant: 'movement',
-      eyebrow: 'Actividad con el adulto',
-      title: 'Sigue la indicación',
-      text: 'Haz la actividad con calma frente al dispositivo.',
-      helper: 'El adulto te dirá qué hacer y registrará el resultado.',
-    }
-  }
-
-  if (modality === 'EVIDENCIA_DIFERIDA' || screen === 'ESTIMULO') {
-    return {
-      variant: 'voice',
-      eyebrow: 'Escucha y responde',
-      title: 'Responde con tu voz',
-      text: task?.instrucciones || 'Escucha al adulto y responde cuando estés listo.',
-      helper: 'No hay prisa. Puedes responder con calma.',
-    }
-  }
-
-  return {
-    variant: 'play',
-    eyebrow: 'Actividad en pantalla',
-    title: 'Vamos a jugar',
-    text: task?.instrucciones || 'Mira la pantalla y sigue la actividad.',
-    helper: 'Si necesitas ayuda, el adulto está contigo.',
-  }
-}
+const sessionAdvanceChannel = 'dayc-session-advance'
 
 export function EvaluationSession() {
   const { sessionCode } = useParams<{ sessionCode: string }>()
@@ -67,6 +28,7 @@ export function EvaluationSession() {
   const [task, setTask] = useState<EvaluationTask | null>(null)
   const [error, setError] = useState<string | null>(null)
   const itemStartRef = useRef(Date.now())
+  const activeItemRef = useRef<string | null>(null)
 
   useEffect(() => {
     void loadSessionState(true)
@@ -80,8 +42,13 @@ export function EvaluationSession() {
     setError(null)
     try {
       const state = await evaluacionesApi.sessionState(sessionCode)
+      const nextTask = state.current_task || null
       setSessionState(state)
-      setTask(state.current_task || null)
+      setTask(nextTask)
+      if (nextTask?.item_id && activeItemRef.current !== nextTask.item_id) {
+        activeItemRef.current = nextTask.item_id
+        itemStartRef.current = Date.now()
+      }
 
       if (state.evaluacion.estado === 'PENDING_REVIEW' || state.evaluacion.estado === 'VALIDATED') {
         setPhase('complete')
@@ -97,15 +64,47 @@ export function EvaluationSession() {
         const response = await evaluacionesApi.startSession(sessionCode)
         setSessionState((prev) => prev ? { ...prev, evaluacion: response.evaluacion } : prev)
         setTask(response.current_task)
+        if (response.current_task?.item_id && activeItemRef.current !== response.current_task.item_id) {
+          activeItemRef.current = response.current_task.item_id
+          itemStartRef.current = Date.now()
+        }
       }
 
-      itemStartRef.current = Date.now()
       setPhase('session')
     } catch {
       setError('No pudimos abrir la sesión. Verifica el código con el adulto.')
       setPhase('error')
     }
   }
+
+  useEffect(() => {
+    const refreshFromSignal = (rawPayload: string | null) => {
+      if (!rawPayload || !sessionCode) return
+      try {
+        const payload = JSON.parse(rawPayload) as { sessionCode?: string }
+        if (payload.sessionCode === sessionCode) void loadSessionState(false)
+      } catch {
+        return
+      }
+    }
+
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === sessionAdvanceChannel) refreshFromSignal(event.newValue)
+    }
+
+    window.addEventListener('storage', onStorage)
+
+    let channel: BroadcastChannel | null = null
+    if ('BroadcastChannel' in window) {
+      channel = new BroadcastChannel(sessionAdvanceChannel)
+      channel.onmessage = (event) => refreshFromSignal(String(event.data || ''))
+    }
+
+    return () => {
+      window.removeEventListener('storage', onStorage)
+      channel?.close()
+    }
+  }, [sessionCode])
 
   const autoAnswer = async (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawDataExt?: any) => {
     if (!task?.evaluacion_id || !task.item_id) return
@@ -129,6 +128,7 @@ export function EvaluationSession() {
 
       if (response.current_task) {
         setTask(response.current_task)
+        activeItemRef.current = response.current_task.item_id
         itemStartRef.current = Date.now()
       } else {
         await loadSessionState(false)
@@ -138,9 +138,9 @@ export function EvaluationSession() {
     }
   }
 
-  const stage = getChildStage(task)
   const digitalEntry = task?.actividad_digital ? getMinijuego(task.actividad_digital) : undefined
   const adultUrl = `${window.location.origin}/adult/session/${sessionCode || ''}`
+  const currentAreaLabel = task?.area ? areaLabels[task.area] || task.area : 'Actividad'
 
   if (phase === 'loading') {
     return <main className="evaluation-loading"><div className="evaluation-spinner" /><p>Preparando actividad...</p></main>
@@ -154,6 +154,7 @@ export function EvaluationSession() {
     return (
       <main className="evaluation-session child-only-session">
         <section className="child-only-stage child-task-stage child-task-stage-neutral">
+          <PedagogicalMascot className="child-stage-mascot" />
           <p className="child-stage-eyebrow">Esperando al adulto</p>
           <h1>Ya casi empezamos</h1>
           <p className="child-stage-main">El adulto debe abrir su pantalla y aceptar los pasos iniciales.</p>
@@ -167,6 +168,7 @@ export function EvaluationSession() {
     return (
       <main className="evaluation-session child-only-session">
         <section className="child-only-stage child-task-stage child-task-stage-neutral">
+          <PedagogicalMascot className="child-stage-mascot" />
           <p className="child-stage-eyebrow">Terminamos</p>
           <h1>Gracias por participar</h1>
           <p className="child-stage-main">Hiciste un gran trabajo.</p>
@@ -188,23 +190,18 @@ export function EvaluationSession() {
 
       <header className="child-only-header">
         <span>DAYC en juego</span>
-        <strong>{task?.area ? areaLabels[task.area] || task.area : 'Actividad'}</strong>
+        <strong>{currentAreaLabel}{task?.numero_item ? ` · Ítem ${task.numero_item}` : ''}</strong>
       </header>
 
       <section className="child-only-stage">
-        {task && digitalEntry ? (
-          <DigitalActivityShell task={task} onComplete={autoAnswer} />
-        ) : (
-          <div className={`child-task-stage child-task-stage-${stage.variant}`}>
-            <div className="child-orbit" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </div>
-            <p className="child-stage-eyebrow">{stage.eyebrow}</p>
-            <h1>{stage.title}</h1>
-            <p className="child-stage-main">{stage.text}</p>
-            <p className="child-stage-helper">{stage.helper}</p>
+        {task && (
+          <div className={digitalEntry ? 'child-question-flow has-digital-activity' : 'child-question-flow'}>
+            <ChildQuestionPresenter task={task} areaLabel={currentAreaLabel} hasActivity={Boolean(digitalEntry)} />
+            {digitalEntry && (
+              <section className="child-digital-activity-panel" aria-label="Actividad digital del ítem">
+                <DigitalActivityShell task={task} onComplete={autoAnswer} />
+              </section>
+            )}
           </div>
         )}
       </section>

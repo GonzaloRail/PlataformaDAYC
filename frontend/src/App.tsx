@@ -5,6 +5,7 @@ import { AdultSession } from './pages/child/AdultSession'
 import { LoginPage } from './pages/auth/LoginPage'
 import { PsychologistDashboard } from './pages/psychologist/Dashboard'
 import { MinijuegosTester } from './pages/psychologist/MinijuegosTester'
+import { SessionAccess } from './pages/psychologist/SessionAccess'
 import { ReviewPage } from './pages/psychologist/ReviewPage'
 import { MetricsDashboard } from './pages/research/MetricsDashboard'
 import { PublicRoute } from './components/auth/PublicRoute'
@@ -38,6 +39,7 @@ function App() {
           <Route path="/psychologist" element={<PsychologistDashboard />} />
           <Route path="/psychologist/evaluations/:evaluacionId/review" element={<ReviewPage />} />
           <Route path="/psychologist/minijuegos" element={<MinijuegosTester />} />
+          <Route path="/psychologist/session-access" element={<SessionAccess />} />
           <Route path="/research/metrics" element={<MetricsDashboard />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />

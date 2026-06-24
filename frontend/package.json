@@ -10,15 +10,21 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/holistic": "^0.5.1675471629",
+    "@mediapipe/tasks-vision": "^0.10.8",
+    "@tailwindcss/postcss": "^4.3.1",
+    "autoprefixer": "^10.5.1",
+    "lottie-react": "^2.4.1",
+    "lucide-react": "^1.16.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",
-    "lucide-react": "^1.16.0",
-    "zustand": "^4.4.7",
-    "@mediapipe/tasks-vision": "^0.10.8",
-    "recharts": "^2.10.3"
+    "recharts": "^2.10.3",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/node": "^26.0.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",

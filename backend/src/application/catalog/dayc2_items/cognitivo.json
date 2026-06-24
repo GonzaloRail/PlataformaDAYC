@@ -305,15 +305,16 @@
     "numero": 45,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_045",
     "requiere_revision_psicologo": true,
     "pregunta": "Imita el dibujo de una cara",
     "descripcion_general": "Imita el dibujo de una cara"

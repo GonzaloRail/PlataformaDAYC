@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { evidenceUploadQueue } from '../../components/evidence/EvidenceUploadQueue'
 import { Button, Card, Input } from '../../components/ui'
 import evaluacionesApi from '../../services/evaluacionesApi'
 import type { EvaluationTask, SessionState } from '../../types'
@@ -32,6 +33,18 @@ const evidenceLabels: Record<string, string> = {
   CAMERA_FRAME: 'cámara',
 }
 
+const sessionAdvanceChannel = 'dayc-session-advance'
+
+function notifyChildSessionAdvanced(sessionCode: string, itemId?: string) {
+  const payload = JSON.stringify({ sessionCode, itemId, at: Date.now() })
+  window.localStorage.setItem(sessionAdvanceChannel, payload)
+  if ('BroadcastChannel' in window) {
+    const channel = new BroadcastChannel(sessionAdvanceChannel)
+    channel.postMessage(payload)
+    channel.close()
+  }
+}
+
 function buildAdultHint(task: EvaluationTask | null) {
   if (!task) return 'Espera a que el sistema cargue el ítem actual.'
 
@@ -52,6 +65,35 @@ function buildAdultHint(task: EvaluationTask | null) {
   }
 
   return 'Guía la actividad y registra el resultado observado.'
+}
+
+async function captureCameraFrame(): Promise<Blob | null> {
+  if (!navigator.mediaDevices?.getUserMedia) return null
+
+  let stream: MediaStream | null = null
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
+    const video = document.createElement('video')
+    video.srcObject = stream
+    video.muted = true
+    await video.play()
+
+    await new Promise((resolve) => window.setTimeout(resolve, 350))
+
+    const canvas = document.createElement('canvas')
+    canvas.width = video.videoWidth || 1280
+    canvas.height = video.videoHeight || 720
+    const context = canvas.getContext('2d')
+    if (!context) return null
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height)
+    return await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.88))
+  } catch (error) {
+    console.warn('No se pudo capturar evidencia de camara:', error)
+    return null
+  } finally {
+    stream?.getTracks().forEach((track) => track.stop())
+  }
 }
 
 export function AdultSession() {
@@ -139,7 +181,10 @@ export function AdultSession() {
     setSubmitting(true)
     setError(null)
     const duration = Date.now() - itemStartRef.current
+    const token = sessionState?.session_token || undefined
     try {
+      void recordAdultEvidence(task, resultado, duration, token)
+
       const response = await evaluacionesApi.submitRespuesta(task.evaluacion_id, {
         item_id: task.item_id,
         resultado,
@@ -151,10 +196,11 @@ export function AdultSession() {
           pantalla_nino: task.pantalla_nino,
           adult_observation: adultObservation,
         },
-      }, sessionState?.session_token || undefined)
+      }, token)
 
       setAdultObservation('')
       if (response.evaluation_finished) {
+        if (sessionCode) notifyChildSessionAdvanced(sessionCode)
         setPhase('complete')
         return
       }
@@ -164,11 +210,76 @@ export function AdultSession() {
       } else {
         await loadSessionState(false)
       }
-    } catch {
-      setError('No se pudo registrar la respuesta')
+      if (sessionCode) notifyChildSessionAdvanced(sessionCode, response.current_task?.item_id || response.next_item_id)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo registrar la respuesta')
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const recordAdultEvidence = async (currentTask: EvaluationTask, resultado: string, duration: number, token?: string) => {
+    const metadata = {
+      item_id: currentTask.item_id,
+      numero_item: currentTask.numero_item,
+      pregunta: currentTask.pregunta || currentTask.instrucciones,
+      resultado,
+      duration_ms: duration,
+      modalidad: currentTask.modalidad,
+      pantalla_nino: currentTask.pantalla_nino,
+      adult_observation: adultObservation,
+      captured_at: new Date().toISOString(),
+    }
+
+    void evaluacionesApi.submitEvent(currentTask.evaluacion_id!, currentTask.item_id, {
+      event_type: 'ADULT_RESULT_SELECTED',
+      relative_time_ms: duration,
+      event_payload: metadata,
+    }, token).catch((error) => {
+      console.warn('No se pudo registrar el evento del adulto:', error)
+    })
+
+    evidenceUploadQueue.add({
+      evaluacionId: currentTask.evaluacion_id!,
+      itemId: currentTask.item_id,
+      type: 'TIME_EVENT',
+      metadata: { ...metadata, event: 'ADULT_RESULT_SELECTED' },
+      durationMs: duration,
+      capturedBy: 'ADULT_DEVICE',
+      sessionToken: token,
+    })
+
+    const shouldCaptureFrame =
+      currentTask.modalidad === 'OBSERVACION_FISICA' ||
+      currentTask.tipos_evidencia?.some((type) => ['VIDEO', 'CAMERA_FRAME', 'SCREENSHOT'].includes(type))
+
+    if (!shouldCaptureFrame) return
+
+    const frame = await captureCameraFrame()
+    if (!frame) {
+      evidenceUploadQueue.add({
+        evaluacionId: currentTask.evaluacion_id!,
+        itemId: currentTask.item_id,
+        type: 'LOG',
+        metadata: { ...metadata, event: 'CAMERA_FRAME_NOT_CAPTURED' },
+        durationMs: duration,
+        capturedBy: 'ADULT_DEVICE',
+        sessionToken: token,
+      })
+      return
+    }
+
+    evidenceUploadQueue.add({
+      evaluacionId: currentTask.evaluacion_id!,
+      itemId: currentTask.item_id,
+      type: 'CAMERA_FRAME',
+      file: frame,
+      metadata,
+      durationMs: duration,
+      sizeBytes: frame.size,
+      capturedBy: 'ADULT_DEVICE',
+      sessionToken: token,
+    })
   }
 
   const finishSession = async () => {
@@ -250,9 +361,9 @@ export function AdultSession() {
       </section>
 
       <Card className="adult-card adult-control-card" padding="lg">
-        <p className="adult-eyebrow">{task?.area || 'Área'} · {task?.item_id || 'Ítem'}</p>
+        <p className="adult-eyebrow">{task?.area || 'Área'} · Ítem {task?.numero_item || task?.item_id || '-'}</p>
         <h1>{modalityLabels[task?.modalidad || ''] || 'Aplicación guiada'}</h1>
-        <p className="adult-question">{task?.instrucciones || 'Sigue la indicación del profesional.'}</p>
+        <p className="adult-question">{task?.pregunta || task?.instrucciones || 'Sigue la indicación del profesional.'}</p>
         <div className="adult-hint">{buildAdultHint(task)}</div>
 
         <div className="adult-evidence-list">
