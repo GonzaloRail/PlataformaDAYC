@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Button } from '../ui';
-import type { Resultado } from '../../types';
+import { Button } from '@/components/ui';
+import type { Resultado } from '@/types';
+import { getScoreCategory, getGdqInterpretation } from '@/utils/scoring';
 import './ResultAdjustment.css';
 
 interface ResultAdjustmentProps {
@@ -22,7 +23,7 @@ export const ResultAdjustment: React.FC<ResultAdjustmentProps> = ({
   const [editableResults, setEditableResults] = useState<EditableResultado[]>(
     resultados.map((r) => ({
       ...r,
-      tempScore: r.puntuacion_estandar ?? r.puntuación_estándar ?? 0,
+      tempScore: r.puntuacion_estandar ?? 0,
       isChanged: false,
     }))
   );
@@ -32,7 +33,7 @@ export const ResultAdjustment: React.FC<ResultAdjustmentProps> = ({
     setEditableResults((prev) =>
       prev.map((r) =>
         r.id === id
-          ? { ...r, tempScore: newScore, isChanged: newScore !== (r.puntuacion_estandar ?? r.puntuación_estándar ?? 0) }
+          ? { ...r, tempScore: newScore, isChanged: newScore !== (r.puntuacion_estandar ?? 0) }
           : r
       )
     );
@@ -57,26 +58,9 @@ export const ResultAdjustment: React.FC<ResultAdjustmentProps> = ({
     }
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 13) return 'score-high';
-    if (score >= 10) return 'score-normal';
-    if (score >= 7) return 'score-low';
-    return 'score-very-low';
-  };
+  const getScoreColor = (score: number) => getScoreCategory(score).className;
 
-  const getScoreLabel = (score: number) => {
-    if (score >= 13) return 'Superior';
-    if (score >= 10) return 'Promedio';
-    if (score >= 7) return 'Bajo';
-    return 'Muy Bajo';
-  };
-
-  const getGdqInterpretation = (gdq: number) => {
-    if (gdq >= 110) return { label: 'Superior', color: '#059669' };
-    if (gdq >= 90) return { label: 'Promedio', color: '#4f46e5' };
-    if (gdq >= 80) return { label: 'Bajo', color: '#f59e0b' };
-    return { label: 'Muy Bajo', color: '#dc2626' };
-  };
+  const getScoreLabel = (score: number) => getScoreCategory(score).label;
 
   return (
     <div className="result-adjustment">
@@ -109,9 +93,9 @@ export const ResultAdjustment: React.FC<ResultAdjustmentProps> = ({
                 return (
                   <>
               <span className="col-area">
-                <span className="area-badge">{result.área ?? result.area}</span>
+                <span className="area-badge">{result.area}</span>
               </span>
-              <span className="col-pd">{result.puntuación_directa ?? result.puntuacion_directa}</span>
+              <span className="col-pd">{result.puntuacion_directa}</span>
               <span className="col-pe">
                 <input
                   type="number"

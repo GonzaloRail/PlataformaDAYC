@@ -1,34 +1,14 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button, Card, Input } from '../../components/ui'
-import api from '../../services/api'
+import { type FormEvent } from 'react'
+import { Button, Card, Input } from '@/components/ui'
+import { useSessionJoin } from '@/hooks/useSessionJoin'
 import './SessionEntry.css'
 
 export function SessionEntry() {
-  const [sessionCode, setSessionCode] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
+  const { sessionCode, setSessionCode, isLoading, error, openSession } = useSessionJoin()
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
     await openSession('child')
-  }
-
-  const openSession = async (target: 'child' | 'adult') => {
-    const normalizedCode = sessionCode.trim().toUpperCase()
-    if (!normalizedCode) return
-
-    setIsLoading(true)
-    setError(null)
-    try {
-      await api.post('/api/evaluaciones/join/', { session_code: normalizedCode })
-      navigate(target === 'adult' ? `/adult/session/${normalizedCode}` : `/child/evaluation/${normalizedCode}`)
-    } catch {
-      setError('Código de sesión no válido o evaluación no disponible')
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   return (

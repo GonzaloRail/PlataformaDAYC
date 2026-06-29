@@ -1,8 +1,18 @@
-import api from './api'
-import type { Evaluacion, EvaluationTask, ReviewOverview, ScoreComparison, SessionState } from '../types'
+import api from '@/services/api'
+import type { Evaluacion, EvaluationTask, ReviewOverview, ScoreComparison, SessionState } from '@/types'
+
+interface PaginatedEvaluaciones {
+  results: Evaluacion[]
+  page: number
+  page_size: number
+  total: number
+}
 
 export const evaluacionesApi = {
-  list: () => api.get<Evaluacion[]>('/api/evaluaciones/'),
+  list: async (): Promise<Evaluacion[]> => {
+    const data = await api.get<PaginatedEvaluaciones>('/api/evaluaciones/')
+    return data.results
+  },
   create: (payload: { nino_id: string; minijuegos_config: string[] }) => api.post<Evaluacion>('/api/evaluaciones/', payload),
   get: (id: string) => api.get<Evaluacion>(`/api/evaluaciones/${id}/`),
   currentTask: (id: string) => api.get<EvaluationTask>(`/api/evaluaciones/${id}/current-task/`),

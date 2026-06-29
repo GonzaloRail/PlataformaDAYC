@@ -43,14 +43,3 @@ export interface MinijuegoRegistry {
     fallback?: React.ComponentType<any>;
   };
 }
-
-export interface EvaluationTask {
-  item_id: string;
-  minijuego: string;
-  instrucciones: string;
-  tipo_interaction: 'visual' | 'audio' | 'text' | 'mixed' | 'gate';
-  test_actual?: string;
-  item_actual?: number;
-  items_test_total?: number;
-  errores_test_actual?: number;
-}

@@ -1,31 +1,30 @@
 import type { StateCreator } from 'zustand'
-import authApi from '../services/authApi'
-import type { RootStore, AuthState } from './types'
+import authApi from '@/services/authApi'
+import type { RootStore, AuthState } from '@/store/types'
 
 export const createAuthStore: StateCreator<RootStore, [], [], AuthState> = (set) => ({
   user: null,
   isAuthenticated: false,
-  authLoading: false,
   isLoading: false,
 
   login: async (email: string, password: string) => {
-    set({ authLoading: true, isLoading: true })
+    set({ isLoading: true })
     try {
       const data = await authApi.login(email, password)
-      set({ user: data.user, isAuthenticated: true, authLoading: false, isLoading: false })
+      set({ user: data.user, isAuthenticated: true, isLoading: false })
     } catch (error) {
-      set({ authLoading: false, isLoading: false })
+      set({ isLoading: false })
       throw error
     }
   },
 
   registerPsychologist: async ({ nombre, apellido, email, password }) => {
-    set({ authLoading: true, isLoading: true })
+    set({ isLoading: true })
     try {
       const data = await authApi.registerPsychologist({ nombre, apellido, email, password })
-      set({ user: data.user, isAuthenticated: true, authLoading: false, isLoading: false })
+      set({ user: data.user, isAuthenticated: true, isLoading: false })
     } catch (error) {
-      set({ authLoading: false, isLoading: false })
+      set({ isLoading: false })
       throw error
     }
   },

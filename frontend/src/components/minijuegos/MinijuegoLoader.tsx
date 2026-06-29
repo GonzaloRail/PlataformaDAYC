@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { minijuegosRegistry } from './registry';
-import type { MinijuegoConfig, Answer, Item } from '../../minijuegos/types';
-import { FallbackProtocolView } from '../fallback/FallbackProtocolView';
+import { minijuegosRegistry } from '@/components/minijuegos/registry';
+import type { MinijuegoConfig, Answer, Item } from '@/minijuegos/types';
+import { FallbackProtocolView } from '@/components/fallback/FallbackProtocolView';
 import './MinijuegoLoader.css';
 
 interface MinijuegoLoaderProps {

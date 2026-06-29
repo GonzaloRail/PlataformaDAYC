@@ -1,7 +1,7 @@
 import React from 'react';
-import { getMinijuego } from './registry';
-import { EvaluationTask } from '../../types';
-import { Item, AreaDAYC2, Answer } from '../../minijuegos/types';
+import { getMinijuego } from '@/components/minijuegos/registry';
+import { EvaluationTask } from '@/types';
+import { Item, AreaDAYC2, Answer } from '@/minijuegos/types';
 
 interface DigitalActivityShellProps {
   task: EvaluationTask;

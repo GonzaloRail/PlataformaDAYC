@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type FormEvent, type ChangeEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button, Input, Card } from '../../components/ui'
-import { store } from '../../store'
+import { Button, Input, Card } from '@/components/ui'
+import { store } from '@/store'
 import './LoginPage.css'
 
 export function LoginPage() {
@@ -56,7 +56,7 @@ export function LoginPage() {
     return fallbackMessage
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError(null)
     setSuccess(null)
@@ -124,7 +124,7 @@ export function LoginPage() {
                     label="Nombre"
                     type="text"
                     value={nombre}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNombre(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setNombre(e.target.value)}
                     placeholder="Tu nombre"
                     autoFocus
                   />
@@ -135,7 +135,7 @@ export function LoginPage() {
                     label="Apellido"
                     type="text"
                     value={apellido}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApellido(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setApellido(e.target.value)}
                     placeholder="Tu apellido"
                   />
                 </div>
@@ -147,7 +147,7 @@ export function LoginPage() {
                   label="Email"
                   type="email"
                   value={email}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
                   autoComplete="email"
                   autoFocus={!isRegisterMode}
@@ -159,7 +159,7 @@ export function LoginPage() {
                   label="Contraseña"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   autoComplete={isRegisterMode ? 'new-password' : 'current-password'}
                 />

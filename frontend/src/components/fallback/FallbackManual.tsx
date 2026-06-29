@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from '../ui/Button';
-import type { Item, Answer, ItemResult } from '../../minijuegos/types';
+import { Button } from '@/components/ui/Button';
+import type { Item, Answer, ItemResult } from '@/minijuegos/types';
 import './FallbackManual.css';
 
 interface FallbackManualProps {

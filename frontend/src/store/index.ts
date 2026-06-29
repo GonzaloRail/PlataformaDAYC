@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import type { RootStore } from './types'
-import { createAuthStore } from './authStore'
-import { createChildrenStore } from './childrenStore'
-import { createEvaluacionesStore } from './evaluacionesStore'
-import { createUiStore } from './uiStore'
+import type { RootStore } from '@/store/types'
+import { createAuthStore } from '@/store/authStore'
+import { createChildrenStore } from '@/store/childrenStore'
+import { createEvaluacionesStore } from '@/store/evaluacionesStore'
+import { createUiStore } from '@/store/uiStore'
 
 export const store = create<RootStore>()((...a) => ({
   ...createAuthStore(...a),
@@ -12,4 +12,4 @@ export const store = create<RootStore>()((...a) => ({
   ...createUiStore(...a),
 }))
 
-export type { RootStore } from './types'
+export type { RootStore } from '@/store/types'

@@ -1,5 +1,5 @@
-import api from './api'
-import type { User } from '../types'
+import api from '@/services/api'
+import type { User } from '@/types'
 
 export const authApi = {
   login: (email: string, password: string) =>

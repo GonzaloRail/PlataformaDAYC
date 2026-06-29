@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Input } from '../ui';
-import type { ItemResult } from '../../minijuegos/types';
+import { Button, Input } from '@/components/ui';
+import type { ItemResult } from '@/minijuegos/types';
 import './ManualResponseEntry.css';
 
 interface ManualResponseEntryProps {

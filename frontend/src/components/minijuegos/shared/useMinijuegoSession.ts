@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Answer, Item, ItemResult } from '../../../minijuegos/types';
+import type { Answer, Item, ItemResult } from '@/minijuegos/types';
 
 interface SessionOptions {
   currentItem: Item;

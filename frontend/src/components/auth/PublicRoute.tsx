@@ -1,31 +1,14 @@
-import { useEffect, useState } from 'react'
+import { type ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { store } from '../../store'
+import { useAuthCheck } from '@/hooks/useAuthCheck'
 
 interface PublicRouteProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export function PublicRoute({ children }: PublicRouteProps) {
   const location = useLocation()
-  const [isChecking, setIsChecking] = useState(true)
-  const isAuthenticated = store((state) => state.isAuthenticated)
-  const checkAuthAction = store((state) => state.checkAuth)
-
-  useEffect(() => {
-    const verifyAuth = async () => {
-      if (!isAuthenticated) {
-        try {
-          await checkAuthAction()
-        } catch {
-          // No hay sesión activa; permitir ver login.
-        }
-      }
-      setIsChecking(false)
-    }
-
-    verifyAuth()
-  }, [isAuthenticated, checkAuthAction])
+  const { isChecking, isAuthenticated } = useAuthCheck()
 
   if (isChecking) return null
 

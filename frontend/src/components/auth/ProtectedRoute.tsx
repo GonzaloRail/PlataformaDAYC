@@ -1,32 +1,17 @@
-import { useEffect, useState } from 'react'
+import { type ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { store } from '../../store'
-import { Skeleton } from '../ui'
+import { store } from '@/store'
+import { useAuthCheck } from '@/hooks/useAuthCheck'
+import { Skeleton } from '@/components/ui'
 
 interface ProtectedRouteProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation()
-  const [isChecking, setIsChecking] = useState(true)
-  const isAuthenticated = store((state) => state.isAuthenticated)
-  const checkAuthAction = store((state) => state.checkAuth)
-
-  useEffect(() => {
-    const verifyAuth = async () => {
-      if (!isAuthenticated) {
-        try {
-          await checkAuthAction()
-        } catch {
-          // User is not authenticated
-        }
-      }
-      setIsChecking(false)
-    }
-
-    verifyAuth()
-  }, [isAuthenticated, checkAuthAction])
+  const { isChecking, isAuthenticated } = useAuthCheck()
+  store((state) => state.isAuthenticated)
 
   if (isChecking) {
     return (

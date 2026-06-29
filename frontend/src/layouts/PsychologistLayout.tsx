@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, KeyRound, LayoutDashboard, LineChart, LogOut, Menu, X } from 'lucide-react'
-import { Button } from '../components/ui'
-import { store } from '../store'
+import { Button } from '@/components/ui'
+import { store } from '@/store'
 import './PsychologistLayout.css'
 
 export function PsychologistLayout() {

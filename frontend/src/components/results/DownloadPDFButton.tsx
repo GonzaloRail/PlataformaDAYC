@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from '../ui';
-import api from '../../services/api';
+import { Button } from '@/components/ui';
+import api from '@/services/api';
 import './DownloadPDFButton.css';
 
 interface DownloadPDFButtonProps {

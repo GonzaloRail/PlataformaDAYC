@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import type { EvaluationTask } from '../../types'
-import { EvidenceOrchestrator } from '../evidence/EvidenceOrchestrator'
-import type { EvidenceSink } from '../evidence/EvidenceSink'
-import { DigitalActivityShell } from '../minijuegos/DigitalActivityShell'
-import { PedagogicalMascot } from './PedagogicalMascot'
+import type { EvaluationTask } from '@/types'
+import { EvidenceOrchestrator } from '@/components/evidence/EvidenceOrchestrator'
+import type { EvidenceSink } from '@/components/evidence/EvidenceSink'
+import { DigitalActivityShell } from '@/components/minijuegos/DigitalActivityShell'
+import { PedagogicalMascot } from '@/components/child/PedagogicalMascot'
 import './DigitalActivityExperience.css'
 
 interface DigitalActivityExperienceProps {

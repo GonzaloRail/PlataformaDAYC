@@ -1,4 +1,5 @@
-import React from 'react'
+
+import { Fragment } from 'react'
 import './Skeleton.css'
 
 interface SkeletonProps {
@@ -66,9 +67,9 @@ export function Skeleton({
   return (
     <div className={`skeleton-wrapper ${className}`} role="status" aria-label="Loading">
       {Array.from({ length: count }).map((_, i) => (
-        <React.Fragment key={i}>
+        <Fragment key={i}>
           {renderSkeleton()}
-        </React.Fragment>
+        </Fragment>
       ))}
     </div>
   )

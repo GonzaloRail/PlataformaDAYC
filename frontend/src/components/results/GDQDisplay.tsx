@@ -1,4 +1,5 @@
 import React from 'react';
+import { getGdqInterpretation } from '@/utils/scoring';
 import './GDQDisplay.css';
 
 interface GDQDisplayProps {
@@ -7,48 +8,12 @@ interface GDQDisplayProps {
   variant?: 'card' | 'badge' | 'detailed';
 }
 
-const getGdqInfo = (gdq: number): { label: string; className: string; description: string } => {
-  if (gdq >= 130) {
-    return {
-      label: 'Excepcionalmente Superior',
-      className: 'gdq-exceptional',
-      description: 'El niño/a muestra habilidades de desarrollo significativamente avanzadas.',
-    };
-  }
-  if (gdq >= 110) {
-    return {
-      label: 'Superior',
-      className: 'gdq-superior',
-      description: 'El niño/a presenta un desarrollo cognitivo por encima del promedio.',
-    };
-  }
-  if (gdq >= 90) {
-    return {
-      label: 'Promedio',
-      className: 'gdq-average',
-      description: 'El niño/a se encuentra dentro del rango esperado para su edad.',
-    };
-  }
-  if (gdq >= 80) {
-    return {
-      label: 'Bajo el Promedio',
-      className: 'gdq-low',
-      description: 'El niño/a muestra un desarrollo cognitivo ligeramente inferior al esperado.',
-    };
-  }
-  return {
-    label: 'Significativamente Bajo',
-    className: 'gdq-very-low',
-    description: 'Se recomienda evaluación adicional y posibles intervenciones.',
-  };
-};
-
 export const GDQDisplay: React.FC<GDQDisplayProps> = ({
   gdq,
   edadMeses,
   variant = 'detailed',
 }) => {
-  const info = getGdqInfo(gdq);
+  const info = getGdqInterpretation(gdq);
 
   if (variant === 'badge') {
     return (

@@ -1,6 +1,6 @@
 import type { StateCreator } from 'zustand'
-import childrenApi from '../services/childrenApi'
-import type { RootStore, NinoState } from './types'
+import childrenApi from '@/services/childrenApi'
+import type { RootStore, NinoState } from '@/store/types'
 
 export const createChildrenStore: StateCreator<RootStore, [], [], NinoState> = (set) => ({
   ninos: [],

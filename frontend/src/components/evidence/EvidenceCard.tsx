@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import api from '../../services/api';
-import type { NormalizedEvidence } from './EvidenceNormalizer';
+import { memo, useEffect, useState } from 'react';
+import api from '@/services/api';
+import type { NormalizedEvidence } from '@/components/evidence/EvidenceNormalizer';
 import './EvidenceCard.css';
 
 interface EvidenceCardProps {
@@ -61,7 +61,7 @@ function EvidenceMedia({ evidence }: { evidence: NormalizedEvidence }) {
   return null;
 }
 
-export function EvidenceCard({ evidence, compact = false }: EvidenceCardProps) {
+function EvidenceCardImpl({ evidence, compact = false }: EvidenceCardProps) {
   const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
   const hasTechnicalDetails = Object.keys(evidence.technicalDetails || {}).length > 0;
 
@@ -101,4 +101,5 @@ export function EvidenceCard({ evidence, compact = false }: EvidenceCardProps) {
   );
 }
 
+export const EvidenceCard = memo(EvidenceCardImpl);
 export default EvidenceCard;

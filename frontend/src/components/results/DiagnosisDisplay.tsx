@@ -1,26 +1,12 @@
 import React from 'react';
-import type { Diagnostico, ActividadEstimulacion } from '../../types';
+import type { Diagnostico, ActividadEstimulacion } from '@/types';
+import { getGdqInterpretation } from '@/utils/scoring';
 import './DiagnosisDisplay.css';
 
 interface DiagnosisDisplayProps {
   diagnostico: Diagnostico;
   onEdit?: () => void;
 }
-
-const getGdqLevel = (gdq: number): string => {
-  if (gdq >= 130) return 'Superior';
-  if (gdq >= 110) return 'Alto Promedio';
-  if (gdq >= 90) return 'Promedio';
-  if (gdq >= 70) return 'Bajo';
-  return 'Muy Bajo';
-};
-
-const getGdqClass = (gdq: number): string => {
-  if (gdq >= 110) return 'gdq-excellent';
-  if (gdq >= 90) return 'gdq-average';
-  if (gdq >= 70) return 'gdq-low';
-  return 'gdq-very-low';
-};
 
 const getActivityIcon = (index: number): string => {
   const icons = ['🧠', '💬', '👀', '🎯', '🖐️', '🎨'];
@@ -51,11 +37,11 @@ export const DiagnosisDisplay: React.FC<DiagnosisDisplayProps> = ({
         <div className="gdq-section">
           <div className="gdq-info">
             <span className="gdq-label">Cociente de Desarrollo General (GDQ)</span>
-            <span className={`gdq-value ${getGdqClass(diagnostico.gdq)}`}>
+            <span className={`gdq-value ${getGdqInterpretation(diagnostico.gdq).className}`}>
               {diagnostico.gdq}
             </span>
-            <span className={`gdq-level ${getGdqClass(diagnostico.gdq)}`}>
-              {getGdqLevel(diagnostico.gdq)}
+            <span className={`gdq-level ${getGdqInterpretation(diagnostico.gdq).className}`}>
+              {getGdqInterpretation(diagnostico.gdq).shortLabel}
             </span>
           </div>
         </div>
@@ -64,8 +50,8 @@ export const DiagnosisDisplay: React.FC<DiagnosisDisplayProps> = ({
       <div className="diagnosis-content">
         <h4>Resumen del Diagnóstico</h4>
         <div className="diagnosis-text">
-          {diagnostico.contenido.split('\n').map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
+          {diagnostico.contenido.split('\n').map((paragraph) => (
+            <p key={paragraph.slice(0, 64)}>{paragraph}</p>
           ))}
         </div>
       </div>
@@ -89,9 +75,9 @@ export const DiagnosisDisplay: React.FC<DiagnosisDisplayProps> = ({
                   <span className="activity-duration">
                     ⏱️ {actividad.duracion_minutos} min
                   </span>
-                  {actividad.área && (
+                  {actividad.area && (
                     <span className="activity-area">
-                      📍 {actividad.área}
+                      📍 {actividad.area}
                     </span>
                   )}
                 </div>

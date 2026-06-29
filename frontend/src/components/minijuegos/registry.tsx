@@ -1,6 +1,6 @@
-import COGNITIVO_045 from '../../minijuegos/cognitivo/COGNITIVO_045';
-import COGNITIVO_046 from '../../minijuegos/cognitivo/COGNITIVO_046';
-import COGNITIVO_047 from '../../minijuegos/cognitivo/COGNITIVO_047';
+import COGNITIVO_045 from '@/minijuegos/cognitivo/COGNITIVO_045';
+import COGNITIVO_046 from '@/minijuegos/cognitivo/COGNITIVO_046';
+import COGNITIVO_047 from '@/minijuegos/cognitivo/COGNITIVO_047';
 interface MinijuegoEntry {
   nombre: string;
   area: string;
@@ -48,10 +48,6 @@ export const minijuegosRegistry: Record<string, MinijuegoEntry> = {
 
 export const getMinijuego = (id: string): MinijuegoEntry | undefined => {
   return minijuegosRegistry[id];
-};
-
-export const getAvailableMinijuegos = (): string[] => {
-  return Object.keys(minijuegosRegistry);
 };
 
 export const getMinijuegosCatalog = () => {

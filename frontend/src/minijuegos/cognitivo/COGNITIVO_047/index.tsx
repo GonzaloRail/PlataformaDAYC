@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Answer, Item } from '../../../minijuegos/types';
-import KidGameShell from '../../../components/minijuegos/KidGameShell';
-import { buildProgressLabel, useMinijuegoSession } from '../../../components/minijuegos/shared/useMinijuegoSession';
-import { useMinigameEvidence } from '../../../components/evidence/MinigameEvidenceProvider';
-import { useAutoEvidence } from '../../../components/evidence/useAutoEvidence';
-import { COGNITIVO_047_CONFIG } from './config';
+import type { Answer, Item } from '@/minijuegos/types';
+import KidGameShell from '@/components/minijuegos/KidGameShell';
+import { buildProgressLabel, useMinijuegoSession } from '@/components/minijuegos/shared/useMinijuegoSession';
+import { useMinigameEvidence } from '@/components/evidence/MinigameEvidenceProvider';
+import { useAutoEvidence } from '@/components/evidence/useAutoEvidence';
+import { COGNITIVO_047_CONFIG } from '@/minijuegos/cognitivo/COGNITIVO_047/config';
 import './COGNITIVO_047.css';
 
 interface Props {

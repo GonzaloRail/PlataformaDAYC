@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useCallback, useContext, useMemo, useRef } from 'react';
-import type { EvaluationTask } from '../../types';
-import evaluacionesApi from '../../services/evaluacionesApi';
-import { evidenceUploadQueue, uploadEvidenceNow } from './EvidenceUploadQueue';
-import type { EvidencePayload } from './EvidenceUploadQueue';
-import type { EvidenceSink } from './EvidenceSink';
+import type { EvaluationTask } from '@/types';
+import evaluacionesApi from '@/services/evaluacionesApi';
+import { evidenceUploadQueue, uploadEvidenceNow } from '@/components/evidence/EvidenceUploadQueue';
+import type { EvidencePayload } from '@/components/evidence/EvidenceUploadQueue';
+import type { EvidenceSink } from '@/components/evidence/EvidenceSink';
 
 type EvidenceType = EvidencePayload['type'];
 

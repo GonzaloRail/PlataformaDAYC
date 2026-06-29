@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import evaluacionesApi from '../../services/evaluacionesApi';
-import { EvidenceCollection } from './EvidenceCollection';
-import { normalizeEvidence } from './EvidenceNormalizer';
+import evaluacionesApi from '@/services/evaluacionesApi';
+import { EvidenceCollection } from '@/components/evidence/EvidenceCollection';
+import { normalizeEvidence } from '@/components/evidence/EvidenceNormalizer';
 import './EvidenceViewer.css';
 
 interface EvidenceViewerProps {
@@ -23,15 +23,13 @@ interface EvidenceData {
 export const EvidenceViewer: React.FC<EvidenceViewerProps> = ({ evaluacionId, itemId }) => {
   const [evidences, setEvidences] = useState<EvidenceData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
-    const load = async (initial = false) => {
+    const load = async () => {
       if (!evaluacionId || !itemId) return;
-      if (initial) setLoading(true);
-      else setRefreshing(true);
+      setLoading(true);
       setError(null);
       try {
         const data = await evaluacionesApi.getEvidence(evaluacionId, itemId);
@@ -39,17 +37,12 @@ export const EvidenceViewer: React.FC<EvidenceViewerProps> = ({ evaluacionId, it
       } catch {
         if (mounted) setError('Error al cargar evidencias');
       } finally {
-        if (mounted) {
-          setLoading(false);
-          setRefreshing(false);
-        }
+        if (mounted) setLoading(false);
       }
     };
-    void load(true);
-    const interval = window.setInterval(() => void load(false), 4000);
+    void load();
     return () => {
       mounted = false;
-      window.clearInterval(interval);
     };
   }, [evaluacionId, itemId]);
 
@@ -65,7 +58,6 @@ export const EvidenceViewer: React.FC<EvidenceViewerProps> = ({ evaluacionId, it
     return (
       <div className="evidence-viewer empty">
         <span>No hay evidencias registradas para este ítem.</span>
-        {refreshing && <strong>Buscando evidencias nuevas...</strong>}
       </div>
     );
   }
@@ -75,7 +67,7 @@ export const EvidenceViewer: React.FC<EvidenceViewerProps> = ({ evaluacionId, it
       <div className="evidence-viewer-heading">
         <div>
           <h4>Evidencias del ítem</h4>
-          <p>{refreshing ? 'Actualizando evidencias...' : 'Resumen clínico y archivos disponibles para revisión profesional.'}</p>
+          <p>Resumen clínico y archivos disponibles para revisión profesional.</p>
         </div>
         <div className="evidence-viewer-counts">
           {Object.entries(counts).map(([label, count]) => (

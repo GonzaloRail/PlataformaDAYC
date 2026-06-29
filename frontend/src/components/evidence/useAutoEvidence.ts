@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import html2canvas from 'html2canvas';
-import { useMinigameEvidence } from './MinigameEvidenceProvider';
-import type { LabEvidenceRecord } from './EvidenceSink';
-import type { EvidencePayload } from './EvidenceUploadQueue';
+import { useMinigameEvidence } from '@/components/evidence/MinigameEvidenceProvider';
+import { canvasToBlob } from '@/utils/media';
+import type { LabEvidenceRecord } from '@/components/evidence/EvidenceSink';
+import type { EvidencePayload } from '@/components/evidence/EvidenceUploadQueue';
 
 interface AutoEvidenceOptions {
   containerRef: React.RefObject<HTMLElement | null>;
@@ -12,10 +13,6 @@ interface AutoEvidenceOptions {
 }
 
 const SCREENSHOT_BG = '#fffdf7';
-
-function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob | null> {
-  return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-}
 
 export function useAutoEvidence({
   containerRef,

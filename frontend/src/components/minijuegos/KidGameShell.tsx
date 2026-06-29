@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import type { RefObject } from 'react';
-import { PedagogicalMascot } from '../child/PedagogicalMascot';
+import { PedagogicalMascot } from '@/components/child/PedagogicalMascot';
 import './KidGameShell.css';
 
 interface KidGameShellProps {

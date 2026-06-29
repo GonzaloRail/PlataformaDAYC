@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { EvidenceCard } from './EvidenceCard';
-import type { NormalizedEvidence } from './EvidenceNormalizer';
+import { EvidenceCard } from '@/components/evidence/EvidenceCard';
+import type { NormalizedEvidence } from '@/components/evidence/EvidenceNormalizer';
 import './EvidenceCollection.css';
 
 interface EvidenceCollectionProps {

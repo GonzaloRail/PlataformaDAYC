@@ -1,9 +1,8 @@
-import type { User, Nino, Evaluacion, EvaluationTask } from '../types'
+import type { User, Nino, Evaluacion, EvaluationTask } from '@/types'
 
 export interface AuthState {
   user: User | null
   isAuthenticated: boolean
-  authLoading: boolean
   isLoading: boolean
   login: (email: string, password: string) => Promise<void>
   registerPsychologist: (payload: { nombre: string; apellido: string; email: string; password: string }) => Promise<void>

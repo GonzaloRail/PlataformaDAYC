@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { ChildQuestionPresenter } from '../../components/child/ChildQuestionPresenter'
-import { DigitalActivityExperience } from '../../components/child/DigitalActivityExperience'
-import { PedagogicalMascot } from '../../components/child/PedagogicalMascot'
-import { MediaPermissionProvider } from '../../components/evidence/MediaPermissionProvider'
-import evaluacionesApi from '../../services/evaluacionesApi'
-import type { EvaluationTask, SessionState } from '../../types'
+import { ChildQuestionPresenter } from '@/components/child/ChildQuestionPresenter'
+import { DigitalActivityExperience } from '@/components/child/DigitalActivityExperience'
+import { PedagogicalMascot } from '@/components/child/PedagogicalMascot'
+import { MediaPermissionProvider } from '@/components/evidence/MediaPermissionProvider'
+import evaluacionesApi from '@/services/evaluacionesApi'
+import type { EvaluationTask, SessionState } from '@/types'
 import './EvaluationSession.css'
 
 type Phase = 'loading' | 'waiting-adult' | 'session' | 'complete' | 'error'
@@ -30,8 +30,14 @@ export function EvaluationSession() {
   const activeItemRef = useRef<string | null>(null)
 
   useEffect(() => {
-    void loadSessionState(true)
-    const interval = window.setInterval(() => void loadSessionState(false), 2000)
+    loadSessionState(true).catch((err) => {
+      console.error('[EvaluationSession] loadSessionState falló:', err)
+    })
+    const interval = window.setInterval(() => {
+      loadSessionState(false).catch((err) => {
+        console.error('[EvaluationSession] loadSessionState falló:', err)
+      })
+    }, 2000)
     return () => window.clearInterval(interval)
   }, [sessionCode])
 

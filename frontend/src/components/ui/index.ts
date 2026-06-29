@@ -1,6 +1,6 @@
-export { Button } from './Button';
-export { Input } from './Input';
-export { Card } from './Card';
-export { Modal } from './Modal';
-export { Skeleton, SkeletonCard, SkeletonTable } from './Skeleton';
-export { ViewState } from './ViewState';
+export { Button } from '@/components/ui/Button';
+export { Input } from '@/components/ui/Input';
+export { Card } from '@/components/ui/Card';
+export { Modal } from '@/components/ui/Modal';
+export { Skeleton, SkeletonCard, SkeletonTable } from '@/components/ui/Skeleton';
+export { ViewState } from '@/components/ui/ViewState';

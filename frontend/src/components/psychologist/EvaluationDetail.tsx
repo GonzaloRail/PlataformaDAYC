@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, Button, Modal } from '../../components/ui';
-import { ManualResponseEntry } from './ManualResponseEntry';
-import { ResultAdjustment } from './ResultAdjustment';
-import { DownloadPDFButton } from '../results/DownloadPDFButton';
-import type { Evaluacion, Nino, Resultado, Respuesta } from '../../types';
-import { useEvaluationProgress } from '../../hooks/useEvaluationProgress';
-import api from '../../services/api';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Card, Button, Modal } from '@/components/ui';
+import { ManualResponseEntry } from '@/components/psychologist/ManualResponseEntry';
+import { ResultAdjustment } from '@/components/psychologist/ResultAdjustment';
+import { DownloadPDFButton } from '@/components/results/DownloadPDFButton';
+import type { Evaluacion, Nino, Resultado, Respuesta } from '@/types';
+import { useEvaluationProgress } from '@/hooks/useEvaluationProgress';
+import api from '@/services/api';
 import './EvaluationDetail.css';
 
 interface EvaluationDetailProps {
@@ -22,21 +23,19 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
   onRefresh,
 }) => {
   const { progress, isConnected } = useEvaluationProgress(evaluacion.id);
+  const navigate = useNavigate();
   const [respuestas, setRespuestas] = useState<Respuesta[]>([]);
   const [resultados, setResultados] = useState<Resultado[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [showAdjustments, setShowAdjustments] = useState(false);
   const [currentTask, setCurrentTask] = useState<string | null>(null);
-  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const inFlightRef = useRef(false);
 
-  useEffect(() => {
-    loadData();
-    startPolling();
-    return () => stopPolling();
-  }, [evaluacion.id]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
+    if (inFlightRef.current) return;
+    inFlightRef.current = true;
     try {
       const [respuestasData, currentTaskData] = await Promise.all([
         api.get<Respuesta[]>(`/api/evaluaciones/${evaluacion.id}/respuestas/`).catch(() => []),
@@ -46,18 +45,30 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
       setCurrentTask(currentTaskData.current_task);
     } catch (err) {
       console.error('Error loading data:', err);
+    } finally {
+      inFlightRef.current = false;
     }
-  };
+  }, [evaluacion.id]);
 
-  const startPolling = () => {
-    pollingRef.current = setInterval(loadData, 5000);
-  };
+  const startPolling = useCallback(() => {
+    if (pollingRef.current) return;
+    pollingRef.current = setInterval(() => {
+      void loadData();
+    }, 5000);
+  }, [loadData]);
 
-  const stopPolling = () => {
+  const stopPolling = useCallback(() => {
     if (pollingRef.current) {
       clearInterval(pollingRef.current);
+      pollingRef.current = null;
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    void loadData();
+    startPolling();
+    return () => stopPolling();
+  }, [loadData, startPolling, stopPolling]);
 
   const handleManualResponse = async (itemId: string, resultado: string) => {
     setIsLoading(true);
@@ -172,7 +183,7 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
       </div>
 
       <div className="detail-actions">
-        <Button onClick={() => { window.location.href = `/psychologist/evaluations/${evaluacion.id}/review`; }} fullWidth>
+        <Button onClick={() => navigate(`/psychologist/evaluations/${evaluacion.id}/review`)} fullWidth>
           Revisar Evidencias
         </Button>
         {isActive && (

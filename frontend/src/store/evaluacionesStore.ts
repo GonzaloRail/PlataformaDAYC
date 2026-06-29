@@ -1,6 +1,6 @@
 import type { StateCreator } from 'zustand'
-import evaluacionesApi from '../services/evaluacionesApi'
-import type { RootStore, EvaluacionState } from './types'
+import evaluacionesApi from '@/services/evaluacionesApi'
+import type { RootStore, EvaluacionState } from '@/store/types'
 
 export const createEvaluacionesStore: StateCreator<RootStore, [], [], EvaluacionState> = (set) => ({
   evaluaciones: [],

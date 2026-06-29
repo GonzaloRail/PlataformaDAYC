@@ -1,22 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Answer, Item } from '../../../minijuegos/types';
-import KidGameShell from '../../../components/minijuegos/KidGameShell';
-import { buildProgressLabel, useMinijuegoSession } from '../../../components/minijuegos/shared/useMinijuegoSession';
-import { useMinigameEvidence } from '../../../components/evidence/MinigameEvidenceProvider';
-import { useAutoEvidence } from '../../../components/evidence/useAutoEvidence';
-import { useDrawingCanvas } from '../../shared/useDrawingCanvas';
-import { FaceDrawingBoard } from './components/FaceDrawingBoard';
-import { COGNITIVO_045_CONFIG } from './config';
+import type { Answer, Item } from '@/minijuegos/types';
+import KidGameShell from '@/components/minijuegos/KidGameShell';
+import { buildProgressLabel, useMinijuegoSession } from '@/components/minijuegos/shared/useMinijuegoSession';
+import { useMinigameEvidence } from '@/components/evidence/MinigameEvidenceProvider';
+import { useAutoEvidence } from '@/components/evidence/useAutoEvidence';
+import { useDrawingCanvas } from '@/minijuegos/shared/useDrawingCanvas';
+import { canvasToBlob } from '@/utils/media';
+import { FaceDrawingBoard } from '@/minijuegos/cognitivo/COGNITIVO_045/components/FaceDrawingBoard';
+import { COGNITIVO_045_CONFIG } from '@/minijuegos/cognitivo/COGNITIVO_045/config';
 import '../../shared/TwoPanelActivityLayout.css';
 import './COGNITIVO_045.css';
 
 interface Cognitivo045Props {
   currentItem: Item;
   onAnswer: (answer: Answer) => void;
-}
-
-function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob | null> {
-  return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
 }
 
 function roundRect(context: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) {

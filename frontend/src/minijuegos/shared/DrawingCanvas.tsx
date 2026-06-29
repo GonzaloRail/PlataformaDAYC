@@ -1,4 +1,4 @@
-import type { DrawingCanvasState } from './useDrawingCanvas';
+import type { DrawingCanvasState } from '@/minijuegos/shared/useDrawingCanvas';
 
 interface DrawingCanvasProps {
   drawing: DrawingCanvasState;

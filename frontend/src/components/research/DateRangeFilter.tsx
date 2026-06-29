@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Button, Input } from '../ui'
+import { useState, type ChangeEvent } from 'react'
+import { Button, Input } from '@/components/ui'
 import './DateRangeFilter.css'
 
 interface DateRange {
@@ -82,7 +82,7 @@ export function DateRangeFilter({ onChange }: DateRangeFilterProps) {
           <Input
             type="date"
             value={startDate}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
             max={endDate || getToday()}
           />
         </div>
@@ -94,7 +94,7 @@ export function DateRangeFilter({ onChange }: DateRangeFilterProps) {
           <Input
             type="date"
             value={endDate}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
             min={startDate}
             max={getToday()}
           />

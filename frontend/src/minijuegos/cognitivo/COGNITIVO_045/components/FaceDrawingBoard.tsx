@@ -1,7 +1,7 @@
-import { DrawingCanvas } from '../../../shared/DrawingCanvas';
-import type { DrawingCanvasState } from '../../../shared/useDrawingCanvas';
-import { TwoPanelActivityLayout } from '../../../shared/TwoPanelActivityLayout';
-import { ModelFace } from './ModelFace';
+import { DrawingCanvas } from '@/minijuegos/shared/DrawingCanvas';
+import type { DrawingCanvasState } from '@/minijuegos/shared/useDrawingCanvas';
+import { TwoPanelActivityLayout } from '@/minijuegos/shared/TwoPanelActivityLayout';
+import { ModelFace } from '@/minijuegos/cognitivo/COGNITIVO_045/components/ModelFace';
 
 interface FaceDrawingBoardProps {
   drawing: DrawingCanvasState;

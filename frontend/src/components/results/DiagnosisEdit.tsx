@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import type { Diagnostico } from '../../types';
-import { api } from '../../services/api';
+import type { Diagnostico } from '@/types';
+import { api } from '@/services/api';
 import './DiagnosisEdit.css';
 
 interface DiagnosisEditProps {

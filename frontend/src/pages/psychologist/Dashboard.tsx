@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Button, Card, Input, ViewState } from '../../components/ui'
-import { EvaluationDetail } from '../../components/psychologist/EvaluationDetail'
-import { EvaluationList } from '../../components/psychologist/EvaluationList'
-import { store } from '../../store'
-import type { Evaluacion } from '../../types'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { Button, Card, Input, ViewState } from '@/components/ui'
+import { EvaluationDetail } from '@/components/psychologist/EvaluationDetail'
+import { EvaluationList } from '@/components/psychologist/EvaluationList'
+import { store } from '@/store'
+import type { Evaluacion } from '@/types'
 import './Dashboard.css'
 
 type DashboardTab = 'activas' | 'completadas' | 'ninos' | 'nueva'
@@ -133,7 +133,7 @@ export function PsychologistDashboard() {
     [ninos, selectedEvaluacion]
   )
 
-  const handleCreateNino = async (event: React.FormEvent) => {
+  const handleCreateNino = async (event: FormEvent) => {
     event.preventDefault()
     setSuccessMessage(null)
     if (!ninoForm.nombre.trim() || !ninoForm.fecha_nacimiento) {

@@ -1,4 +1,4 @@
-import { evaluacionesApi } from '../../services/evaluacionesApi';
+import { evaluacionesApi } from '@/services/evaluacionesApi';
 
 export interface EvidencePayload {
   evaluacionId: string;
@@ -51,15 +51,11 @@ class UploadQueue {
       const payload = this.queue[0];
       try {
         await uploadEvidenceNow(payload);
-        // Eliminado exitosamente de la cola
         this.queue.shift();
       } catch (error) {
         console.error('Error uploading evidence:', error);
-        // Si hay error, esperar un poco antes de reintentar
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        // Rompemos el loop para que no se quede bloqueado eternamente;
-        // processQueue se llamará de nuevo si se añaden más o podemos re-llamar.
-        break;
+        this.queue.shift();
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
     }
 

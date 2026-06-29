@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Button, Card, ViewState } from '../../components/ui'
-import { EvidenceViewer } from '../../components/evidence/EvidenceViewer'
-import evaluacionesApi from '../../services/evaluacionesApi'
-import type { EvaluacionItem, ReviewOverview, ScoreComparison } from '../../types'
+import { Button, Card, ViewState } from '@/components/ui'
+import { EvidenceViewer } from '@/components/evidence/EvidenceViewer'
+import evaluacionesApi from '@/services/evaluacionesApi'
+import type { EvaluacionItem, ReviewOverview, ScoreComparison } from '@/types'
 import './ReviewPage.css'
 
 const resultLabel: Record<string, string> = {

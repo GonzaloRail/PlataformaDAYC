@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import type { DragEvent, KeyboardEvent } from 'react';
-import type { Answer, Item } from '../../../minijuegos/types';
-import KidGameShell from '../../../components/minijuegos/KidGameShell';
-import { buildProgressLabel, useMinijuegoSession } from '../../../components/minijuegos/shared/useMinijuegoSession';
-import { useMinigameEvidence } from '../../../components/evidence/MinigameEvidenceProvider';
-import { useAutoEvidence } from '../../../components/evidence/useAutoEvidence';
-import { COGNITIVO_046_CONFIG } from './config';
+import type { Answer, Item } from '@/minijuegos/types';
+import KidGameShell from '@/components/minijuegos/KidGameShell';
+import { buildProgressLabel, useMinijuegoSession } from '@/components/minijuegos/shared/useMinijuegoSession';
+import { useMinigameEvidence } from '@/components/evidence/MinigameEvidenceProvider';
+import { useAutoEvidence } from '@/components/evidence/useAutoEvidence';
+import { COGNITIVO_046_CONFIG } from '@/minijuegos/cognitivo/COGNITIVO_046/config';
 import './COGNITIVO_046.css';
 
 interface Props {

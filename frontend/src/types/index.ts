@@ -47,16 +47,13 @@ export interface Respuesta {
 
 export interface Resultado {
   id: string;
-  evaluacion_id: string;
+  evaluacion_id?: string;
   area: string;
-  área?: string;
   puntuacion_directa: number;
-  puntuación_directa?: number;
-  puntuacion_estandar: number;
-  puntuación_estándar?: number;
-  percentil: number;
-  edad_equivalente: string;
-  cociente_general_gdq: number;
+  puntuacion_estandar?: number | null;
+  percentil?: number | null;
+  edad_equivalente?: string | null;
+  cociente_general_gdq?: number | null;
   created_at?: string;
   tempScore?: number;
   isChanged?: boolean;
@@ -67,7 +64,7 @@ export interface ActividadEstimulacion {
   nombre: string;
   descripcion: string;
   duracion_minutos: number;
-  área?: string;
+  area?: string;
 }
 
 export interface Diagnostico {

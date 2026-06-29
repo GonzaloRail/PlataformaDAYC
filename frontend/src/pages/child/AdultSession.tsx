@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
-import { evidenceUploadQueue } from '../../components/evidence/EvidenceUploadQueue'
-import { Button, Card, Input } from '../../components/ui'
-import evaluacionesApi from '../../services/evaluacionesApi'
-import type { EvaluationTask, SessionState } from '../../types'
+import { evidenceUploadQueue } from '@/components/evidence/EvidenceUploadQueue'
+import { Button, Card, Input } from '@/components/ui'
+import evaluacionesApi from '@/services/evaluacionesApi'
+import type { EvaluationTask, SessionState } from '@/types'
 import './AdultSession.css'
 
 type Phase = 'loading' | 'child-data' | 'consent' | 'control' | 'complete' | 'error'
@@ -142,7 +142,7 @@ export function AdultSession() {
     }
   }
 
-  const completeChildData = async (event: React.FormEvent) => {
+  const completeChildData = async (event: FormEvent) => {
     event.preventDefault()
     if (!sessionCode || !childForm.nombre || !childForm.fecha_nacimiento) {
       setError('Nombre y fecha de nacimiento son requeridos')
@@ -183,7 +183,9 @@ export function AdultSession() {
     const duration = Date.now() - itemStartRef.current
     const token = sessionState?.session_token || undefined
     try {
-      void recordAdultEvidence(task, resultado, duration, token)
+      recordAdultEvidence(task, resultado, duration, token).catch((err) => {
+        console.warn('[AdultSession] recordAdultEvidence falló:', err)
+      })
 
       const response = await evaluacionesApi.submitRespuesta(task.evaluacion_id, {
         item_id: task.item_id,

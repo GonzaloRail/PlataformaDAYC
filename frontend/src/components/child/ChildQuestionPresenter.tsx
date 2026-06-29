@@ -1,5 +1,5 @@
-import type { EvaluationTask } from '../../types'
-import { PedagogicalMascot } from './PedagogicalMascot'
+import type { EvaluationTask } from '@/types'
+import { PedagogicalMascot } from '@/components/child/PedagogicalMascot'
 import './ChildQuestionPresenter.css'
 
 interface ChildQuestionPresenterProps {

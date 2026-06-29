@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Card, ViewState } from '../../components/ui'
-import api from '../../services/api'
+import { Card, ViewState } from '@/components/ui'
+import api from '@/services/api'
 import './MetricsDashboard.css'
 
 interface ThesisMetrics {

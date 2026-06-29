@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useMediaPermissions } from './MediaPermissionProvider';
+import { useMediaPermissions } from '@/components/evidence/MediaPermissionProvider';
 import './MediaPermissionPanel.css';
 
 interface MediaPermissionPanelProps {

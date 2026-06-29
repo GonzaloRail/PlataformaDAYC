@@ -1,5 +1,5 @@
 import React from 'react';
-import type { EvaluationTask } from '../../minijuegos/types';
+import type { EvaluationTask } from '@/types';
 import './TaskDisplay.css';
 
 interface TaskDisplayProps {

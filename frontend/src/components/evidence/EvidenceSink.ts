@@ -1,4 +1,4 @@
-import type { EvidencePayload } from './EvidenceUploadQueue';
+import type { EvidencePayload } from '@/components/evidence/EvidenceUploadQueue';
 
 export interface EvidenceEventPayload {
   eventType: string;

@@ -1,5 +1,5 @@
-import { getEvidenceDefinition } from './EvidenceRegistry';
-import type { EvidenceType } from './EvidenceRegistry';
+import { getEvidenceDefinition } from '@/components/evidence/EvidenceRegistry';
+import type { EvidenceType } from '@/components/evidence/EvidenceRegistry';
 
 export interface RawEvidenceLike {
   id: string;

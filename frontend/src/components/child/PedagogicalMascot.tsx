@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import talk1 from '../../assets/dinosaur/talk_1.png'
-import talk2 from '../../assets/dinosaur/talk_2.png'
-import talk3 from '../../assets/dinosaur/talk_3.png'
-import celebrate from '../../assets/dinosaur/celebrate.jpg'
+import talk1 from '@/assets/dinosaur/talk_1.png'
+import talk2 from '@/assets/dinosaur/talk_2.png'
+import talk3 from '@/assets/dinosaur/talk_3.png'
+import celebrate from '@/assets/dinosaur/celebrate.jpg'
 import './PedagogicalMascot.css'
 
 export type DinoAnimation = 'idle' | 'talking' | 'thinking' | 'reading' | 'celebrate' | 'celebrating'

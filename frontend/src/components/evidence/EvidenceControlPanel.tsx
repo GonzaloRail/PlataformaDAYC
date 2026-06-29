@@ -1,5 +1,5 @@
-import { EVIDENCE_REGISTRY } from './EvidenceRegistry';
-import type { EvidenceType } from './EvidenceRegistry';
+import { EVIDENCE_REGISTRY } from '@/components/evidence/EvidenceRegistry';
+import type { EvidenceType } from '@/components/evidence/EvidenceRegistry';
 import './EvidenceControlPanel.css';
 
 const DEFAULT_OPTIONS: EvidenceType[] = ['LOG', 'TIME_EVENT', 'SCREENSHOT', 'AUDIO', 'VIDEO', 'CAMERA_FRAME'];

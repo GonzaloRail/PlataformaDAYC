@@ -1,5 +1,6 @@
 import React from 'react';
-import type { Resultado } from '../../types';
+import type { Resultado } from '@/types';
+import { getScoreCategory, getGdqInterpretation } from '@/utils/scoring';
 import './ResultsTable.css';
 
 interface ResultsTableProps {
@@ -8,14 +9,10 @@ interface ResultsTableProps {
   showGdq?: boolean;
 }
 
-const getScoreClass = (score: number): string => {
-  if (score >= 13) return 'score-superior';
-  if (score >= 10) return 'score-average';
-  if (score >= 7) return 'score-low';
-  return 'score-very-low';
-};
+const getScoreClass = (score: number): string => getScoreCategory(score).className;
 
-const getPercentileClass = (percentile: number): string => {
+const getPercentileClass = (percentile: number | null | undefined): string => {
+  if (percentile == null) return '';
   if (percentile >= 75) return 'percentile-high';
   if (percentile >= 25) return 'percentile-average';
   return 'percentile-low';
@@ -35,9 +32,8 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
     );
   }
 
-  const formatEdadEquivalente = (ee: string | null): string => {
-    if (!ee) return '-';
-    return ee;
+  const formatEdadEquivalente = (ee: string | null | undefined): string => {
+    return ee ?? '-';
   };
 
   return (
@@ -60,10 +56,10 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                   {result.area}
                 </span>
               </td>
-              <td className="pd-cell">{result.puntuacion_directa ?? result.puntuación_directa}</td>
+              <td className="pd-cell">{result.puntuacion_directa}</td>
               <td>
-                <span className={`pe-cell ${getScoreClass(result.puntuacion_estandar ?? result.puntuación_estándar ?? 0)}`}>
-                  {result.puntuacion_estandar ?? result.puntuación_estándar}
+                <span className={`pe-cell ${getScoreClass(result.puntuacion_estandar ?? 0)}`}>
+                  {result.puntuacion_estandar ?? '—'}
                 </span>
               </td>
               <td>
@@ -81,10 +77,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
               <td colSpan={2} className="gdq-label">Cociente General de Desarrollo (GDQ)</td>
               <td className="gdq-value">{gdqGlobal}</td>
               <td colSpan={2} className="gdq-interpretation">
-                {gdqGlobal >= 110 && 'Superior'}
-                {gdqGlobal >= 90 && gdqGlobal < 110 && 'Promedio'}
-                {gdqGlobal >= 80 && gdqGlobal < 90 && 'Bajo'}
-                {gdqGlobal < 80 && 'Muy Bajo'}
+                {getGdqInterpretation(gdqGlobal).shortLabel}
               </td>
             </tr>
           </tfoot>
