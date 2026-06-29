@@ -1,0 +1,70 @@
+.evidence-orchestrator {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.evidence-orchestrator-status {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: min(76vw, 520px);
+  padding: 0.42rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(15, 107, 122, 0.16);
+  box-shadow: 0 10px 22px rgba(27, 74, 92, 0.12);
+  color: #173846;
+  font-size: 0.76rem;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+.evidence-orchestrator-status span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.evidence-orchestrator-status strong {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.18rem 0.42rem;
+  background: #e7f6f8;
+  color: #0f6b7a;
+  font-size: 0.68rem;
+}
+
+.evidence-orchestrator-recording .evidence-orchestrator-status::before {
+  content: '';
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #d33d35;
+  box-shadow: 0 0 0 0 rgba(211, 61, 53, 0.45);
+  animation: evidence-pulse 1.2s infinite;
+}
+
+.evidence-orchestrator-failed .evidence-orchestrator-status,
+.evidence-orchestrator-permission-denied .evidence-orchestrator-status {
+  border-color: rgba(180, 58, 53, 0.22);
+  color: #8f2a27;
+}
+
+@keyframes evidence-pulse {
+  70% { box-shadow: 0 0 0 8px rgba(211, 61, 53, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(211, 61, 53, 0); }
+}
+
+@media (max-width: 620px) {
+  .evidence-orchestrator-status {
+    left: 0.55rem;
+    right: 0.55rem;
+    justify-content: space-between;
+  }
+}

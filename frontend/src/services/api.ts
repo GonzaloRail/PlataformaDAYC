@@ -1,6 +1,14 @@
 import { store } from '../store';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+export function toApiUrl(endpoint: string): string {
+  if (/^https?:\/\//i.test(endpoint)) {
+    return endpoint;
+  }
+
+  return `${API_BASE}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
+}
 
 interface RequestOptions extends RequestInit {
   timeout?: number;
@@ -48,7 +56,7 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
-    const response = await fetch(`${API_BASE}${endpoint}`, {
+    const response = await fetch(toApiUrl(endpoint), {
       ...defaultOptions,
       cache: 'no-store',
       ...fetchOptions,
@@ -110,8 +118,23 @@ export const api = {
   delete: <T>(endpoint: string, options?: RequestOptions) =>
     request<T>(endpoint, { ...options, method: 'DELETE' }),
 
+  blob: async (endpoint: string, options?: RequestOptions) => {
+    const response = await fetch(toApiUrl(endpoint), {
+      ...defaultOptions,
+      ...options,
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new ApiError(response.status, extractErrorMessage(response.status, errorText));
+    }
+
+    return response.blob();
+  },
+
   download: async (endpoint: string, filename: string) => {
-    const response = await fetch(`${API_BASE}${endpoint}`, {
+    const response = await fetch(toApiUrl(endpoint), {
       ...defaultOptions,
       method: 'GET',
     });

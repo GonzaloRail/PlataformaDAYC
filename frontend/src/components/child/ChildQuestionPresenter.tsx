@@ -20,7 +20,7 @@ export function ChildQuestionPresenter({ task, areaLabel, hasActivity = false }:
       </div>
 
       <div className="child-mascot-card" aria-hidden="true">
-        <PedagogicalMascot className="child-mascot-lottie" />
+        <PedagogicalMascot className="child-mascot-lottie" animation="talking" />
       </div>
 
       <div className="child-question-copy">

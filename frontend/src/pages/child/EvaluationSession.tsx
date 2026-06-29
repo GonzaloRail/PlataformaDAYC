@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { ChildQuestionPresenter } from '../../components/child/ChildQuestionPresenter'
 import { DigitalActivityExperience } from '../../components/child/DigitalActivityExperience'
 import { PedagogicalMascot } from '../../components/child/PedagogicalMascot'
-import { EvidenceRecorder } from '../../components/evidence/EvidenceRecorder'
+import { MediaPermissionProvider } from '../../components/evidence/MediaPermissionProvider'
 import evaluacionesApi from '../../services/evaluacionesApi'
 import type { EvaluationTask, SessionState } from '../../types'
 import './EvaluationSession.css'
@@ -153,7 +153,7 @@ export function EvaluationSession() {
     return (
       <main className="evaluation-session child-only-session">
         <section className="child-only-stage child-task-stage child-task-stage-neutral">
-          <PedagogicalMascot className="child-stage-mascot" />
+          <PedagogicalMascot className="child-stage-mascot" animation="talking" />
           <p className="child-stage-eyebrow">Esperando al adulto</p>
           <h1>Ya casi empezamos</h1>
           <p className="child-stage-main">El adulto debe abrir su pantalla y aceptar los pasos iniciales.</p>
@@ -167,7 +167,7 @@ export function EvaluationSession() {
     return (
       <main className="evaluation-session child-only-session">
         <section className="child-only-stage child-task-stage child-task-stage-neutral">
-          <PedagogicalMascot className="child-stage-mascot" />
+          <PedagogicalMascot className="child-stage-mascot" animation="celebrating" loop={false} />
           <p className="child-stage-eyebrow">Terminamos</p>
           <h1>Gracias por participar</h1>
           <p className="child-stage-main">Hiciste un gran trabajo.</p>
@@ -177,16 +177,8 @@ export function EvaluationSession() {
   }
 
   return (
+    <MediaPermissionProvider>
     <main className="evaluation-session child-only-session">
-      {task?.evaluacion_id && task?.item_id && (
-        <EvidenceRecorder
-          evaluacionId={task.evaluacion_id}
-          itemId={task.item_id}
-          tiposEvidencia={task.tipos_evidencia || []}
-          sessionToken={sessionState?.session_token || undefined}
-        />
-      )}
-
       <header className="child-only-header">
         <span>DAYC en juego</span>
         <strong>{currentAreaLabel}{task?.numero_item ? ` · Ítem ${task.numero_item}` : ''}</strong>
@@ -195,7 +187,12 @@ export function EvaluationSession() {
       <section className="child-only-stage">
         {task && (
           hasDigitalActivity ? (
-            <DigitalActivityExperience task={task} areaLabel={currentAreaLabel} onComplete={autoAnswer} />
+            <DigitalActivityExperience
+              task={task}
+              areaLabel={currentAreaLabel}
+              onComplete={autoAnswer}
+              sessionToken={sessionState?.session_token || undefined}
+            />
           ) : (
             <div className="child-question-flow">
               <ChildQuestionPresenter task={task} areaLabel={currentAreaLabel} />
@@ -204,6 +201,7 @@ export function EvaluationSession() {
         )}
       </section>
     </main>
+    </MediaPermissionProvider>
   )
 }
 

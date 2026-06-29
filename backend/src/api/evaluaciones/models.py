@@ -175,6 +175,27 @@ class Evidencia(models.Model):
         indexes = [models.Index(fields=['evaluación', 'type', 'created_at'])]
 
 
+class EvidencePolicy(models.Model):
+    """Global evidence configuration override for a DAYC-2 item/minigame."""
+
+    item_id = models.CharField(max_length=80, unique=True)
+    activity_id = models.CharField(max_length=100, blank=True)
+    evidence_types = models.JSONField(default=list, blank=True)
+    enabled = models.BooleanField(default=True)
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='updated_evidence_policies')
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'evidence_policies'
+        verbose_name = 'Política de Evidencia'
+        verbose_name_plural = 'Políticas de Evidencia'
+        indexes = [models.Index(fields=['item_id', 'enabled'])]
+
+    def __str__(self):
+        return f"{self.item_id}: {', '.join(self.evidence_types or [])}"
+
+
 class InteractionEvent(models.Model):
     """Fine-grained interaction log captured during child sessions."""
 

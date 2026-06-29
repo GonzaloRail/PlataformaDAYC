@@ -1,5 +1,6 @@
 import COGNITIVO_045 from '../../minijuegos/cognitivo/COGNITIVO_045';
-
+import COGNITIVO_046 from '../../minijuegos/cognitivo/COGNITIVO_046';
+import COGNITIVO_047 from '../../minijuegos/cognitivo/COGNITIVO_047';
 interface MinijuegoEntry {
   nombre: string;
   area: string;
@@ -20,11 +21,27 @@ const FallbackManual = () => {
 
 export const minijuegosRegistry: Record<string, MinijuegoEntry> = {
   COGNITIVO_045: {
-    nombre: 'COGNITIVO_045 Imita una cara',
+    nombre: 'Imita una cara',
     area: 'COGNITIVO',
     descripcion: 'Cara modelo con lienzo de dibujo para copia asistida.',
     estado: 'ready',
     component: COGNITIVO_045,
+    fallback: FallbackManual,
+  },
+  COGNITIVO_046: {
+    nombre: 'Clasifica animales y juguetes',
+    area: 'COGNITIVO',
+    descripcion: 'Clasifica objetos en categorías (juguetes, animales)',
+    estado: 'ready',
+    component: COGNITIVO_046,
+    fallback: FallbackManual,
+  },
+  COGNITIVO_047: {
+    nombre: 'Identifica el intruso',
+    area: 'COGNITIVO',
+    descripcion: 'El niño toca el objeto que no pertenece al grupo.',
+    estado: 'ready',
+    component: COGNITIVO_047,
     fallback: FallbackManual,
   },
 };

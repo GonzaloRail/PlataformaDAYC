@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import type { RefObject } from 'react';
 import { PedagogicalMascot } from '../child/PedagogicalMascot';
 import './KidGameShell.css';
 
@@ -9,6 +10,7 @@ interface KidGameShellProps {
   progressLabel?: string;
   mascotMessage?: string;
   playArea: ReactNode;
+  playAreaRef?: RefObject<HTMLElement | null>;
   actions?: ReactNode;
   footer?: ReactNode;
 }
@@ -20,6 +22,7 @@ export default function KidGameShell({
   progressLabel,
   mascotMessage,
   playArea,
+  playAreaRef,
   actions,
   footer,
 }: KidGameShellProps) {
@@ -42,12 +45,12 @@ export default function KidGameShell({
 
       {!isEmbedded && mascotMessage && (
         <div className="kid-shell-mascot" role="status" aria-live="polite">
-          <PedagogicalMascot className="kid-shell-mascot-animation" />
+          <PedagogicalMascot className="kid-shell-mascot-animation" animation="talking" />
           <p>{mascotMessage}</p>
         </div>
       )}
 
-      <main className="kid-shell-play">{playArea}</main>
+      <main className="kid-shell-play" ref={playAreaRef as RefObject<HTMLElement>}>{playArea}</main>
       {actions ? <div className="kid-shell-actions">{actions}</div> : null}
 
       {footer && <footer className="kid-shell-footer">{footer}</footer>}

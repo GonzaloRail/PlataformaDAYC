@@ -1,0 +1,88 @@
+.media-permission-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+  border-radius: 16px;
+  border: 1px solid rgba(15,107,122,0.14);
+  background: rgba(255,255,255,0.82);
+  padding: 0.75rem;
+}
+
+.media-permission-panel strong {
+  display: block;
+  color: #173846;
+  font-size: 0.9rem;
+  font-weight: 1000;
+}
+
+.media-permission-panel p {
+  margin: 0.28rem 0 0;
+  color: #5a7280;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  font-weight: 750;
+}
+
+.media-permission-panel small {
+  display: block;
+  margin-top: 0.35rem;
+  color: #8f2a27;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.media-permission-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+  flex: 0 0 auto;
+}
+
+.media-permission-actions span {
+  border-radius: 999px;
+  padding: 0.24rem 0.5rem;
+  background: rgba(15,107,122,0.08);
+  color: #0f6b7a;
+  font-size: 0.7rem;
+  font-weight: 1000;
+}
+
+.media-permission-ready .media-permission-actions span {
+  background: rgba(47,142,102,0.12);
+  color: #176b5f;
+}
+
+.media-permission-denied .media-permission-actions span,
+.media-permission-error .media-permission-actions span,
+.media-permission-unsupported .media-permission-actions span {
+  background: rgba(180,58,53,0.1);
+  color: #8f2a27;
+}
+
+.media-permission-actions button {
+  border: 0;
+  border-radius: 999px;
+  background: #173846;
+  color: #fff;
+  padding: 0.44rem 0.68rem;
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 950;
+}
+
+.media-permission-actions button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+@media (max-width: 540px) {
+  .media-permission-panel {
+    flex-direction: column;
+  }
+
+  .media-permission-actions {
+    align-items: flex-start;
+  }
+}

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import evaluacionesApi from '../../services/evaluacionesApi';
+import { EvidenceCollection } from './EvidenceCollection';
+import { normalizeEvidence } from './EvidenceNormalizer';
 import './EvidenceViewer.css';
 
 interface EvidenceViewerProps {
@@ -21,60 +23,67 @@ interface EvidenceData {
 export const EvidenceViewer: React.FC<EvidenceViewerProps> = ({ evaluacionId, itemId }) => {
   const [evidences, setEvidences] = useState<EvidenceData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
-    const load = async () => {
+    const load = async (initial = false) => {
       if (!evaluacionId || !itemId) return;
-      setLoading(true);
+      if (initial) setLoading(true);
+      else setRefreshing(true);
       setError(null);
       try {
         const data = await evaluacionesApi.getEvidence(evaluacionId, itemId);
         if (mounted) setEvidences(data);
-      } catch (err) {
+      } catch {
         if (mounted) setError('Error al cargar evidencias');
       } finally {
-        if (mounted) setLoading(false);
+        if (mounted) {
+          setLoading(false);
+          setRefreshing(false);
+        }
       }
     };
-    void load();
-    return () => { mounted = false; };
+    void load(true);
+    const interval = window.setInterval(() => void load(false), 4000);
+    return () => {
+      mounted = false;
+      window.clearInterval(interval);
+    };
   }, [evaluacionId, itemId]);
+
+  const normalized = useMemo(() => evidences.map(normalizeEvidence), [evidences]);
+  const counts = useMemo(() => normalized.reduce<Record<string, number>>((acc, evidence) => {
+    acc[evidence.shortLabel] = (acc[evidence.shortLabel] || 0) + 1;
+    return acc;
+  }, {}), [normalized]);
 
   if (loading) return <div className="evidence-viewer loading">Cargando evidencias...</div>;
   if (error) return <div className="evidence-viewer error">{error}</div>;
-  if (evidences.length === 0) return <div className="evidence-viewer empty">No hay evidencias registradas para este ítem.</div>;
+  if (normalized.length === 0) {
+    return (
+      <div className="evidence-viewer empty">
+        <span>No hay evidencias registradas para este ítem.</span>
+        {refreshing && <strong>Buscando evidencias nuevas...</strong>}
+      </div>
+    );
+  }
 
   return (
-    <div className="evidence-viewer">
-      <h4>Evidencias Recopiladas</h4>
-      <div className="evidence-list">
-        {evidences.map((ev) => (
-          <div key={ev.id} className="evidence-card">
-            <div className="evidence-meta">
-              <span className="evidence-type">{ev.type}</span>
-              <span className="evidence-time">{new Date(ev.created_at).toLocaleTimeString()}</span>
-            </div>
-            
-            {ev.type === 'VIDEO' && ev.download_url && (
-              <video src={ev.download_url} controls preload="metadata" className="evidence-media" />
-            )}
-            
-            {ev.type === 'AUDIO' && ev.download_url && (
-              <audio src={ev.download_url} controls preload="metadata" className="evidence-media" />
-            )}
-            
-            {ev.type === 'SCREENSHOT' && ev.download_url && (
-              <img src={ev.download_url} alt="Captura" className="evidence-media" />
-            )}
-            
-            {(ev.type === 'LOG' || ev.type === 'SYSTEM_RESULT' || ev.type === 'TIME_EVENT') && (
-              <pre className="evidence-logs">{JSON.stringify(ev.metadata, null, 2)}</pre>
-            )}
-          </div>
-        ))}
+    <div className="evidence-viewer evidence-viewer-normalized">
+      <div className="evidence-viewer-heading">
+        <div>
+          <h4>Evidencias del ítem</h4>
+          <p>{refreshing ? 'Actualizando evidencias...' : 'Resumen clínico y archivos disponibles para revisión profesional.'}</p>
+        </div>
+        <div className="evidence-viewer-counts">
+          {Object.entries(counts).map(([label, count]) => (
+            <span key={label}>{label}: {count}</span>
+          ))}
+        </div>
       </div>
+      <EvidenceCollection evidences={normalized} />
     </div>
   );
 };

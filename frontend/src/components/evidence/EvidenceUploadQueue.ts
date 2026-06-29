@@ -10,6 +10,28 @@ export interface EvidencePayload {
   sizeBytes?: number;
   capturedBy?: string;
   sessionToken?: string;
+  fileName?: string;
+}
+
+function buildEvidenceFormData(payload: EvidencePayload): FormData {
+  const formData = new FormData();
+  formData.append('type', payload.type);
+  if (payload.file) {
+    formData.append('file', payload.file, payload.fileName || 'evidence-file');
+  }
+  if (payload.metadata) {
+    formData.append('metadata', JSON.stringify(payload.metadata));
+  }
+  if (payload.durationMs !== undefined) formData.append('duration_ms', payload.durationMs.toString());
+  if (payload.sizeBytes !== undefined) formData.append('size_bytes', payload.sizeBytes.toString());
+  if (payload.capturedBy) formData.append('captured_by', payload.capturedBy);
+
+  return formData;
+}
+
+export async function uploadEvidenceNow(payload: EvidencePayload) {
+  const formData = buildEvidenceFormData(payload);
+  return evaluacionesApi.uploadEvidence(payload.evaluacionId, payload.itemId, formData, payload.sessionToken);
 }
 
 class UploadQueue {
@@ -28,19 +50,7 @@ class UploadQueue {
     while (this.queue.length > 0) {
       const payload = this.queue[0];
       try {
-        const formData = new FormData();
-        formData.append('type', payload.type);
-        if (payload.file) {
-          formData.append('file', payload.file);
-        }
-        if (payload.metadata) {
-          formData.append('metadata', JSON.stringify(payload.metadata));
-        }
-        if (payload.durationMs !== undefined) formData.append('duration_ms', payload.durationMs.toString());
-        if (payload.sizeBytes !== undefined) formData.append('size_bytes', payload.sizeBytes.toString());
-        if (payload.capturedBy) formData.append('captured_by', payload.capturedBy);
-
-        await evaluacionesApi.uploadEvidence(payload.evaluacionId, payload.itemId, formData, payload.sessionToken);
+        await uploadEvidenceNow(payload);
         // Eliminado exitosamente de la cola
         this.queue.shift();
       } catch (error) {

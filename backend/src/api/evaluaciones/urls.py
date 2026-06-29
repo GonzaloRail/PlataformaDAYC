@@ -3,6 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('evidence-policies/', views.list_evidence_policies, name='list_evidence_policies'),
+    path('evidence-policies/<str:item_id>/', views.evidence_policy_detail, name='evidence_policy_detail'),
     path('', views.crear_evaluación, name='crear_evaluación'),
     path('join/', views.join_evaluación, name='join_evaluación'),
     path('session/<str:session_code>/state/', views.session_state, name='session_state'),
@@ -18,7 +20,7 @@ urlpatterns = [
     path('<uuid:pk>/items/<str:item_id>/auto-result/', views.registrar_auto_result, name='registrar_auto_result'),
     path('<uuid:pk>/items/<str:item_id>/events/', views.registrar_evento_item, name='registrar_evento_item'),
     path('<uuid:pk>/items/<str:item_id>/evidence/', views.manejar_evidencia_item, name='manejar_evidencia_item'),
-    path('evidencias/<uuid:evidence_id>/download/', views.descargar_evidencia, name='descargar_evidencia'),
+    path('evidencias/<int:evidence_id>/download/', views.descargar_evidencia, name='descargar_evidencia'),
     path('<uuid:pk>/review/', views.review_overview, name='review_overview'),
     path('<uuid:pk>/review/pending/', views.review_pending, name='review_pending'),
     path('<uuid:pk>/items/<str:item_id>/review/', views.review_item, name='review_item'),

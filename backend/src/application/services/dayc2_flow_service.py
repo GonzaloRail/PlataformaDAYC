@@ -9,7 +9,7 @@ from typing import Any
 
 from django.utils import timezone
 
-from src.api.evaluaciones.models import Evaluación, EvaluacionItem, Respuesta
+from src.api.evaluaciones.models import Evaluación, EvaluacionItem, EvidencePolicy, Respuesta
 from src.application.services.item_catalog_service import AREA_ORDER, item_catalog_service
 
 
@@ -66,7 +66,7 @@ class Dayc2FlowService:
             'instrucciones': catalog_item.get('pregunta') or catalog_item.get('descripcion_general', 'Sigue las instrucciones del adulto acompanante.'),
             'tipo_interaction': self._interaction_type(catalog_item),
             'requiere_evidencia': catalog_item.get('requiere_evidencia', True),
-            'tipos_evidencia': catalog_item.get('tipos_evidencia', ['LOG']),
+            'tipos_evidencia': self._effective_evidence_types(item.item_id, catalog_item),
             'auto_validable': catalog_item.get('auto_validable', False),
             'requiere_revision_psicologo': item.requires_review,
             'validation_mode': validation_mode,
@@ -256,6 +256,12 @@ class Dayc2FlowService:
             return int(value)
         except (TypeError, ValueError):
             return None
+
+    def _effective_evidence_types(self, item_id: str, catalog_item: dict[str, Any]) -> list[str]:
+        policy = EvidencePolicy.objects.filter(item_id=item_id, enabled=True).first()
+        if policy and policy.evidence_types:
+            return policy.evidence_types
+        return catalog_item.get('tipos_evidencia', ['LOG'])
 
     def _interaction_type(self, catalog_item: dict[str, Any]) -> str:
         evidence_types = set(catalog_item.get('tipos_evidencia', []))

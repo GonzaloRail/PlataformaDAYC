@@ -1,0 +1,29 @@
+@keyframes mascot-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.02); }
+}
+
+@keyframes mascot-sway {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-1.2deg); }
+  75%      { transform: rotate(1.2deg); }
+}
+
+.pedagogical-mascot-sway {
+  width: 100%;
+  height: 100%;
+  animation: mascot-sway 4.2s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+}
+
+.pedagogical-mascot-sway--talking {
+  animation-duration: 2.8s;
+}
+
+.pedagogical-mascot-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: mascot-breathe 3s ease-in-out infinite;
+}

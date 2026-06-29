@@ -312,7 +312,11 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "SCREENSHOT"
+      "TIME_EVENT",
+      "SCREENSHOT",
+      "AUDIO",
+      "VIDEO",
+      "CAMERA_FRAME"
     ],
     "actividad_digital": "COGNITIVO_045",
     "requiere_revision_psicologo": true,
@@ -332,9 +336,13 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "SCREENSHOT"
+      "TIME_EVENT",
+      "SCREENSHOT",
+      "AUDIO",
+      "VIDEO",
+      "CAMERA_FRAME"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_046",
     "requiere_revision_psicologo": true,
     "pregunta": "Clasifica objetos en categorías (juguetes, animales)",
     "descripcion_general": "Clasifica objetos en categorías (juguetes, animales)"
@@ -345,16 +353,21 @@
     "numero": 47,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
-    "auto_validable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
+    "auto_validable": true,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "TIME_EVENT",
+      "SCREENSHOT",
+      "AUDIO",
+      "VIDEO",
+      "CAMERA_FRAME"
     ],
-    "actividad_digital": null,
-    "requiere_revision_psicologo": true,
+    "actividad_digital": "COGNITIVO_047",
+    "requiere_revision_psicologo": false,
     "pregunta": "Identifica objetos que no pertenecen a un grupo",
     "descripcion_general": "Identifica objetos que no pertenecen a un grupo"
   },

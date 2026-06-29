@@ -1,0 +1,61 @@
+.evidence-collection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.evidence-collection-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.evidence-collection-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  border: 1px solid rgba(15,107,122,0.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.76);
+  color: #173846;
+  padding: 0.42rem 0.62rem;
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 950;
+}
+
+.evidence-collection-tabs button.is-active {
+  background: #0f6b7a;
+  color: #fff;
+}
+
+.evidence-collection-tabs span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: rgba(15,107,122,0.1);
+  color: inherit;
+  font-size: 0.68rem;
+}
+
+.evidence-collection-tabs button.is-active span {
+  background: rgba(255,255,255,0.22);
+}
+
+.evidence-collection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.evidence-collection-empty {
+  margin: 0;
+  padding: 0.9rem;
+  border-radius: 14px;
+  background: rgba(15,107,122,0.06);
+  color: #5a7280;
+  font-size: 0.84rem;
+  font-weight: 800;
+}

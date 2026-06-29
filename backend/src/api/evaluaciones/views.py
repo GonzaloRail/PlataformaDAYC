@@ -10,7 +10,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.http import FileResponse
-from .models import Consentimiento, Evaluación, EvaluacionItem, Evidencia, InteractionEvent, Respuesta, ResultadoÁrea
+from .models import Consentimiento, Evaluación, EvaluacionItem, Evidencia, EvidencePolicy, InteractionEvent, Respuesta, ResultadoÁrea
 from src.api.children.models import Niño
 from src.application.services.edad_service import EdadService
 from src.application.services.rules_service import rules_service
@@ -467,7 +467,7 @@ def manejar_evidencia_item(request, pk, item_id):
             'size_bytes': ev.size_bytes,
             'captured_by': ev.captured_by,
             'created_at': ev.created_at.isoformat() if ev.created_at else None,
-            'download_url': f'/api/evidencias/{ev.id}/download/' if ev.file else None
+            'download_url': f'/api/evaluaciones/evidencias/{ev.id}/download/' if ev.file else None
         } for ev in evidencias])
 
     consentimiento = getattr(evaluación, 'consentimiento', None)
@@ -833,3 +833,59 @@ def reporte_pdf(request, pk):
 
     pdf_path = ReporteGenerator().generar(evaluación)
     return FileResponse(open(pdf_path, 'rb'), content_type='application/pdf', as_attachment=True, filename=f"reporte_DAYC2_{evaluación.niño.nombre}_{evaluación.created_at.date()}.pdf")
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_evidence_policies(request):
+    """List all evidence policies (overrides)"""
+    policies = EvidencePolicy.objects.all().order_by('item_id')
+    return Response([
+        {
+            'item_id': p.item_id,
+            'evidence_types': p.evidence_types,
+            'enabled': p.enabled,
+            'updated_at': p.updated_at.isoformat() if p.updated_at else None,
+        }
+        for p in policies
+    ])
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def evidence_policy_detail(request, item_id):
+    """Get, update or reset an evidence policy for a specific item."""
+    if request.method == 'GET':
+        policy = EvidencePolicy.objects.filter(item_id=item_id).first()
+        return Response({
+            'item_id': item_id,
+            'evidence_types': policy.evidence_types if policy else [],
+            'enabled': policy.enabled if policy else True,
+            'updated_at': policy.updated_at.isoformat() if policy and policy.updated_at else None,
+            'is_override': policy is not None,
+        })
+
+    if request.method == 'PUT':
+        evidence_types = request.data.get('evidence_types')
+        enabled = request.data.get('enabled', True)
+        if evidence_types is not None and not isinstance(evidence_types, list):
+            return Response({'error': 'evidence_types debe ser una lista'}, status=status.HTTP_400_BAD_REQUEST)
+        policy, created = EvidencePolicy.objects.update_or_create(
+            item_id=item_id,
+            defaults={
+                'evidence_types': evidence_types or [],
+                'enabled': enabled,
+                'updated_by': request.user if request.user.is_authenticated else None,
+            },
+        )
+        return Response({
+            'item_id': policy.item_id,
+            'evidence_types': policy.evidence_types,
+            'enabled': policy.enabled,
+            'updated_at': policy.updated_at.isoformat() if policy.updated_at else None,
+            'is_override': True,
+        }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+
+    if request.method == 'DELETE':
+        deleted, _ = EvidencePolicy.objects.filter(item_id=item_id).delete()
+        return Response({'deleted': bool(deleted)}, status=status.HTTP_200_OK)
