@@ -34,6 +34,12 @@ class Evaluación(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     niño = models.ForeignKey(Niño, on_delete=models.CASCADE, related_name='evaluaciones')
+    # NOTE: `psychologist_id` is a CharField (not a ForeignKey) to keep the
+    # public API contract intact and to allow this table to exist without a
+    # hard FK to the auth_user table (some evaluation rows can outlive the
+    # original psychologist). If/when a real FK is needed, a multi-step
+    # migration should: (1) add `psychologist` ForeignKey, (2) backfill from
+    # `psychologist_id`, (3) switch query sites, (4) drop the old column.
     psychologist_id = models.CharField(max_length=64, null=True, blank=True)
     estado = models.CharField(max_length=20, choices=Estado.choices, default=Estado.INITIATED)
     edad_meses = models.IntegerField(null=True, blank=True)

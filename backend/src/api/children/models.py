@@ -29,8 +29,6 @@ class Niño(models.Model):
 
     @property
     def edad_meses(self):
-        """Calculate age in months from date of birth"""
-        from datetime import date
-        today = date.today()
-        months = (today.year - self.fecha_nacimiento.year) * 12 + (today.month - self.fecha_nacimiento.month)
-        return months
+        """Calculate age in months from date of birth (delegates to EdadService for day precision)."""
+        from src.application.services.edad_service import EdadService
+        return EdadService.calcular_edad_meses(self.fecha_nacimiento)

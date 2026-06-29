@@ -10,18 +10,13 @@ class EdadCronológica:
     años: int
     meses: int
     días: int
-    
+
     def __str__(self):
         return f"{self.años} años {self.meses} meses"
-    
+
     @property
     def meses_totales(self) -> int:
         return self.años * 12 + self.meses
-    
-    def a_string(self) -> str:
-        if self.años == 0:
-            return f"{self.meses} meses"
-        return f"{self.años} años {self.meses} meses"
 
 
 class EdadService:
@@ -68,17 +63,3 @@ class EdadService:
             return "Bajo"
         else:
             return "Significativamente bajo"
-    
-    @staticmethod
-    def validar_fecha_nacimiento(fecha_nacimiento: date) -> bool:
-        """Validate that birth date is valid (not in future, within reasonable range)"""
-        today = date.today()
-        
-        if fecha_nacimiento > today:
-            return False
-        
-        edad = EdadService.calcular_edad(fecha_nacimiento)
-        if edad.años > 18 or edad.años < 0:
-            return False
-        
-        return True

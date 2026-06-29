@@ -79,10 +79,14 @@ class ItemCatalogService:
         return AREA_ORDER[next_index]
 
     def get_item(self, item_id: str) -> dict[str, Any] | None:
-        for item in self.all_items():
-            if item.get('id') == item_id:
-                return dict(item)
+        for item in self._index().get(item_id, ()):
+            return dict(item)
         return None
+
+    @lru_cache(maxsize=1)
+    def _index(self) -> dict[str, tuple[dict[str, Any], ...]]:
+        """O(1) lookup index of item_id -> (item,)."""
+        return {item.get('id'): (item,) for item in self.all_items() if item.get('id')}
 
     def select_start_item(self, area: str, edad_meses: int | None) -> dict[str, Any] | None:
         items = list(self.items_by_area(area))

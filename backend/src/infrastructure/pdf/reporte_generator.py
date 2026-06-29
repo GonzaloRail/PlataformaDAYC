@@ -1,7 +1,6 @@
 """PDF Report Generator for DAYC-2 evaluations"""
 import os
 import tempfile
-from typing import Optional
 from datetime import datetime
 
 
@@ -40,10 +39,13 @@ class ReporteGenerator:
         try:
             from weasyprint import HTML
             HTML(string=html_content).write_pdf(pdf_path)
-        except Exception:
-            with open(pdf_path, 'wb') as f:
-                f.write(html_content.encode('utf-8'))
-        
+        except (ImportError, OSError) as exc:
+            import logging
+            logging.getLogger(__name__).error(
+                "PDF generation failed for evaluation %s: %s", getattr(evaluación, 'id', '?'), exc
+            )
+            raise RuntimeError(f"PDF generation failed: {exc}") from exc
+
         return pdf_path
     
     def _generar_html(self, niño, evaluación, resultados, diagnóstico) -> str:

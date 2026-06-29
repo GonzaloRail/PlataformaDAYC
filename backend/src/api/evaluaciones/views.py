@@ -1,91 +1,30 @@
 """Views for Evaluaciones API"""
-import random
-import secrets
-import string
-from datetime import timedelta
+import json
+from django.http import FileResponse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from django.http import FileResponse
 from .models import Consentimiento, Evaluación, EvaluacionItem, Evidencia, EvidencePolicy, InteractionEvent, Respuesta, ResultadoÁrea
 from src.api.children.models import Niño
 from src.application.services.edad_service import EdadService
 from src.application.services.rules_service import rules_service
 from src.application.services.scoring_service import scoring_service
 from src.application.services.dayc2_flow_service import dayc2_flow_service
-
-
-def generar_códigoSesión():
-    """Generate unique session code"""
-    while True:
-        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-        if not Evaluación.objects.filter(session_code=code).exists():
-            return code
-
-
-def _serialize_evaluación(evaluación):
-    return {
-        'id': str(evaluación.id),
-        'nino_id': str(evaluación.niño.id),
-        'niño': {'id': str(evaluación.niño.id), 'nombre': evaluación.niño.nombre},
-        'psychologist_id': evaluación.psychologist_id,
-        'estado': evaluación.estado,
-        'edad_meses': evaluación.edad_meses,
-        'session_code': evaluación.session_code,
-        'modo_evaluacion': evaluación.modo_evaluacion,
-        'current_area': evaluación.current_area,
-        'current_item_id': evaluación.current_item_id,
-        'child_data_completed': evaluación.child_data_completed,
-        'consentimiento_aceptado': getattr(evaluación, 'consentimiento', None).accepted if hasattr(evaluación, 'consentimiento') else False,
-        'started_at': evaluación.started_at.isoformat() if evaluación.started_at else None,
-        'completed_at': evaluación.completed_at.isoformat() if evaluación.completed_at else None,
-        'created_at': evaluación.created_at.isoformat() if evaluación.created_at else None,
-    }
-
-
-def _client_ip(request):
-    forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if forwarded_for:
-        return forwarded_for.split(',')[0].strip()
-    return request.META.get('REMOTE_ADDR')
-
-
-def _ensure_session_token(evaluación):
-    if not evaluación.session_token:
-        evaluación.session_token = secrets.token_urlsafe(32)
-    if not evaluación.session_expires_at:
-        evaluación.session_expires_at = timezone.now() + timedelta(days=7)
-    evaluación.save(update_fields=['session_token', 'session_expires_at'])
-    return evaluación.session_token
-
-
-def _get_evaluación_by_session(session_code):
-    return Evaluación.objects.select_related('niño').get(session_code=session_code.strip().upper())
-
-
-def _serialize_item(item):
-    return {
-        'id': str(item.id),
-        'evaluacion_id': str(item.evaluación_id),
-        'item_id': item.item_id,
-        'area': item.area,
-        'orden': item.orden,
-        'modalidad': item.modalidad,
-        'pantalla_nino': item.pantalla_nino,
-        'estado': item.estado,
-        'system_result': item.system_result,
-        'system_confidence': item.system_confidence,
-        'final_result': item.final_result,
-        'requires_review': item.requires_review,
-        'psychologist_notes': item.psychologist_notes,
-        'adult_notes': item.adult_notes,
-        'duration_ms': item.duration_ms,
-        'started_at': item.started_at.isoformat() if item.started_at else None,
-        'completed_at': item.completed_at.isoformat() if item.completed_at else None,
-    }
+from src.application.services.item_catalog_service import item_catalog_service
+from .serializers import (
+    generar_codigo_sesion,
+    serialize_evaluación as _serialize_evaluación,
+    serialize_item as _serialize_item,
+    serialize_resultado_area as _serialize_resultado_area,
+    autorizar_evaluacion as _autorizar_evaluacion,
+    client_ip as _client_ip,
+    ensure_session_token as _ensure_session_token,
+    get_evaluación_by_session as _get_evaluación_by_session,
+    generar_pdf_evaluacion as _generar_pdf_evaluacion,
+)
 
 
 @api_view(['GET', 'POST'])
@@ -93,10 +32,16 @@ def _serialize_item(item):
 def crear_evaluación(request):
     """Create new evaluation for a child"""
     if request.method == 'GET':
-        evaluaciones = Evaluación.objects.select_related('niño').filter(psychologist_id=str(request.user.id)).order_by('-created_at')
-        return Response([_serialize_evaluación(e) for e in evaluaciones])
+        from src.api.children.views import _paginate
+        evaluaciones_qs = (
+            Evaluación.objects.select_related('niño')
+            .filter(psychologist_id=str(request.user.id))
+            .order_by('-created_at')
+        )
+        evaluaciones, meta = _paginate(evaluaciones_qs, request)
+        return Response({'results': [_serialize_evaluación(e) for e in evaluaciones], **meta})
 
-    niño_id = request.data.get('niño_id') or request.data.get('nino_id')
+    niño_id = request.data.get('nino_id')
     
     try:
         niño = Niño.objects.get(pk=niño_id, psychologist=request.user)
@@ -110,7 +55,7 @@ def crear_evaluación(request):
         psychologist_id=str(request.user.id),
         estado=Evaluación.Estado.INITIATED,
         edad_meses=edad_meses,
-        session_code=generar_códigoSesión(),
+        session_code=generar_codigo_sesion(),
         started_at=timezone.now(),
     )
     dayc2_flow_service.get_current_item(evaluación)
@@ -155,11 +100,7 @@ def registrar_respuesta(request, pk):
     except Evaluación.DoesNotExist:
         return Response({'error': 'Evaluación no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
-    is_psychologist = request.user.is_authenticated and str(request.user.id) == evaluación.psychologist_id
-    session_token = request.headers.get('Authorization', '').replace('Bearer ', '')
-    is_valid_child_session = session_token and session_token == evaluación.session_token
-
-    if not (is_psychologist or is_valid_child_session):
+    if not _autorizar_evaluacion(request, evaluación):
         return Response({'error': 'No autorizado para registrar respuestas'}, status=status.HTTP_403_FORBIDDEN)
 
     item, advance_info = dayc2_flow_service.complete_current_item(
@@ -195,11 +136,7 @@ def registrar_auto_result(request, pk, item_id):
     except Evaluación.DoesNotExist:
         return Response({'error': 'Evaluación no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
-    is_psychologist = request.user.is_authenticated and str(request.user.id) == evaluación.psychologist_id
-    session_token = request.headers.get('Authorization', '').replace('Bearer ', '')
-    is_valid_child_session = session_token and session_token == evaluación.session_token
-
-    if not (is_psychologist or is_valid_child_session):
+    if not _autorizar_evaluacion(request, evaluación):
         return Response({'error': 'No autorizado para registrar resultados'}, status=status.HTTP_403_FORBIDDEN)
 
     evaluación_item = evaluación.items.filter(item_id=item_id).first()
@@ -211,13 +148,11 @@ def registrar_auto_result(request, pk, item_id):
     raw_data = request.data.get('raw_data', {})
     duration_ms = request.data.get('duration_ms')
 
-    import json
     try:
         json.dumps(raw_data)
     except TypeError:
         raw_data = {}
 
-    from src.api.evaluaciones.models import Evidencia, Respuesta
     Evidencia.objects.create(
         evaluación=evaluación,
         evaluación_item=evaluación_item,
@@ -230,7 +165,6 @@ def registrar_auto_result(request, pk, item_id):
         captured_by='SYSTEM_AUTO'
     )
 
-    from src.application.services.dayc2_flow_service import dayc2_flow_service
     item, advance_info = dayc2_flow_service.complete_current_item(
         evaluación=evaluación,
         result=resultado,
@@ -419,11 +353,7 @@ def registrar_evento_item(request, pk, item_id):
     except Evaluación.DoesNotExist:
         return Response({'error': 'Evaluación no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
-    is_psychologist = request.user.is_authenticated and str(request.user.id) == evaluación.psychologist_id
-    session_token = request.headers.get('Authorization', '').replace('Bearer ', '')
-    is_valid_child_session = session_token and session_token == evaluación.session_token
-
-    if not (is_psychologist or is_valid_child_session):
+    if not _autorizar_evaluacion(request, evaluación):
         return Response({'error': 'No autorizado para registrar eventos'}, status=status.HTTP_403_FORBIDDEN)
 
     evaluación_item = evaluación.items.filter(item_id=item_id).first()
@@ -446,11 +376,7 @@ def manejar_evidencia_item(request, pk, item_id):
     except Evaluación.DoesNotExist:
         return Response({'error': 'Evaluación no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
-    is_psychologist = request.user.is_authenticated and str(request.user.id) == evaluación.psychologist_id
-    session_token = request.headers.get('Authorization', '').replace('Bearer ', '') or request.GET.get('session_token')
-    is_valid_child_session = session_token and session_token == evaluación.session_token
-
-    if not (is_psychologist or is_valid_child_session):
+    if not _autorizar_evaluacion(request, evaluación):
         return Response({'error': 'No autorizado para acceder a estas evidencias'}, status=status.HTTP_403_FORBIDDEN)
 
     evaluación_item = evaluación.items.filter(item_id=item_id).first()
@@ -475,7 +401,6 @@ def manejar_evidencia_item(request, pk, item_id):
         return Response({'error': 'El consentimiento es obligatorio para registrar evidencias'}, status=status.HTTP_403_FORBIDDEN)
 
     uploaded_file = request.FILES.get('file')
-    import json
     metadata_raw = request.data.get('metadata', '{}')
     if isinstance(metadata_raw, str):
         try:
@@ -503,19 +428,15 @@ def descargar_evidencia(request, evidence_id):
         evidencia = Evidencia.objects.select_related('evaluación').get(pk=evidence_id)
     except Evidencia.DoesNotExist:
         return Response({'error': 'Evidencia no encontrada'}, status=status.HTTP_404_NOT_FOUND)
-    
-    evaluación = evidencia.evaluación
-    is_psychologist = request.user.is_authenticated and str(request.user.id) == evaluación.psychologist_id
-    session_token = request.GET.get('session_token')
-    is_valid_child_session = session_token and session_token == evaluación.session_token
 
-    if not (is_psychologist or is_valid_child_session):
+    evaluación = evidencia.evaluación
+    if not _autorizar_evaluacion(request, evaluación):
         return Response({'error': 'No autorizado para acceder a este archivo'}, status=status.HTTP_403_FORBIDDEN)
-        
+
     if not evidencia.file:
         return Response({'error': 'El archivo físico no existe'}, status=status.HTTP_404_NOT_FOUND)
-        
-    return FileResponse(evidencia.file.open('rb'), as_attachment=False)
+
+    return FileResponse(open(evidencia.file.path, 'rb'), as_attachment=False)
 
 
 @api_view(['GET'])
@@ -646,19 +567,7 @@ def listar_resultados(request, pk):
     except Evaluación.DoesNotExist:
         return Response({'error': 'Evaluación no encontrada'}, status=status.HTTP_404_NOT_FOUND)
     return Response([
-        {
-            'id': str(r.id),
-            'evaluacion_id': str(evaluación.id),
-            'area': r.área,
-            'área': r.área,
-            'puntuacion_directa': r.puntuación_directa,
-            'puntuación_directa': r.puntuación_directa,
-            'puntuacion_estandar': r.puntuación_estándar,
-            'puntuación_estándar': r.puntuación_estándar,
-            'percentil': r.percentil,
-            'edad_equivalente': r.edad_equivalente,
-            'cociente_general_gdq': r.cociente_general_gdq,
-        }
+        {**_serialize_resultado_area(r), 'evaluacion_id': str(evaluación.id)}
         for r in evaluación.resultados.all()
     ])
 
@@ -711,21 +620,7 @@ def calcular_puntuación(request, pk):
     gdq_global = scoring_service.calcular_gdq_global(resultados)
     
     return Response({
-        'resultados': [
-            {
-                'area': r.área,
-                'id': str(r.id),
-                'área': r.área,
-                'puntuación_directa': r.puntuación_directa,
-                'puntuacion_directa': r.puntuación_directa,
-                'puntuación_estándar': r.puntuación_estándar,
-                'puntuacion_estandar': r.puntuación_estándar,
-                'percentil': r.percentil,
-                'edad_equivalente': r.edad_equivalente,
-                'cociente_general_gdq': r.cociente_general_gdq,
-            }
-            for r in resultados
-        ],
+        'resultados': [_serialize_resultado_area(r) for r in resultados],
         'gdq_global': gdq_global,
     })
 
@@ -746,18 +641,7 @@ def calcular_puntuación_preliminar(request, pk):
     return Response({
         'tipo': 'PRELIMINARY',
         'pendientes_revision': pending_count,
-        'resultados': [
-            {
-                'id': str(r.id),
-                'area': r.área,
-                'puntuacion_directa': r.puntuación_directa,
-                'puntuacion_estandar': r.puntuación_estándar,
-                'percentil': r.percentil,
-                'edad_equivalente': r.edad_equivalente,
-                'cociente_general_gdq': r.cociente_general_gdq,
-            }
-            for r in resultados
-        ],
+        'resultados': [_serialize_resultado_area(r) for r in resultados],
         'gdq_global': gdq_global,
     })
 
@@ -780,18 +664,7 @@ def calcular_puntuación_validada(request, pk):
         evaluación.save(update_fields=['validated_calculated_at'])
     return Response({
         'tipo': 'VALIDATED',
-        'resultados': [
-            {
-                'id': str(r.id),
-                'area': r.área,
-                'puntuacion_directa': r.puntuación_directa,
-                'puntuacion_estandar': r.puntuación_estándar,
-                'percentil': r.percentil,
-                'edad_equivalente': r.edad_equivalente,
-                'cociente_general_gdq': r.cociente_general_gdq,
-            }
-            for r in resultados
-        ],
+        'resultados': [_serialize_resultado_area(r) for r in resultados],
         'gdq_global': gdq_global,
     })
 
@@ -829,10 +702,7 @@ def reporte_pdf(request, pk):
     except Evaluación.DoesNotExist:
         return Response({'error': 'Evaluación no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
-    from src.infrastructure.pdf.reporte_generator import ReporteGenerator
-
-    pdf_path = ReporteGenerator().generar(evaluación)
-    return FileResponse(open(pdf_path, 'rb'), content_type='application/pdf', as_attachment=True, filename=f"reporte_DAYC2_{evaluación.niño.nombre}_{evaluación.created_at.date()}.pdf")
+    return _generar_pdf_evaluacion(evaluación)
 
 
 @api_view(['GET'])

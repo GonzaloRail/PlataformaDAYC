@@ -28,7 +28,6 @@ class RulesService:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance.regla_activa = None
         return cls._instance
 
     def evaluar_reglas(self, respuestas: List[Respuesta]) -> Optional[RuleResult]:

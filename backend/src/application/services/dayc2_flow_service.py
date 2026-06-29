@@ -153,10 +153,7 @@ class Dayc2FlowService:
         if next_catalog_item is None:
             next_area = item_catalog_service.get_next_area(completed_item.area)
             if next_area is None:
-                evaluación.estado = Evaluación.Estado.PENDING_REVIEW
-                evaluación.completed_at = timezone.now()
-                evaluación.current_item_id = None
-                evaluación.save(update_fields=['estado', 'completed_at', 'current_item_id'])
+                self._finalizar_evaluacion(evaluación)
                 return {
                     'area_finished': True,
                     'area_finished_by_rule': area_finished_by_rule,
@@ -169,10 +166,7 @@ class Dayc2FlowService:
             evaluación.current_area_index = item_catalog_service.get_area_index(next_area)
             next_catalog_item = item_catalog_service.select_start_item(next_area, evaluación.edad_meses)
             if next_catalog_item is None:
-                evaluación.estado = Evaluación.Estado.PENDING_REVIEW
-                evaluación.completed_at = timezone.now()
-                evaluación.current_item_id = None
-                evaluación.save(update_fields=['estado', 'completed_at', 'current_item_id'])
+                self._finalizar_evaluacion(evaluación)
                 return {'evaluation_finished': True}
 
             next_item = self._activate_catalog_item(evaluación, next_catalog_item)
@@ -192,6 +186,13 @@ class Dayc2FlowService:
             'next_area': next_item.area,
             'next_item_id': next_item.item_id,
         }
+
+    def _finalizar_evaluacion(self, evaluación: Evaluación) -> None:
+        """Move evaluación to PENDING_REVIEW and stamp completion time."""
+        evaluación.estado = Evaluación.Estado.PENDING_REVIEW
+        evaluación.completed_at = timezone.now()
+        evaluación.current_item_id = None
+        evaluación.save(update_fields=['estado', 'completed_at', 'current_item_id'])
 
     def _activate_catalog_item(self, evaluación: Evaluación, catalog_item: dict[str, Any]) -> EvaluacionItem:
         item, _ = EvaluacionItem.objects.get_or_create(
@@ -213,21 +214,15 @@ class Dayc2FlowService:
         return item
 
     def _has_three_consecutive_fails(self, evaluación: Evaluación, area: str) -> bool:
-        completed_items = list(
+        recent = list(
             evaluación.items.filter(area=area)
             .exclude(system_result__isnull=True)
-            .order_by('orden', 'attempt_number')
+            .order_by('-orden', '-attempt_number')[:3]
         )
-        consecutive = 0
-        for item in completed_items:
-            result = item.final_result or item.system_result
-            if result == EvaluacionItem.Resultado.FAIL:
-                consecutive += 1
-                if consecutive >= 3:
-                    return True
-            else:
-                consecutive = 0
-        return False
+        return len(recent) == 3 and all(
+            (item.final_result or item.system_result) == EvaluacionItem.Resultado.FAIL
+            for item in recent
+        )
 
     def _normalize_result(self, result: str) -> str:
         mapping = {

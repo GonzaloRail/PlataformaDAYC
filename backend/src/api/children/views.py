@@ -21,6 +21,24 @@ def serialize_user(user):
     }
 
 
+def serialize_niño(niño, include_edad=False):
+    """Serialize a Niño model to a JSON-friendly dict."""
+    data = {
+        'id': str(niño.id),
+        'nombre': niño.nombre,
+        'fecha_nacimiento': niño.fecha_nacimiento.isoformat(),
+        'genero': niño.genero,
+        'padre_tutor': niño.padre_tutor,
+        'escuela': niño.escuela,
+        'nombre_informante': niño.nombre_informante,
+        'relacion_informante': niño.relacion_informante,
+        'periodo_conoce_nino': niño.periodo_conoce_nino,
+    }
+    if include_edad:
+        data['edad_meses'] = niño.edad_meses
+    return data
+
+
 @api_view(['POST'])
 @authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
@@ -89,28 +107,33 @@ def logout_view(request):
     return Response({'status': 'ok'})
 
 
+DEFAULT_PAGE_SIZE = 50
+MAX_PAGE_SIZE = 200
+
+
+def _paginate(queryset, request):
+    """Return a (page, total) tuple based on ?page and ?page_size query params."""
+    try:
+        page = max(1, int(request.query_params.get('page', 1)))
+    except (TypeError, ValueError):
+        page = 1
+    try:
+        page_size = min(MAX_PAGE_SIZE, max(1, int(request.query_params.get('page_size', DEFAULT_PAGE_SIZE))))
+    except (TypeError, ValueError):
+        page_size = DEFAULT_PAGE_SIZE
+    total = queryset.count()
+    items = list(queryset[(page - 1) * page_size:page * page_size])
+    return items, {'page': page, 'page_size': page_size, 'total': total}
+
+
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def listar_niños(request):
     """List all children or create new child"""
     if request.method == 'GET':
-        niños = Niño.objects.filter(psychologist=request.user)
-        data = [
-            {
-                'id': str(n.id),
-                'nombre': n.nombre,
-                'fecha_nacimiento': n.fecha_nacimiento.isoformat(),
-                'genero': n.genero,
-                'padre_tutor': n.padre_tutor,
-                'escuela': n.escuela,
-                'nombre_informante': n.nombre_informante,
-                'relacion_informante': n.relacion_informante,
-                'periodo_conoce_nino': n.periodo_conoce_nino,
-            }
-            for n in niños
-        ]
-        return Response(data)
-    
+        niños, meta = _paginate(Niño.objects.filter(psychologist=request.user), request)
+        return Response({'results': [serialize_niño(n) for n in niños], **meta})
+
     if request.method == 'POST':
         fecha_nacimiento = parse_date(request.data['fecha_nacimiento'])
         if not fecha_nacimiento:
@@ -127,17 +150,7 @@ def listar_niños(request):
             periodo_conoce_nino=request.data.get('periodo_conoce_nino'),
             psychologist=request.user,
         )
-        return Response({
-            'id': str(niño.id),
-            'nombre': niño.nombre,
-            'fecha_nacimiento': niño.fecha_nacimiento.isoformat(),
-            'genero': niño.genero,
-            'padre_tutor': niño.padre_tutor,
-            'escuela': niño.escuela,
-            'nombre_informante': niño.nombre_informante,
-            'relacion_informante': niño.relacion_informante,
-            'periodo_conoce_nino': niño.periodo_conoce_nino,
-        }, status=status.HTTP_201_CREATED)
+        return Response(serialize_niño(niño), status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -148,21 +161,10 @@ def detalle_niño(request, pk):
         niño = Niño.objects.get(pk=pk, psychologist=request.user)
     except Niño.DoesNotExist:
         return Response({'error': 'Niño no encontrado'}, status=status.HTTP_404_NOT_FOUND)
-    
+
     if request.method == 'GET':
-        return Response({
-            'id': str(niño.id),
-            'nombre': niño.nombre,
-            'fecha_nacimiento': niño.fecha_nacimiento.isoformat(),
-            'genero': niño.genero,
-            'padre_tutor': niño.padre_tutor,
-            'escuela': niño.escuela,
-            'nombre_informante': niño.nombre_informante,
-            'relacion_informante': niño.relacion_informante,
-            'periodo_conoce_nino': niño.periodo_conoce_nino,
-            'edad_meses': niño.edad_meses
-        })
-    
+        return Response(serialize_niño(niño, include_edad=True))
+
     if request.method == 'PUT':
         niño.nombre = request.data.get('nombre', niño.nombre)
         niño.fecha_nacimiento = request.data.get('fecha_nacimiento', niño.fecha_nacimiento)
@@ -174,7 +176,7 @@ def detalle_niño(request, pk):
         niño.periodo_conoce_nino = request.data.get('periodo_conoce_nino', niño.periodo_conoce_nino)
         niño.save()
         return Response({'status': 'Actualizado'})
-    
+
     if request.method == 'DELETE':
         niño.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -188,9 +190,9 @@ def evaluaciones_niño(request, pk):
         niño = Niño.objects.get(pk=pk, psychologist=request.user)
     except Niño.DoesNotExist:
         return Response({'error': 'Niño no encontrado'}, status=status.HTTP_404_NOT_FOUND)
-    
+
     from src.api.evaluaciones.models import Evaluación
-    
+
     evaluaciones = Evaluación.objects.filter(niño=niño).order_by('-created_at')
     data = [
         {

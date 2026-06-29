@@ -4,10 +4,13 @@ CRITICAL: This service MUST load baremos into memory at startup.
 NO database queries for baremos calculations - performance O(1).
 """
 import json
-import os
+import logging
 import math
+import os
 from typing import Dict, Optional, Tuple
 from dataclasses import dataclass
+
+logger = logging.getLogger(__name__)
 
 
 class _AdjustedAge(int):
@@ -112,7 +115,7 @@ class BaremosService:
                 data = json.load(f)
                 self._construir_lookup(data)
         except FileNotFoundError:
-            print(f"Warning: Baremos file not found at {json_path}")
+            logger.warning("Baremos file not found at %s", json_path)
             self._baremos = self._get_default_baremos()
         
         self._loaded = True

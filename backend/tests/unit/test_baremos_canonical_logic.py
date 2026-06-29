@@ -13,7 +13,6 @@ class TestCanonicalBaremosLogic(unittest.TestCase):
         from src.application.services.baremos_service import BaremosService
         self.service = BaremosService()
         self.service._loaded = False
-        self.service._baremos_module = None
 
     def test_item_inicio_fis(self):
         inicio = self.service.get_item_inicio('DESARROLLO_FISICO', 30)

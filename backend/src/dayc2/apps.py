@@ -1,6 +1,9 @@
 """
 App configuration for DAYC-2 project.
 """
+import json
+import os
+
 from django.apps import AppConfig
 from django.conf import settings
 import logging
@@ -16,21 +19,20 @@ class Dayc2Config(AppConfig):
     def ready(self):
         """Load baremos into memory at Django startup"""
         self._cargar_baremos()
-    
+
     def _cargar_baremos(self):
         """Load baremos JSON file into BaremosService"""
+        from src.application.services.baremos_service import baremos_service
+
+        baremos_path = getattr(settings, 'BAREMOS_JSON_PATH', None)
+        if not baremos_path:
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            baremos_path = os.path.join(base_dir, 'data', 'baremos_dayc2.json')
+
         try:
-            from src.application.services.baremos_service import baremos_service
-            
-            baremos_path = getattr(settings, 'BAREMOS_JSON_PATH', None)
-            
-            if not baremos_path:
-                import os
-                base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-                baremos_path = os.path.join(base_dir, 'data', 'baremos_dayc2.json')
-            
             baremos_service.cargar_baremos(baremos_path)
-            logger.info(f"Baremos loaded successfully from {baremos_path}")
-        except Exception as e:
-            logger.warning(f"Could not load baremos at startup: {e}")
-            logger.info("Baremos will be loaded on first request")
+            logger.info("Baremos loaded successfully from %s", baremos_path)
+        except FileNotFoundError:
+            logger.warning("Baremos file not found at %s; using defaults", baremos_path)
+        except json.JSONDecodeError as exc:
+            logger.warning("Baremos file at %s is not valid JSON: %s", baremos_path, exc)
