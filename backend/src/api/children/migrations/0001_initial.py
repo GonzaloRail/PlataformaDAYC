@@ -8,23 +8,30 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Niño',
+            name="Niño",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('nombre', models.CharField(max_length=255)),
-                ('fecha_nacimiento', models.DateField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("nombre", models.CharField(max_length=255)),
+                ("fecha_nacimiento", models.DateField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Niño',
-                'verbose_name_plural': 'Niños',
-                'db_table': 'niños',
+                "verbose_name": "Niño",
+                "verbose_name_plural": "Niños",
+                "db_table": "niños",
             },
         ),
     ]

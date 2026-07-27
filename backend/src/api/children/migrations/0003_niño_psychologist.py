@@ -8,14 +8,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('children', '0002_niño_escuela_niño_genero_niño_nombre_informante_and_more'),
+        ("children", "0002_niño_escuela_niño_genero_niño_nombre_informante_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='niño',
-            name='psychologist',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='ninos', to=settings.AUTH_USER_MODEL),
+            model_name="niño",
+            name="psychologist",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="ninos",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

@@ -24,15 +24,16 @@
     "numero": 31,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_031",
     "requiere_revision_psicologo": true,
     "pregunta": "Canta canciones familiares con un adulto",
     "descripcion_general": "Canta canciones familiares con un adulto"
@@ -51,7 +52,7 @@
     "tipos_evidencia": [
       "LOG"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_032",
     "requiere_revision_psicologo": true,
     "pregunta": "Saluda espontáneamente a persona familiar",
     "descripcion_general": "Saluda espontáneamente a persona familiar"
@@ -100,15 +101,16 @@
     "numero": 35,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_035",
     "requiere_revision_psicologo": true,
     "pregunta": "Se ríe ante combinaciones de eventos incongruentes",
     "descripcion_general": "Se ríe ante combinaciones de eventos incongruentes"
@@ -127,7 +129,7 @@
     "tipos_evidencia": [
       "LOG"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_036",
     "requiere_revision_psicologo": true,
     "pregunta": "Pide ayuda cuando tiene dificultad",
     "descripcion_general": "Pide ayuda cuando tiene dificultad"
@@ -146,7 +148,7 @@
     "tipos_evidencia": [
       "LOG"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_037",
     "requiere_revision_psicologo": true,
     "pregunta": "Se muestra orgulloso de sus realizaciones",
     "descripcion_general": "Se muestra orgulloso de sus realizaciones"
@@ -157,15 +159,16 @@
     "numero": 38,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_038",
     "requiere_revision_psicologo": true,
     "pregunta": "Afirma si es niño o niña",
     "descripcion_general": "Afirma si es niño o niña"
@@ -195,15 +198,16 @@
     "numero": 40,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_040",
     "requiere_revision_psicologo": true,
     "pregunta": "Juega a disfrazarse",
     "descripcion_general": "Juega a disfrazarse"
@@ -223,7 +227,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_041",
     "requiere_revision_psicologo": true,
     "pregunta": "Llama la atención repitiendo rimas, canciones o bailes",
     "descripcion_general": "Llama la atención repitiendo rimas, canciones o bailes"
@@ -234,15 +238,16 @@
     "numero": 42,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_042",
     "requiere_revision_psicologo": true,
     "pregunta": "Habla de sus propios sentimientos",
     "descripcion_general": "Habla de sus propios sentimientos"
@@ -367,15 +372,16 @@
     "numero": 49,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_049",
     "requiere_revision_psicologo": true,
     "pregunta": "Gusta de los juegos competitivos",
     "descripcion_general": "Gusta de los juegos competitivos"
@@ -433,7 +439,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_052",
     "requiere_revision_psicologo": true,
     "pregunta": "Acepta bromas suaves sin inquietarse demasiado",
     "descripcion_general": "Acepta bromas suaves sin inquietarse demasiado"
@@ -463,16 +469,16 @@
     "numero": 54,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "AUDIO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_054",
     "requiere_revision_psicologo": true,
     "pregunta": "Expresa enojo con palabras, no con acción física",
     "descripcion_general": "Expresa enojo con palabras, no con acción física"
@@ -502,16 +508,16 @@
     "numero": 56,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "AUDIO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_056",
     "requiere_revision_psicologo": true,
     "pregunta": "Acepta crítica válida sin llorar ni rehusarse",
     "descripcion_general": "Acepta crítica válida sin llorar ni rehusarse"
@@ -522,15 +528,16 @@
     "numero": 57,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "SOCIAL_EMOCIONAL_057",
     "requiere_revision_psicologo": true,
     "pregunta": "Responde al teléfono y recuerda un mensaje simple",
     "descripcion_general": "Responde al teléfono y recuerda un mensaje simple"

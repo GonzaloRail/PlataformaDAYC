@@ -67,6 +67,11 @@ export const EvaluationList: React.FC<EvaluationListProps> = ({
   isLoading,
   completed = false,
 }) => {
+  const ninosById = useMemo(
+    () => new Map(ninos.map((n) => [n.id, n])),
+    [ninos]
+  );
+
   if (isLoading) {
     return <ViewState kind="loading" message="Cargando evaluaciones..." />;
   }
@@ -79,11 +84,6 @@ export const EvaluationList: React.FC<EvaluationListProps> = ({
       />
     );
   }
-
-  const ninosById = useMemo(
-    () => new Map(ninos.map((n) => [n.id, n])),
-    [ninos]
-  );
 
   return (
     <div className="evaluation-list">

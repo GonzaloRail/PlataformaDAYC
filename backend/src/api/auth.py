@@ -1,5 +1,6 @@
 from rest_framework.authentication import SessionAuthentication
 
+
 # NOTA: CsrfExemptSessionAuthentication deshabilita la verificación CSRF para DRF.
 # Esto es necesario mientras el frontend (Vite :5173) y backend (Django :8000) se
 # sirven en dominios distintos con CORS. El middleware de CSRF de Django sigue activo
@@ -9,4 +10,3 @@ from rest_framework.authentication import SessionAuthentication
 class CsrfExemptSessionAuthentication(SessionAuthentication):
     def enforce_csrf(self, request):
         return
-

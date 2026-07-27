@@ -11,12 +11,20 @@ interface ResultsTableProps {
 
 const getScoreClass = (score: number): string => getScoreCategory(score).className;
 
-const getPercentileClass = (percentile: number | null | undefined): string => {
-  if (percentile == null) return '';
-  if (percentile >= 75) return 'percentile-high';
-  if (percentile >= 25) return 'percentile-average';
-  return 'percentile-low';
-};
+const parsePercentil = (raw: string | null | undefined): number | null => {
+  if (!raw) return null
+  const cleaned = raw.replace(/[<>%]/g, '').trim()
+  const num = parseFloat(cleaned)
+  return isNaN(num) ? null : num
+}
+
+const getPercentileClass = (percentile: string | number | null | undefined): string => {
+  const num = typeof percentile === 'string' ? parsePercentil(percentile) : percentile
+  if (num == null) return ''
+  if (num >= 75) return 'percentile-high'
+  if (num >= 25) return 'percentile-average'
+  return 'percentile-low'
+}
 
 export const ResultsTable: React.FC<ResultsTableProps> = ({
   resultados,

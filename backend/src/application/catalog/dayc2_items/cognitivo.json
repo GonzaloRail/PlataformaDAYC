@@ -12,9 +12,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_030",
     "requiere_revision_psicologo": true,
     "pregunta": "Apila de 6 a 7 cubos",
     "descripcion_general": "Apila de 6 a 7 cubos"
@@ -34,7 +34,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_031",
     "requiere_revision_psicologo": true,
     "pregunta": "Empareja formas simples: círculo, cuadrado, triángulo",
     "descripcion_general": "Empareja formas simples: círculo, cuadrado, triángulo"
@@ -54,7 +54,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_032",
     "requiere_revision_psicologo": true,
     "pregunta": "Responde a 'uno' y 'uno más'",
     "descripcion_general": "Responde a 'uno' y 'uno más'"
@@ -74,7 +74,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_033",
     "requiere_revision_psicologo": true,
     "pregunta": "Coloca medidas graduadas en orden (cajas, anillos por tamaño)",
     "descripcion_general": "Coloca medidas graduadas en orden (cajas, anillos por tamaño)"
@@ -94,7 +94,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_034",
     "requiere_revision_psicologo": true,
     "pregunta": "Empareja objetos por color, forma y medida",
     "descripcion_general": "Empareja objetos por color, forma y medida"
@@ -114,7 +114,7 @@
       "LOG",
       "VIDEO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_035",
     "requiere_revision_psicologo": true,
     "pregunta": "Repite juegos de dedos con palabras y acciones",
     "descripcion_general": "Repite juegos de dedos con palabras y acciones"
@@ -134,7 +134,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_036",
     "requiere_revision_psicologo": true,
     "pregunta": "Cuenta de memoria hasta 5",
     "descripcion_general": "Cuenta de memoria hasta 5"
@@ -154,7 +154,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_037",
     "requiere_revision_psicologo": true,
     "pregunta": "Empareja objetos de la misma función",
     "descripcion_general": "Empareja objetos de la misma función"
@@ -174,7 +174,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_038",
     "requiere_revision_psicologo": true,
     "pregunta": "Dice si un objeto es 'pesado' o 'liviano'",
     "descripcion_general": "Dice si un objeto es 'pesado' o 'liviano'"
@@ -194,7 +194,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_039",
     "requiere_revision_psicologo": true,
     "pregunta": "Cuenta más de 5 objetos",
     "descripcion_general": "Cuenta más de 5 objetos"
@@ -212,9 +212,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_040",
     "requiere_revision_psicologo": true,
     "pregunta": "Construye puente con 3 cubos: según modelo",
     "descripcion_general": "Construye puente con 3 cubos: según modelo"
@@ -234,7 +234,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_041",
     "requiere_revision_psicologo": true,
     "pregunta": "Comprende 'igual' y 'diferente'",
     "descripcion_general": "Comprende 'igual' y 'diferente'"
@@ -254,7 +254,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_042",
     "requiere_revision_psicologo": true,
     "pregunta": "Clasifica objetos por un criterio (forma o color)",
     "descripcion_general": "Clasifica objetos por un criterio (forma o color)"
@@ -274,7 +274,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_043",
     "requiere_revision_psicologo": true,
     "pregunta": "Comprende el concepto del número 3",
     "descripcion_general": "Comprende el concepto del número 3"
@@ -294,7 +294,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_044",
     "requiere_revision_psicologo": true,
     "pregunta": "Comprende 'más', 'menos', 'igual'",
     "descripcion_general": "Comprende 'más', 'menos', 'igual'"
@@ -386,7 +386,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_048",
     "requiere_revision_psicologo": true,
     "pregunta": "Conoce secuencia de lectura: izq-der, arriba-abajo",
     "descripcion_general": "Conoce secuencia de lectura: izq-der, arriba-abajo"
@@ -406,7 +406,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_049",
     "requiere_revision_psicologo": true,
     "pregunta": "Clasifica objetos considerando más de una forma",
     "descripcion_general": "Clasifica objetos considerando más de una forma"
@@ -424,9 +424,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_050",
     "requiere_revision_psicologo": true,
     "pregunta": "Construye pirámide de 6 cubos: según modelo",
     "descripcion_general": "Construye pirámide de 6 cubos: según modelo"
@@ -446,7 +446,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_051",
     "requiere_revision_psicologo": true,
     "pregunta": "Identifica 'primero', 'último', 'al medio'",
     "descripcion_general": "Identifica 'primero', 'último', 'al medio'"
@@ -464,9 +464,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "SCREENSHOT"
+      "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_052",
     "requiere_revision_psicologo": true,
     "pregunta": "Narra historia de un libro de figuras",
     "descripcion_general": "Narra historia de un libro de figuras"
@@ -486,7 +486,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_053",
     "requiere_revision_psicologo": true,
     "pregunta": "Identifica el más grande de dos números",
     "descripcion_general": "Identifica el más grande de dos números"
@@ -504,9 +504,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_054",
     "requiere_revision_psicologo": true,
     "pregunta": "Dibuja figura de palotes",
     "descripcion_general": "Dibuja figura de palotes"
@@ -526,7 +526,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_055",
     "requiere_revision_psicologo": true,
     "pregunta": "Identifica características abstractas (vivo/no vivo, real/creencia)",
     "descripcion_general": "Identifica características abstractas (vivo/no vivo, real/creencia)"
@@ -544,9 +544,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_056",
     "requiere_revision_psicologo": true,
     "pregunta": "Copia su propio nombre",
     "descripcion_general": "Copia su propio nombre"
@@ -566,7 +566,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_057",
     "requiere_revision_psicologo": true,
     "pregunta": "Predice lo que ocurrirá en la historia",
     "descripcion_general": "Predice lo que ocurrirá en la historia"
@@ -586,7 +586,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_058",
     "requiere_revision_psicologo": true,
     "pregunta": "Señala objetos a la 'mitad' o 'completos'",
     "descripcion_general": "Señala objetos a la 'mitad' o 'completos'"
@@ -606,7 +606,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_059",
     "requiere_revision_psicologo": true,
     "pregunta": "Nombra la mayoría de las letras del abecedario",
     "descripcion_general": "Nombra la mayoría de las letras del abecedario"
@@ -626,7 +626,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_060",
     "requiere_revision_psicologo": true,
     "pregunta": "Coloca tres figuras en secuencia para contar historia",
     "descripcion_general": "Coloca tres figuras en secuencia para contar historia"
@@ -646,7 +646,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_061",
     "requiere_revision_psicologo": true,
     "pregunta": "Empareja número de ítems con serie de números exactos",
     "descripcion_general": "Empareja número de ítems con serie de números exactos"
@@ -666,7 +666,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_062",
     "requiere_revision_psicologo": true,
     "pregunta": "Comprende el concepto de 'cero'",
     "descripcion_general": "Comprende el concepto de 'cero'"
@@ -684,9 +684,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_063",
     "requiere_revision_psicologo": true,
     "pregunta": "Dibuja persona con 6 partes reconocibles",
     "descripcion_general": "Dibuja persona con 6 partes reconocibles"
@@ -704,9 +704,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_064",
     "requiere_revision_psicologo": true,
     "pregunta": "Escribe primer nombre en forma legible",
     "descripcion_general": "Escribe primer nombre en forma legible"
@@ -724,9 +724,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_065",
     "requiere_revision_psicologo": true,
     "pregunta": "Dibuja objetos identificables sin modelo",
     "descripcion_general": "Dibuja objetos identificables sin modelo"
@@ -746,7 +746,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_066",
     "requiere_revision_psicologo": true,
     "pregunta": "Cuenta hasta 20 objetos",
     "descripcion_general": "Cuenta hasta 20 objetos"
@@ -766,7 +766,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_067",
     "requiere_revision_psicologo": true,
     "pregunta": "Dice el mes y el día de su nacimiento",
     "descripcion_general": "Dice el mes y el día de su nacimiento"
@@ -786,7 +786,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_068",
     "requiere_revision_psicologo": true,
     "pregunta": "Ordena cartas numeradas en secuencia",
     "descripcion_general": "Ordena cartas numeradas en secuencia"
@@ -803,9 +803,10 @@
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_069",
     "requiere_revision_psicologo": true,
     "pregunta": "Dice el nombre de su calle y su ciudad",
     "descripcion_general": "Dice el nombre de su calle y su ciudad"
@@ -825,7 +826,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_070",
     "requiere_revision_psicologo": true,
     "pregunta": "Nombra los días de la semana en orden",
     "descripcion_general": "Nombra los días de la semana en orden"
@@ -845,7 +846,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_071",
     "requiere_revision_psicologo": true,
     "pregunta": "Sabe los días que anteceden y siguen",
     "descripcion_general": "Sabe los días que anteceden y siguen"
@@ -863,9 +864,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "SCREENSHOT"
+      "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_072",
     "requiere_revision_psicologo": true,
     "pregunta": "Señala el nombre de las monedas",
     "descripcion_general": "Señala el nombre de las monedas"
@@ -885,7 +886,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_073",
     "requiere_revision_psicologo": true,
     "pregunta": "Sabe los números que anteceden y siguen",
     "descripcion_general": "Sabe los números que anteceden y siguen"
@@ -903,9 +904,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_074",
     "requiere_revision_psicologo": true,
     "pregunta": "Escribe su nombre y apellido de memoria",
     "descripcion_general": "Escribe su nombre y apellido de memoria"
@@ -925,7 +926,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_075",
     "requiere_revision_psicologo": true,
     "pregunta": "Calcula problemas de adición y sustracción de un dígito",
     "descripcion_general": "Calcula problemas de adición y sustracción de un dígito"
@@ -945,7 +946,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_076",
     "requiere_revision_psicologo": true,
     "pregunta": "Cuenta de memoria del 1 al 100",
     "descripcion_general": "Cuenta de memoria del 1 al 100"
@@ -963,9 +964,9 @@
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_077",
     "requiere_revision_psicologo": true,
     "pregunta": "Escribe números del 1 al 19 sin modelo",
     "descripcion_general": "Escribe números del 1 al 19 sin modelo"
@@ -985,7 +986,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COGNITIVO_078",
     "requiere_revision_psicologo": true,
     "pregunta": "Lee diez palabras impresas",
     "descripcion_general": "Lee diez palabras impresas"

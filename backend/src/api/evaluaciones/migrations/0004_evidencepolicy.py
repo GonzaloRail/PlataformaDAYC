@@ -8,28 +8,50 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('evaluaciones', '0003_evaluación_child_data_completed_and_more'),
+        ("evaluaciones", "0003_evaluación_child_data_completed_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='EvidencePolicy',
+            name="EvidencePolicy",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('item_id', models.CharField(max_length=80, unique=True)),
-                ('activity_id', models.CharField(blank=True, max_length=100)),
-                ('evidence_types', models.JSONField(blank=True, default=list)),
-                ('enabled', models.BooleanField(default=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='updated_evidence_policies', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("item_id", models.CharField(max_length=80, unique=True)),
+                ("activity_id", models.CharField(blank=True, max_length=100)),
+                ("evidence_types", models.JSONField(blank=True, default=list)),
+                ("enabled", models.BooleanField(default=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "updated_by",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="updated_evidence_policies",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Política de Evidencia',
-                'verbose_name_plural': 'Políticas de Evidencia',
-                'db_table': 'evidence_policies',
-                'indexes': [models.Index(fields=['item_id', 'enabled'], name='evidence_po_item_id_87cefd_idx')],
+                "verbose_name": "Política de Evidencia",
+                "verbose_name_plural": "Políticas de Evidencia",
+                "db_table": "evidence_policies",
+                "indexes": [
+                    models.Index(
+                        fields=["item_id", "enabled"],
+                        name="evidence_po_item_id_87cefd_idx",
+                    )
+                ],
             },
         ),
     ]

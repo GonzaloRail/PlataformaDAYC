@@ -25,16 +25,16 @@
     "numero": 56,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_056",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa una mano consistentemente en la mayoría de actividades",
     "descripcion_general": "Usa una mano consistentemente en la mayoría de actividades"
@@ -85,16 +85,16 @@
     "numero": 59,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_059",
     "requiere_revision_psicologo": true,
     "pregunta": "Imita trazos circulares, verticales y horizontales",
     "descripcion_general": "Imita trazos circulares, verticales y horizontales"
@@ -105,16 +105,16 @@
     "numero": 60,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_060",
     "requiere_revision_psicologo": true,
     "pregunta": "Sostiene el lápiz entre los dos primeros dedos y el pulgar",
     "descripcion_general": "Sostiene el lápiz entre los dos primeros dedos y el pulgar"
@@ -125,16 +125,16 @@
     "numero": 61,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_061",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa movimientos verticales, horizontales y circulares al dibujar",
     "descripcion_general": "Usa movimientos verticales, horizontales y circulares al dibujar"
@@ -265,16 +265,16 @@
     "numero": 68,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_068",
     "requiere_revision_psicologo": true,
     "pregunta": "Copia una cruz",
     "descripcion_general": "Copia una cruz"
@@ -345,16 +345,16 @@
     "numero": 72,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_072",
     "requiere_revision_psicologo": true,
     "pregunta": "Copia un cuadrado",
     "descripcion_general": "Copia un cuadrado"
@@ -365,16 +365,16 @@
     "numero": 73,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_073",
     "requiere_revision_psicologo": true,
     "pregunta": "Copia un rectángulo",
     "descripcion_general": "Copia un rectángulo"
@@ -445,16 +445,16 @@
     "numero": 77,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_077",
     "requiere_revision_psicologo": true,
     "pregunta": "Colorea dentro de las líneas",
     "descripcion_general": "Colorea dentro de las líneas"
@@ -505,16 +505,16 @@
     "numero": 80,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_080",
     "requiere_revision_psicologo": true,
     "pregunta": "Toca rápidamente cada dedo con su pulgar",
     "descripcion_general": "Toca rápidamente cada dedo con su pulgar"
@@ -545,16 +545,16 @@
     "numero": 82,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_082",
     "requiere_revision_psicologo": true,
     "pregunta": "Coloca clips en el papel",
     "descripcion_general": "Coloca clips en el papel"
@@ -605,16 +605,16 @@
     "numero": 85,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "OBSERVACION_FISICA",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
       "LOG",
-      "VIDEO"
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "DESARROLLO_FISICO_085",
     "requiere_revision_psicologo": true,
     "pregunta": "Copia figura de diamante con líneas derechas conectadas",
     "descripcion_general": "Copia figura de diamante con líneas derechas conectadas"

@@ -7,11 +7,47 @@
       "skillPath": "plugins/django-expert/skills/SKILL.md",
       "computedHash": "a6b8c224017570496d688a526fcbea74025a01cc90d9afb0977bfcc1f76af306"
     },
+    "emil-design-eng": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/emil-design-eng/SKILL.md",
+      "computedHash": "41b0a4dc1a27164fe297845a6c6850a39e9242c42c9be999967fcee9df2c5974"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "781bd6d3f9b19f8c9af6b53d8d0e4876d0183841b565db34ca7092ffa412d111"
+    },
+    "game-designer": {
+      "source": "opusgamelabs/game-creator",
+      "sourceType": "github",
+      "skillPath": "skills/game-designer/SKILL.md",
+      "computedHash": "051d3e1e033f0beffeaef7a82af944d23102ef82fc6606aca4064f1100be95b7"
+    },
+    "game-development": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/game-development/SKILL.md",
+      "computedHash": "a5a1b37d86be11134798abc1558f964ca4fc538fc56ac661f779a90a54e338ca"
+    },
+    "game-engine": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/game-engine/SKILL.md",
+      "computedHash": "20057f62cf7a8b2d9f940b3de0b18e5426e8f4bb50e236d36b1033aa0d42c4d8"
+    },
+    "game-ui-ux": {
+      "source": "gamedev-skills/awesome-gamedev-agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/disciplines/game-ui-ux/SKILL.md",
+      "computedHash": "63b4cbefc49de3c92020fc47cbad97cf5be1b05077514e03c4dc032756f47c29"
+    },
+    "ui-animation": {
+      "source": "mblode/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ui-animation/SKILL.md",
+      "computedHash": "5acd39be845f4f8bd7c35c3c83987dfaa25c05b45a2d6dfaf2c85838b66aff19"
     },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",

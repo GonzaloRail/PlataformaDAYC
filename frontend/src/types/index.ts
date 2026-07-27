@@ -51,7 +51,8 @@ export interface Resultado {
   area: string;
   puntuacion_directa: number;
   puntuacion_estandar?: number | null;
-  percentil?: number | null;
+  percentil?: string | null;
+  interpretacion?: string | null;
   edad_equivalente?: string | null;
   cociente_general_gdq?: number | null;
   created_at?: string;
@@ -150,4 +151,26 @@ export interface ScoreComparison {
   pendientes_revision: number;
   concordancia_porcentual: number;
   items_corregidos: EvaluacionItem[];
+}
+
+export interface CalculoOnlineResultado {
+  area: string;
+  area_nombre: string;
+  puntuacion_directa: number;
+  puntuacion_estandar: number | null;
+  percentil: string;
+  interpretacion: string;
+  edad_equivalente: string;
+}
+
+export interface CalculoOnlineGDQ {
+  cociente_general: number;
+  percentil_general: string;
+  clasificacion_general: string;
+}
+
+export interface CalculoOnlineResponse {
+  resultados: CalculoOnlineResultado[];
+  gdq: CalculoOnlineGDQ | null;
+  suma_puntajes_estandar: number;
 }

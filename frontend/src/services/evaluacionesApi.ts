@@ -1,5 +1,5 @@
 import api from '@/services/api'
-import type { Evaluacion, EvaluationTask, ReviewOverview, ScoreComparison, SessionState } from '@/types'
+import type { CalculoOnlineResponse, Evaluacion, EvaluationTask, Resultado, ReviewOverview, ScoreComparison, SessionState } from '@/types'
 
 interface PaginatedEvaluaciones {
   results: Evaluacion[]
@@ -41,9 +41,9 @@ export const evaluacionesApi = {
   reviewOverview: (evaluacionId: string) => api.get<ReviewOverview>(`/api/evaluaciones/${evaluacionId}/review/`),
   reviewItem: (evaluacionId: string, itemId: string, payload: { final_result: string; psychologist_notes?: string }) =>
     api.patch<{ item: unknown }>(`/api/evaluaciones/${evaluacionId}/items/${itemId}/review/`, payload),
-  completeReview: (evaluacionId: string) => api.post<{ evaluacion: Evaluacion }>(`/api/evaluaciones/${evaluacionId}/review/complete/`),
-  scorePreliminary: (evaluacionId: string) => api.post(`/api/evaluaciones/${evaluacionId}/score/preliminary/`),
-  scoreValidated: (evaluacionId: string) => api.post(`/api/evaluaciones/${evaluacionId}/score/validated/`),
+  completeReview: (evaluacionId: string) => api.post<{ evaluacion: Evaluacion; resultados: Resultado[]; gdq_global: number | null }>(`/api/evaluaciones/${evaluacionId}/review/complete/`),
+  scorePreliminary: (evaluacionId: string) => api.post<{ resultados: Resultado[]; gdq_global: number | null; tipo?: string }>(`/api/evaluaciones/${evaluacionId}/score/preliminary/`),
+  scoreValidated: (evaluacionId: string) => api.post<{ resultados: Resultado[]; gdq_global: number | null; tipo?: string }>(`/api/evaluaciones/${evaluacionId}/score/validated/`),
   scoreComparison: (evaluacionId: string) => api.get<ScoreComparison>(`/api/evaluaciones/${evaluacionId}/score/comparison/`),
   submitRespuesta: (
     id: string,
@@ -60,6 +60,8 @@ export const evaluacionesApi = {
   ) => api.post<{ estado: string; stop_triggered?: boolean; area_finished?: boolean; evaluation_finished?: boolean; next_area?: string; next_item_id?: string; current_task?: EvaluationTask }>(`/api/evaluaciones/${id}/items/${itemId}/auto-result/`, payload, {
       headers: token ? { 'Authorization': `Bearer ${token}` } : {}
   }),
+  calcularOnline: (edadMeses: number, puntajes: Record<string, number>) =>
+    api.post<CalculoOnlineResponse>('/api/evaluaciones/calcular-online/', { edad_meses: edadMeses, puntajes }),
 }
 
 export default evaluacionesApi

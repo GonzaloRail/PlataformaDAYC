@@ -1,4 +1,5 @@
 """Fixed DAYC-2 item catalog for the semi-assisted evaluation flow."""
+
 from __future__ import annotations
 
 import json
@@ -8,21 +9,20 @@ from typing import Any
 
 from src.application.services.baremos_service import baremos_service
 
-
 AREA_ORDER = [
-    'COGNITIVO',
-    'COMUNICACION',
-    'SOCIAL_EMOCIONAL',
-    'DESARROLLO_FISICO',
-    'CONDUCTA_ADAPTATIVA',
+    "COGNITIVO",
+    "COMUNICACION",
+    "SOCIAL_EMOCIONAL",
+    "DESARROLLO_FISICO",
+    "CONDUCTA_ADAPTATIVA",
 ]
 
 AREA_FILES = {
-    'COGNITIVO': 'cognitivo.json',
-    'COMUNICACION': 'comunicacion.json',
-    'SOCIAL_EMOCIONAL': 'social_emocional.json',
-    'DESARROLLO_FISICO': 'desarrollo_fisico.json',
-    'CONDUCTA_ADAPTATIVA': 'conducta_adaptativa.json',
+    "COGNITIVO": "cognitivo.json",
+    "COMUNICACION": "comunicacion.json",
+    "SOCIAL_EMOCIONAL": "social_emocional.json",
+    "DESARROLLO_FISICO": "desarrollo_fisico.json",
+    "CONDUCTA_ADAPTATIVA": "conducta_adaptativa.json",
 }
 
 
@@ -30,7 +30,9 @@ class ItemCatalogService:
     """Loads fixed DAYC-2 item metadata from versioned JSON files."""
 
     def __init__(self):
-        self.catalog_dir = Path(__file__).resolve().parents[1] / 'catalog' / 'dayc2_items'
+        self.catalog_dir = (
+            Path(__file__).resolve().parents[1] / "catalog" / "dayc2_items"
+        )
 
     @lru_cache(maxsize=1)
     def all_items(self) -> tuple[dict[str, Any], ...]:
@@ -50,19 +52,19 @@ class ItemCatalogService:
         if not path.exists():
             return tuple()
 
-        with path.open('r', encoding='utf-8') as catalog_file:
+        with path.open("r", encoding="utf-8") as catalog_file:
             data = json.load(catalog_file)
 
-        return tuple(sorted(data, key=lambda item: item.get('numero', 0)))
+        return tuple(sorted(data, key=lambda item: item.get("numero", 0)))
 
     def normalize_area(self, area: str | None) -> str:
         if not area:
             return AREA_ORDER[0]
-        normalized = area.upper().replace('-', '_').replace(' ', '_')
-        if normalized == 'SOCIAL':
-            return 'SOCIAL_EMOCIONAL'
-        if normalized == 'FISICO':
-            return 'DESARROLLO_FISICO'
+        normalized = area.upper().replace("-", "_").replace(" ", "_")
+        if normalized == "SOCIAL":
+            return "SOCIAL_EMOCIONAL"
+        if normalized == "FISICO":
+            return "DESARROLLO_FISICO"
         return normalized
 
     def get_area_index(self, area: str | None) -> int:
@@ -86,9 +88,11 @@ class ItemCatalogService:
     @lru_cache(maxsize=1)
     def _index(self) -> dict[str, tuple[dict[str, Any], ...]]:
         """O(1) lookup index of item_id -> (item,)."""
-        return {item.get('id'): (item,) for item in self.all_items() if item.get('id')}
+        return {item.get("id"): (item,) for item in self.all_items() if item.get("id")}
 
-    def select_start_item(self, area: str, edad_meses: int | None) -> dict[str, Any] | None:
+    def select_start_item(
+        self, area: str, edad_meses: int | None
+    ) -> dict[str, Any] | None:
         items = list(self.items_by_area(area))
         if not items:
             return None
@@ -99,18 +103,20 @@ class ItemCatalogService:
         inicio = baremos_service.get_item_inicio(area, edad_meses)
         if inicio is not None:
             for item in items:
-                if item.get('numero') == inicio:
+                if item.get("numero") == inicio:
                     return dict(item)
 
         for item in items:
-            min_age = item.get('edad_inicio_min_meses', 0)
-            max_age = item.get('edad_inicio_max_meses', 999)
+            min_age = item.get("edad_inicio_min_meses", 0)
+            max_age = item.get("edad_inicio_max_meses", 999)
             if min_age <= edad_meses <= max_age:
                 return dict(item)
 
         return dict(items[0])
 
-    def next_item_in_area(self, area: str, current_item_id: str | None) -> dict[str, Any] | None:
+    def next_item_in_area(
+        self, area: str, current_item_id: str | None
+    ) -> dict[str, Any] | None:
         items = list(self.items_by_area(area))
         if not items:
             return None
@@ -118,7 +124,7 @@ class ItemCatalogService:
             return dict(items[0])
 
         for index, item in enumerate(items):
-            if item.get('id') == current_item_id:
+            if item.get("id") == current_item_id:
                 next_index = index + 1
                 if next_index < len(items):
                     return dict(items[next_index])

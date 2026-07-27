@@ -6,38 +6,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('children', '0001_initial'),
+        ("children", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='niño',
-            name='escuela',
+            model_name="niño",
+            name="escuela",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='niño',
-            name='genero',
-            field=models.CharField(blank=True, choices=[('M', 'Masculino'), ('F', 'Femenino'), ('O', 'Otro')], max_length=1, null=True),
+            model_name="niño",
+            name="genero",
+            field=models.CharField(
+                blank=True,
+                choices=[("M", "Masculino"), ("F", "Femenino"), ("O", "Otro")],
+                max_length=1,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='niño',
-            name='nombre_informante',
+            model_name="niño",
+            name="nombre_informante",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='niño',
-            name='padre_tutor',
+            model_name="niño",
+            name="padre_tutor",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='niño',
-            name='periodo_conoce_nino',
+            model_name="niño",
+            name="periodo_conoce_nino",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='niño',
-            name='relacion_informante',
+            model_name="niño",
+            name="relacion_informante",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
     ]

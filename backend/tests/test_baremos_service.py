@@ -1,173 +1,137 @@
-"""Tests for BaremosService - O(1) lookup in RAM"""
+"""Tests for BaremosService - lookup por rango de edad contra baremos.py"""
+
 import pytest
-from unittest.mock import patch, MagicMock
 from src.application.services.baremos_service import BaremosService, baremos_service
 
 
 class TestBaremosService:
-    """Test suite for BaremosService"""
-    
+    """Test suite for BaremosService - API nueva basada en baremos.py"""
+
     def setup_method(self):
-        """Reset service state before each test"""
         self.service = BaremosService()
-        self.service._baremos = {}
-        self.service._loaded = False
-    
+        self.service.cargar_baremos()
+
     def test_singleton_pattern(self):
-        """Test that BaremosService follows singleton pattern"""
-        service1 = BaremosService()
-        service2 = BaremosService()
-        assert service1 is service2
-    
-    def test_cargar_baremos_with_default(self):
-        """Test loading baremos with default fallback"""
-        with patch('os.path.exists', return_value=False):
-            self.service.cargar_baremos()
-            assert self.service._loaded is True
-            assert self.service._baremos == {}
-    
-    def test_cargar_baremos_from_json(self):
-        """Test loading baremos from JSON file"""
-        mock_data = {
-            'áreas': {
-                'LENGUAJE': {
-                    'articulation': {
-                        '24': {
-                            '10': {'estándar': 10, 'percentil': 50},
-                            'default': {'estándar': 8, 'percentil': 25}
-                        }
-                    }
-                }
-            }
-        }
-        
-        with patch('builtins.open', MagicMock()):
-            with patch('json.load', return_value=mock_data):
-                self.service.cargar_baremos('/fake/path.json')
-                assert self.service._loaded is True
-                assert (24, 'LENGUAJE') in self.service._baremos
-    
-    def test_lookup_with_exact_match(self):
-        """Test O(1) lookup with exact age and area match"""
-        self.service._baremos = {
-            (36, 'MEMORIA'): {
-                '10': {'estándar': 12, 'percentil': 75}
-            }
-        }
-        self.service._loaded = True
-        
-        result = self.service.lookup(36, 'MEMORIA', 10)
-        
-        assert result is not None
-        assert result.puntuación_estándar == 12
-        assert result.percentil == 75
-    
-    def test_lookup_with_age_adjustment(self):
-        """Test lookup with age adjustment to nearest valid"""
-        self.service._baremos = {
-            (36, 'LENGUAJE'): {
-                '15': {'estándar': 11, 'percentil': 63}
-            }
-        }
-        self.service._loaded = True
-        
-        result = self.service.lookup(38, 'LENGUAJE', 15)
-        
-        assert result is not None
-        assert result.puntuación_estándar == 11
-    
-    def test_lookup_with_out_of_range_age(self):
-        """Test lookup with age outside valid range"""
-        self.service._baremos = {
-            (24, 'ATENCIÓN'): {
-                '8': {'estándar': 9, 'percentil': 37}
-            }
-        }
-        self.service._loaded = True
-        
-        result = self.service.lookup(12, 'ATENCIÓN', 8)
-        
-        assert result is not None
-        assert result.puntuación_estándar == 9
-    
-    def test_lookup_not_found(self):
-        """Test lookup when no matching baremos exists"""
-        self.service._baremos = {}
-        self.service._loaded = True
-        
-        result = self.service.lookup(36, 'PERCEPCIÓN', 100)
-        
-        assert result is None
-    
-    def test_lookup_triggers_auto_load(self):
-        """Test that lookup triggers auto-load if not loaded"""
-        with patch.object(self.service, 'cargar_baremos') as mock_load:
-            self.service.lookup(36, 'LENGUAJE', 10)
-            mock_load.assert_called_once()
-    
-    def test_ajustar_edad_below_minimum(self):
-        """Test age adjustment for ages below minimum (24 months)"""
-        result = self.service._ajustar_edad(18)
-        assert result == 24
-    
-    def test_ajustar_edad_above_maximum(self):
-        """Test age adjustment for ages above maximum (72 months)"""
-        result = self.service._ajustar_edad(84)
-        assert result == 72
-    
-    def test_ajustar_edad_within_range(self):
-        """Test age adjustment for ages within valid range"""
-        result = self.service._ajustar_edad(35)
-        assert result == 36
-    
-    def test_ajustar_edad_rounds_to_nearest_6(self):
-        """Test age adjustment rounds to nearest 6 months"""
-        assert self.service._ajustar_edad(37) == 36
-        assert self.service._ajustar_edad(38) == 36
-        assert self.service._ajustar_edad(43) == 42
-    
-    def test_esta_cargado(self):
-        """Test está_cargado method"""
-        self.service._loaded = False
-        assert self.service.está_cargado() is False
-        
-        self.service._loaded = True
-        assert self.service.está_cargado() is True
-    
-    def test_lookup_returns_correct_puntuacion_range(self):
-        """Test that lookup returns correct min/max range"""
-        self.service._baremos = {
-            (48, 'MEMORIA'): {
-                '12': {'estándar': 14, 'percentil': 91},
-                'min': 0,
-                'max': 20
-            }
-        }
-        self.service._loaded = True
-        
-        result = self.service.lookup(48, 'MEMORIA', 12)
-        
-        assert result.puntuación_min == 0
-        assert result.puntuación_max == 20
+        assert BaremosService() is baremos_service
 
+    def test_cargar_baremos_carga_las_5_areas(self):
+        assert self.service._loaded is True
+        for code in ("COG", "LEN", "FIS", "SOC", "ADA"):
+            assert code in self.service._tablas
+            assert code in self.service._edad_equivalente
+            assert code in self.service._reglas_inicio
 
-class TestBaremosServicePerformance:
-    """Test suite for O(1) performance characteristics"""
-    
-    def test_lookup_performance_is_constant(self):
-        """Verify lookup performance is O(1) regardless of data size"""
-        service = BaremosService()
-        service._loaded = True
-        
-        large_baremos = {(i, 'MEMORIA'): {'5': {'estándar': 10, 'percentil': 50}} 
-                       for i in range(24, 96, 6)}
-        service._baremos = large_baremos
-        
-        import time
-        
-        start = time.perf_counter()
-        for _ in range(1000):
-            service.lookup(48, 'MEMORIA', 5)
-        elapsed = time.perf_counter() - start
-        
-        assert elapsed < 0.1
+    def test_normalizar_area_nombre_a_codigo(self):
+        assert self.service.normalizar_area("COGNITIVO") == "COG"
+        assert self.service.normalizar_area("COMUNICACION") == "LEN"
+        assert self.service.normalizar_area("DESARROLLO_FISICO") == "FIS"
+        assert self.service.normalizar_area("SOCIAL_EMOCIONAL") == "SOC"
+        assert self.service.normalizar_area("CONDUCTA_ADAPTATIVA") == "ADA"
+
+    def test_area_code_to_name(self):
+        assert self.service.area_code_to_name("COG") == "COGNITIVO"
+        assert self.service.area_code_to_name("LEN") == "COMUNICACION"
+        assert self.service.area_code_to_name("FIS") == "DESARROLLO_FISICO"
+
+    def test_get_item_inicio_por_edad_y_area(self):
+        # Cognitivo: 36-47m → 30
+        assert self.service.get_item_inicio("COGNITIVO", 36) == 30
+        assert self.service.get_item_inicio("COGNITIVO", 47) == 30
+        # Cognitivo: 48m+ → 45
+        assert self.service.get_item_inicio("COGNITIVO", 48) == 45
+        # Cognitivo: 24-35m → 20
+        assert self.service.get_item_inicio("COGNITIVO", 30) == 20
+        # Lenguaje: 48m+ → 50
+        assert self.service.get_item_inicio("COMUNICACION", 50) == 50
+        # Social: 36-47m → 30
+        assert self.service.get_item_inicio("SOCIAL_EMOCIONAL", 40) == 30
+
+    def test_calcular_puntaje_directo_con_puntos_base(self):
+        # Niño de 30m Cognitivo (inicio=20), 8 items aprobados
+        # raw = 20 + 8 = 28
+        raw = self.service.calcular_puntaje_directo(
+            items_count_by_area={"COGNITIVO": 8}, area="COGNITIVO", edad_meses=30
+        )
+        assert raw == 28
+
+    def test_calcular_puntaje_directo_sin_items(self):
+        # 0 items aprobados → raw = puntos_base = 20
+        raw = self.service.calcular_puntaje_directo(
+            items_count_by_area={"COGNITIVO": 0}, area="COGNITIVO", edad_meses=30
+        )
+        assert raw == 20
+
+    def test_get_puntaje_estandar_lookup_por_rango(self):
+        # COG 30m raw=28 → según manual 87
+        # Rango 28-30 en COG, puntos[28]=87
+        estándar = self.service.get_puntaje_estandar("COGNITIVO", 30, 28)
+        assert estándar == 87
+
+    def test_get_puntaje_estandar_sin_match(self):
+        # raw=200 no está en la tabla 28-30 de COG
+        estándar = self.service.get_puntaje_estandar("COGNITIVO", 30, 200)
+        assert estándar is None
+
+    def test_get_puntaje_estandar_edad_fuera_de_rango(self):
+        # 200 meses no está en ningún rango
+        estándar = self.service.get_puntaje_estandar("COGNITIVO", 200, 28)
+        assert estándar is None
+
+    def test_get_percentil_string(self):
+        assert self.service.get_percentil(100) == "50"
+        assert self.service.get_percentil(50) == "<0.1"
+        assert self.service.get_percentil(150) == ">99.9"
+        assert self.service.get_percentil(None) == "-"
+
+    def test_get_interpretacion(self):
+        assert self.service.get_interpretacion(100) == "Promedio"
+        assert self.service.get_interpretacion(130) == "Superior"
+        assert self.service.get_interpretacion(140) == "Muy Superior"
+        assert self.service.get_interpretacion(85) == "Por debajo del Promedio"
+        assert self.service.get_interpretacion(75) == "Bajo"
+        assert self.service.get_interpretacion(60) == "Muy Bajo"
+        assert self.service.get_interpretacion(None) == "Sin datos"
+
+    def test_get_edad_equivalente(self):
+        # COG raw=28 → 21 meses
+        edad = self.service.get_edad_equivalente("COGNITIVO", 28)
+        assert edad == 21
+        # COG raw=0 → 0 meses
+        assert self.service.get_edad_equivalente("COGNITIVO", 0) == 0
+        # raw fuera de tabla → None
+        assert self.service.get_edad_equivalente("COGNITIVO", 200) is None
+
+    def test_calcular_cociente_general_tabla(self):
+        # GDQ usa TABLA_COCIENTE (mapeo directo suma → cociente)
+        # sum=500 → TABLA_COCIENTE[500] = 100
+        gdq = self.service.calcular_cociente_general([100, 100, 100, 100, 100])
+        assert gdq == 100
+        # sum=535 → TABLA_COCIENTE[535] = 108
+        gdq = self.service.calcular_cociente_general([105, 110, 100, 112, 108])
+        assert gdq == 108
+        # sum=200 (< 286) → cap 40
+        gdq = self.service.calcular_cociente_general([40, 40, 40, 40, 40])
+        assert gdq == 40
+        # sum=800 (> 720) → cap 160
+        gdq = self.service.calcular_cociente_general([160, 160, 160, 160, 160])
+        assert gdq == 160
+
+    def test_calcular_cociente_general_incompleto(self):
+        # Si no hay 5 estándares válidos, retorna None
+        assert self.service.calcular_cociente_general([100, 100, 100]) is None
+        assert self.service.calcular_cociente_general([100, 100, 100, 100, None]) is None
+
+    def test_lookup_completo_caso_ejemplo(self):
+        # Niño 30m, COG, inicio=20, 8 items aprobados → raw=28
+        raw = self.service.calcular_puntaje_directo(
+            items_count_by_area={"COGNITIVO": 8}, area="COGNITIVO", edad_meses=30
+        )
+        assert raw == 28
+        result = self.service.lookup("COGNITIVO", 30, raw)
+        assert result is not None
+        assert result.raw_score == 28
+        # raw=28 en rango 28-30 → puntos[28]=87
+        assert result.estándar == 87
+        assert result.percentil == "19"
+        assert result.interpretacion == "Por debajo del Promedio"
+        assert result.edad_equivalente == 21

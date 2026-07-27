@@ -16,6 +16,9 @@ const PsychologistDashboard = lazy(() =>
 const MinijuegosTester = lazy(() =>
   import('@/pages/psychologist/MinijuegosTester').then((m) => ({ default: m.MinijuegosTester }))
 )
+const LabPrototypes = lazy(() =>
+  import('@/pages/psychologist/LabPrototypes').then((m) => ({ default: m.LabPrototypes }))
+)
 const SessionAccess = lazy(() =>
   import('@/pages/psychologist/SessionAccess').then((m) => ({ default: m.SessionAccess }))
 )
@@ -24,6 +27,9 @@ const ReviewPage = lazy(() =>
 )
 const MetricsDashboard = lazy(() =>
   import('@/pages/research/MetricsDashboard').then((m) => ({ default: m.MetricsDashboard }))
+)
+const CalculoResultados = lazy(() =>
+  import('@/pages/psychologist/CalculoResultados').then((m) => ({ default: m.CalculoResultados }))
 )
 
 function PageFallback() {
@@ -64,7 +70,9 @@ function App() {
             <Route path="/psychologist" element={<PsychologistDashboard />} />
             <Route path="/psychologist/evaluations/:evaluacionId/review" element={<ReviewPage />} />
             <Route path="/psychologist/minijuegos" element={<MinijuegosTester />} />
+            <Route path="/psychologist/lab-prototypes" element={<LabPrototypes />} />
             <Route path="/psychologist/session-access" element={<SessionAccess />} />
+            <Route path="/psychologist/calculo-resultados" element={<CalculoResultados />} />
             <Route path="/research/metrics" element={<MetricsDashboard />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />

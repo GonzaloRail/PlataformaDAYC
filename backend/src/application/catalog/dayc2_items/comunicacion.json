@@ -5,15 +5,13 @@
     "numero": 45,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_045",
     "requiere_revision_psicologo": true,
     "pregunta": "Cumple instrucciones con 'al lado' o 'debajo'",
     "descripcion_general": "Cumple instrucciones con 'al lado' o 'debajo'"
@@ -33,7 +31,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_046",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa por lo menos 50 palabras distintas espontáneamente",
     "descripcion_general": "Usa por lo menos 50 palabras distintas espontáneamente"
@@ -53,7 +51,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_047",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa oraciones con tres palabras",
     "descripcion_general": "Usa oraciones con tres palabras"
@@ -64,16 +62,13 @@
     "numero": 48,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_048",
     "requiere_revision_psicologo": true,
     "pregunta": "Demuestra entendimiento de oraciones pasivas",
     "descripcion_general": "Demuestra entendimiento de oraciones pasivas"
@@ -93,7 +88,7 @@
       "LOG",
       "VIDEO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_049",
     "requiere_revision_psicologo": true,
     "pregunta": "Describe lo que está haciendo",
     "descripcion_general": "Describe lo que está haciendo"
@@ -113,7 +108,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_050",
     "requiere_revision_psicologo": true,
     "pregunta": "Hace preguntas con 'qué' o 'dónde'",
     "descripcion_general": "Hace preguntas con 'qué' o 'dónde'"
@@ -124,16 +119,13 @@
     "numero": 51,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_051",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa algunos plurales",
     "descripcion_general": "Usa algunos plurales"
@@ -144,16 +136,13 @@
     "numero": 52,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_052",
     "requiere_revision_psicologo": true,
     "pregunta": "Dice si dos palabras riman",
     "descripcion_general": "Dice si dos palabras riman"
@@ -164,16 +153,13 @@
     "numero": 53,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_053",
     "requiere_revision_psicologo": true,
     "pregunta": "Responde a preguntas sobre 'quién' y 'de quién'",
     "descripcion_general": "Responde a preguntas sobre 'quién' y 'de quién'"
@@ -192,7 +178,7 @@
     "tipos_evidencia": [
       "LOG"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_054",
     "requiere_revision_psicologo": true,
     "pregunta": "Da su nombre completo cuando se le pregunta",
     "descripcion_general": "Da su nombre completo cuando se le pregunta"
@@ -212,7 +198,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_055",
     "requiere_revision_psicologo": true,
     "pregunta": "Hace preguntas con 'cuándo', 'por qué', 'cuántos'",
     "descripcion_general": "Hace preguntas con 'cuándo', 'por qué', 'cuántos'"
@@ -232,7 +218,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_056",
     "requiere_revision_psicologo": true,
     "pregunta": "Comprende 'enfrente de' y 'detrás'",
     "descripcion_general": "Comprende 'enfrente de' y 'detrás'"
@@ -252,7 +238,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_057",
     "requiere_revision_psicologo": true,
     "pregunta": "Cambia de conversación dependiendo del oyente",
     "descripcion_general": "Cambia de conversación dependiendo del oyente"
@@ -272,7 +258,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_058",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa de 300 a 1000 palabras espontáneamente",
     "descripcion_general": "Usa de 300 a 1000 palabras espontáneamente"
@@ -283,15 +269,13 @@
     "numero": 59,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "MANUAL_GUIADO",
-    "pantalla_nino": "ESPERA_ADULTO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_059",
     "requiere_revision_psicologo": true,
     "pregunta": "Sigue órdenes de 3 pasos no relacionados",
     "descripcion_general": "Sigue órdenes de 3 pasos no relacionados"
@@ -302,16 +286,13 @@
     "numero": 60,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_060",
     "requiere_revision_psicologo": true,
     "pregunta": "Completa analogías verbales simples",
     "descripcion_general": "Completa analogías verbales simples"
@@ -322,16 +303,13 @@
     "numero": 61,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_061",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa comparativos (grande, más grande, el más grande)",
     "descripcion_general": "Usa comparativos (grande, más grande, el más grande)"
@@ -351,7 +329,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_062",
     "requiere_revision_psicologo": true,
     "pregunta": "Define 2 palabras simples",
     "descripcion_general": "Define 2 palabras simples"
@@ -362,16 +340,13 @@
     "numero": 63,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_063",
     "requiere_revision_psicologo": true,
     "pregunta": "Hace oraciones de causa y efecto",
     "descripcion_general": "Hace oraciones de causa y efecto"
@@ -382,16 +357,13 @@
     "numero": 64,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_064",
     "requiere_revision_psicologo": true,
     "pregunta": "Responde a '¿Qué pasa si...'",
     "descripcion_general": "Responde a '¿Qué pasa si...'"
@@ -411,7 +383,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_065",
     "requiere_revision_psicologo": true,
     "pregunta": "Define 5 palabras simples",
     "descripcion_general": "Define 5 palabras simples"
@@ -431,7 +403,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_066",
     "requiere_revision_psicologo": true,
     "pregunta": "Cuenta historias familiares sin guiarse por figuras",
     "descripcion_general": "Cuenta historias familiares sin guiarse por figuras"
@@ -442,16 +414,13 @@
     "numero": 67,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_067",
     "requiere_revision_psicologo": true,
     "pregunta": "Responde preguntas integrales cuando se le contó una historia",
     "descripcion_general": "Responde preguntas integrales cuando se le contó una historia"
@@ -471,7 +440,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_068",
     "requiere_revision_psicologo": true,
     "pregunta": "Define 10 palabras simples",
     "descripcion_general": "Define 10 palabras simples"
@@ -491,7 +460,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_069",
     "requiere_revision_psicologo": true,
     "pregunta": "Comprende las estaciones del año y sus actividades",
     "descripcion_general": "Comprende las estaciones del año y sus actividades"
@@ -502,16 +471,13 @@
     "numero": 70,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_070",
     "requiere_revision_psicologo": true,
     "pregunta": "Responde a preguntas de conceptos de tiempo",
     "descripcion_general": "Responde a preguntas de conceptos de tiempo"
@@ -531,7 +497,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_071",
     "requiere_revision_psicologo": true,
     "pregunta": "Establece semejanzas y diferencias entre objetos",
     "descripcion_general": "Establece semejanzas y diferencias entre objetos"
@@ -542,16 +508,13 @@
     "numero": 72,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_072",
     "requiere_revision_psicologo": true,
     "pregunta": "Responde a 'Dime lo contrario de...'",
     "descripcion_general": "Responde a 'Dime lo contrario de...'"
@@ -571,7 +534,7 @@
       "LOG",
       "AUDIO"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_073",
     "requiere_revision_psicologo": true,
     "pregunta": "Cuenta bromas sencillas",
     "descripcion_general": "Cuenta bromas sencillas"
@@ -591,7 +554,7 @@
       "LOG",
       "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "COMUNICACION_074",
     "requiere_revision_psicologo": true,
     "pregunta": "Identifica izquierda y derecha en su propio cuerpo",
     "descripcion_general": "Identifica izquierda y derecha en su propio cuerpo"
@@ -602,16 +565,13 @@
     "numero": 75,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_075",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa comparativos irregulares (bueno, mejor, lo mejor)",
     "descripcion_general": "Usa comparativos irregulares (bueno, mejor, lo mejor)"
@@ -622,16 +582,13 @@
     "numero": 76,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "EVIDENCIA_DIFERIDA",
-    "pantalla_nino": "ESTIMULO",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
-    "tipos_evidencia": [
-      "LOG",
-      "AUDIO"
-    ],
-    "actividad_digital": null,
+    "tipos_evidencia": ["LOG", "SCREENSHOT"],
+    "actividad_digital": "COMUNICACION_076",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa 'ayer' y 'mañana' con significado",
     "descripcion_general": "Usa 'ayer' y 'mañana' con significado"

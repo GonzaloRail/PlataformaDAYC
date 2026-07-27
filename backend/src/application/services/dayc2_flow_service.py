@@ -3,15 +3,64 @@
 The MVP rule intentionally stays simple: three consecutive FAIL results end the
 current area and move the evaluation to the next area.
 """
+
 from __future__ import annotations
 
 from typing import Any
 
 from django.utils import timezone
 
-from src.api.evaluaciones.models import Evaluación, EvaluacionItem, EvidencePolicy, Respuesta
-from src.application.services.item_catalog_service import AREA_ORDER, item_catalog_service
+from src.api.evaluaciones.models import (
+    Evaluación,
+    EvaluacionItem,
+    EvidencePolicy,
+    Respuesta,
+)
+from src.application.services.item_catalog_service import (
+    AREA_ORDER,
+    item_catalog_service,
+)
 
+
+_RESULT_NORMALIZATION = {
+    "CORRECT": EvaluacionItem.Resultado.PASS,
+    "PASS": EvaluacionItem.Resultado.PASS,
+    "ERROR": EvaluacionItem.Resultado.FAIL,
+    "FAIL": EvaluacionItem.Resultado.FAIL,
+    "NOT_APPLICABLE": EvaluacionItem.Resultado.NOT_ADMINISTERED,
+    "NOT_ADMINISTERED": EvaluacionItem.Resultado.NOT_ADMINISTERED,
+    "INCONCLUSIVE": EvaluacionItem.Resultado.INCONCLUSIVE,
+}
+
+
+def normalize_result_label(label: str) -> str:
+    """Map user-facing outcome labels to canonical EvaluacionItem.Resultado values."""
+    if not label:
+        return EvaluacionItem.Resultado.INCONCLUSIVE
+    return _RESULT_NORMALIZATION.get(str(label).upper(), EvaluacionItem.Resultado.INCONCLUSIVE)
+
+
+def sincronizar_item_con_respuesta(item: EvaluacionItem, final_label: str, *, requires_review: bool = False) -> None:
+    """Force EvaluacionItem to reflect the latest response when the psychologist hasn't reviewed it yet.
+
+    This guarantees that scoring_service has access to final_result for every item
+    with a Respuesta, even if the psychologist never explicitly reviewed it.
+    """
+    if not item:
+        return
+    if item.estado == EvaluacionItem.Estado.REVIEWED:
+        return
+    normalized = normalize_result_label(final_label)
+    valid_choices = {choice for choice, _ in EvaluacionItem.Resultado.choices}
+    if normalized not in valid_choices:
+        return
+    item.final_result = normalized
+    item.requires_review = requires_review or item.requires_review
+    if not requires_review:
+        item.estado = EvaluacionItem.Estado.AUTO_VALIDATED
+    else:
+        item.estado = EvaluacionItem.Estado.NEEDS_REVIEW
+    item.save(update_fields=["final_result", "requires_review", "estado"])
 
 RESULT_TO_LEGACY = {
     EvaluacionItem.Resultado.PASS: Respuesta.Resultado.CORRECT,
@@ -34,7 +83,9 @@ class Dayc2FlowService:
                 return existing
 
         area = item_catalog_service.normalize_area(evaluación.current_area)
-        catalog_item = item_catalog_service.select_start_item(area, evaluación.edad_meses)
+        catalog_item = item_catalog_service.select_start_item(
+            area, evaluación.edad_meses
+        )
         if catalog_item is None:
             return None
         return self._activate_catalog_item(evaluación, catalog_item)
@@ -45,33 +96,41 @@ class Dayc2FlowService:
             return None
 
         catalog_item = item_catalog_service.get_item(item.item_id) or {}
-        validation_mode = 'ADULT_REQUIRED'
-        if catalog_item.get('auto_validable') and not catalog_item.get('requiere_revision_psicologo', True):
-            validation_mode = 'SYSTEM_AUTO'
-        elif catalog_item.get('auto_validable'):
-            validation_mode = 'SYSTEM_ASSISTED_REVIEW'
+        validation_mode = "ADULT_REQUIRED"
+        if catalog_item.get("auto_validable") and not catalog_item.get(
+            "requiere_revision_psicologo", True
+        ):
+            validation_mode = "SYSTEM_AUTO"
+        elif catalog_item.get("auto_validable"):
+            validation_mode = "SYSTEM_ASSISTED_REVIEW"
 
         return {
-            'evaluacion_id': str(evaluación.id),
-            'area': item.area,
-            'area_index': item_catalog_service.get_area_index(item.area),
-            'item_id': item.item_id,
-            'numero_item': catalog_item.get('numero', item.orden),
-            'current_task': item.item_id,
-            'modalidad': item.modalidad,
-            'pantalla_nino': item.pantalla_nino,
-            'minijuego': catalog_item.get('actividad_digital') or item.item_id,
-            'actividad_digital': catalog_item.get('actividad_digital'),
-            'pregunta': catalog_item.get('pregunta') or catalog_item.get('descripcion_general'),
-            'instrucciones': catalog_item.get('pregunta') or catalog_item.get('descripcion_general', 'Sigue las instrucciones del adulto acompanante.'),
-            'tipo_interaction': self._interaction_type(catalog_item),
-            'requiere_evidencia': catalog_item.get('requiere_evidencia', True),
-            'tipos_evidencia': self._effective_evidence_types(item.item_id, catalog_item),
-            'auto_validable': catalog_item.get('auto_validable', False),
-            'requiere_revision_psicologo': item.requires_review,
-            'validation_mode': validation_mode,
-            'estado_item': item.estado,
-            'estado_evaluacion': evaluación.estado,
+            "evaluacion_id": str(evaluación.id),
+            "area": item.area,
+            "area_index": item_catalog_service.get_area_index(item.area),
+            "item_id": item.item_id,
+            "numero_item": catalog_item.get("numero", item.orden),
+            "current_task": item.item_id,
+            "modalidad": item.modalidad,
+            "pantalla_nino": item.pantalla_nino,
+            "minijuego": catalog_item.get("actividad_digital") or item.item_id,
+            "actividad_digital": catalog_item.get("actividad_digital"),
+            "pregunta": catalog_item.get("pregunta")
+            or catalog_item.get("descripcion_general"),
+            "instrucciones": catalog_item.get("pregunta")
+            or catalog_item.get(
+                "descripcion_general", "Sigue las instrucciones del adulto acompanante."
+            ),
+            "tipo_interaction": self._interaction_type(catalog_item),
+            "requiere_evidencia": catalog_item.get("requiere_evidencia", True),
+            "tipos_evidencia": self._effective_evidence_types(
+                item.item_id, catalog_item
+            ),
+            "auto_validable": catalog_item.get("auto_validable", False),
+            "requiere_revision_psicologo": item.requires_review,
+            "validation_mode": validation_mode,
+            "estado_item": item.estado,
+            "estado_evaluacion": evaluación.estado,
         }
 
     def start_current_item(self, evaluación: Evaluación) -> EvaluacionItem | None:
@@ -79,11 +138,14 @@ class Dayc2FlowService:
         if item and item.estado == EvaluacionItem.Estado.PENDING:
             item.estado = EvaluacionItem.Estado.IN_PROGRESS
             item.started_at = timezone.now()
-            item.save(update_fields=['estado', 'started_at'])
-        if evaluación.estado in [Evaluación.Estado.INITIATED, Evaluación.Estado.WAITING_CONSENT]:
+            item.save(update_fields=["estado", "started_at"])
+        if evaluación.estado in [
+            Evaluación.Estado.INITIATED,
+            Evaluación.Estado.WAITING_CONSENT,
+        ]:
             evaluación.estado = Evaluación.Estado.IN_PROGRESS
             evaluación.started_at = evaluación.started_at or timezone.now()
-            evaluación.save(update_fields=['estado', 'started_at'])
+            evaluación.save(update_fields=["estado", "started_at"])
         return item
 
     def complete_current_item(
@@ -94,18 +156,21 @@ class Dayc2FlowService:
         duration_ms: int | None = None,
         confidence: float | None = None,
         raw_data: dict[str, Any] | None = None,
-        notes: str = '',
+        notes: str = "",
     ) -> tuple[EvaluacionItem | None, dict[str, Any]]:
         item = self.get_current_item(evaluación)
         if item is None:
-            return None, {'evaluation_finished': True}
+            return None, {"evaluation_finished": True}
 
         normalized_result = self._normalize_result(result)
         confidence = self._to_float(confidence)
         duration_ms = self._to_int(duration_ms)
         catalog_item = item_catalog_service.get_item(item.item_id) or {}
-        needs_review = bool(catalog_item.get('requiere_revision_psicologo', True))
-        if normalized_result in [EvaluacionItem.Resultado.INCONCLUSIVE, EvaluacionItem.Resultado.NOT_ADMINISTERED]:
+        needs_review = bool(catalog_item.get("requiere_revision_psicologo", True))
+        if normalized_result in [
+            EvaluacionItem.Resultado.INCONCLUSIVE,
+            EvaluacionItem.Resultado.NOT_ADMINISTERED,
+        ]:
             needs_review = True
         if confidence is not None and confidence < 0.75:
             needs_review = True
@@ -126,13 +191,19 @@ class Dayc2FlowService:
         Respuesta.objects.create(
             evaluación=evaluación,
             evaluación_item=item,
-            minijuego_id=catalog_item.get('actividad_digital') or item.item_id,
+            minijuego_id=catalog_item.get("actividad_digital") or item.item_id,
             item_id=item.item_id,
             area=item.area,
-            resultado=RESULT_TO_LEGACY.get(normalized_result, Respuesta.Resultado.NOT_APPLICABLE),
+            resultado=RESULT_TO_LEGACY.get(
+                normalized_result, Respuesta.Resultado.NOT_APPLICABLE
+            ),
             final_result=item.final_result,
             source=source,
-            validation_status=Respuesta.ValidationStatus.NEEDS_REVIEW if needs_review else Respuesta.ValidationStatus.AUTO_ACCEPTED,
+            validation_status=(
+                Respuesta.ValidationStatus.NEEDS_REVIEW
+                if needs_review
+                else Respuesta.ValidationStatus.AUTO_ACCEPTED
+            ),
             confidence=confidence,
             notes=notes,
             raw_data=raw_data or {},
@@ -143,11 +214,19 @@ class Dayc2FlowService:
         advance_info = self.advance_after_item(evaluación, item)
         return item, advance_info
 
-    def advance_after_item(self, evaluación: Evaluación, completed_item: EvaluacionItem) -> dict[str, Any]:
-        area_finished_by_rule = self._has_three_consecutive_fails(evaluación, completed_item.area)
-        next_catalog_item = None if area_finished_by_rule else item_catalog_service.next_item_in_area(
-            completed_item.area,
-            completed_item.item_id,
+    def advance_after_item(
+        self, evaluación: Evaluación, completed_item: EvaluacionItem
+    ) -> dict[str, Any]:
+        area_finished_by_rule = self._has_three_consecutive_fails(
+            evaluación, completed_item.area
+        )
+        next_catalog_item = (
+            None
+            if area_finished_by_rule
+            else item_catalog_service.next_item_in_area(
+                completed_item.area,
+                completed_item.item_id,
+            )
         )
 
         if next_catalog_item is None:
@@ -155,36 +234,40 @@ class Dayc2FlowService:
             if next_area is None:
                 self._finalizar_evaluacion(evaluación)
                 return {
-                    'area_finished': True,
-                    'area_finished_by_rule': area_finished_by_rule,
-                    'evaluation_finished': True,
-                    'next_area': None,
-                    'next_item_id': None,
+                    "area_finished": True,
+                    "area_finished_by_rule": area_finished_by_rule,
+                    "evaluation_finished": True,
+                    "next_area": None,
+                    "next_item_id": None,
                 }
 
             evaluación.current_area = next_area
-            evaluación.current_area_index = item_catalog_service.get_area_index(next_area)
-            next_catalog_item = item_catalog_service.select_start_item(next_area, evaluación.edad_meses)
+            evaluación.current_area_index = item_catalog_service.get_area_index(
+                next_area
+            )
+            next_catalog_item = item_catalog_service.select_start_item(
+                next_area, evaluación.edad_meses
+            )
             if next_catalog_item is None:
                 self._finalizar_evaluacion(evaluación)
-                return {'evaluation_finished': True}
+                return {"evaluation_finished": True}
 
             next_item = self._activate_catalog_item(evaluación, next_catalog_item)
             return {
-                'area_finished': True,
-                'area_finished_by_rule': area_finished_by_rule,
-                'evaluation_finished': False,
-                'next_area': next_item.area,
-                'next_item_id': next_item.item_id,
+                "area_finished": True,
+                "area_finished_by_rule": area_finished_by_rule,
+                "evaluation_finished": False,
+                "next_area": next_item.area,
+                "next_item_id": next_item.item_id,
             }
 
         next_item = self._activate_catalog_item(evaluación, next_catalog_item)
         return {
-            'area_finished': False,
-            'area_finished_by_rule': False,
-            'evaluation_finished': False,
-            'next_area': next_item.area,
-            'next_item_id': next_item.item_id,
+            "area_finished": False,
+            "area_finished_by_rule": False,
+            "evaluation_finished": False,
+            "next_area": next_item.area,
+            "next_item_id": next_item.item_id,
         }
 
     def _finalizar_evaluacion(self, evaluación: Evaluación) -> None:
@@ -192,32 +275,42 @@ class Dayc2FlowService:
         evaluación.estado = Evaluación.Estado.PENDING_REVIEW
         evaluación.completed_at = timezone.now()
         evaluación.current_item_id = None
-        evaluación.save(update_fields=['estado', 'completed_at', 'current_item_id'])
+        evaluación.save(update_fields=["estado", "completed_at", "current_item_id"])
 
-    def _activate_catalog_item(self, evaluación: Evaluación, catalog_item: dict[str, Any]) -> EvaluacionItem:
+    def _activate_catalog_item(
+        self, evaluación: Evaluación, catalog_item: dict[str, Any]
+    ) -> EvaluacionItem:
         item, _ = EvaluacionItem.objects.get_or_create(
             evaluación=evaluación,
-            item_id=catalog_item['id'],
+            item_id=catalog_item["id"],
             attempt_number=1,
             defaults={
-                'area': catalog_item['area'],
-                'orden': catalog_item.get('numero', 0),
-                'modalidad': catalog_item.get('modalidad', EvaluacionItem.Modalidad.MANUAL_GUIADO),
-                'pantalla_nino': catalog_item.get('pantalla_nino', 'INSTRUCCION_SIMPLE'),
-                'requires_review': catalog_item.get('requiere_revision_psicologo', True),
+                "area": catalog_item["area"],
+                "orden": catalog_item.get("numero", 0),
+                "modalidad": catalog_item.get(
+                    "modalidad", EvaluacionItem.Modalidad.MANUAL_GUIADO
+                ),
+                "pantalla_nino": catalog_item.get(
+                    "pantalla_nino", "INSTRUCCION_SIMPLE"
+                ),
+                "requires_review": catalog_item.get(
+                    "requiere_revision_psicologo", True
+                ),
             },
         )
         evaluación.current_area = item.area
         evaluación.current_area_index = item_catalog_service.get_area_index(item.area)
         evaluación.current_item_id = item.item_id
-        evaluación.save(update_fields=['current_area', 'current_area_index', 'current_item_id'])
+        evaluación.save(
+            update_fields=["current_area", "current_area_index", "current_item_id"]
+        )
         return item
 
     def _has_three_consecutive_fails(self, evaluación: Evaluación, area: str) -> bool:
         recent = list(
             evaluación.items.filter(area=area)
             .exclude(system_result__isnull=True)
-            .order_by('-orden', '-attempt_number')[:3]
+            .order_by("-orden", "-attempt_number")[:3]
         )
         return len(recent) == 3 and all(
             (item.final_result or item.system_result) == EvaluacionItem.Resultado.FAIL
@@ -226,18 +319,18 @@ class Dayc2FlowService:
 
     def _normalize_result(self, result: str) -> str:
         mapping = {
-            'CORRECT': EvaluacionItem.Resultado.PASS,
-            'PASS': EvaluacionItem.Resultado.PASS,
-            'ERROR': EvaluacionItem.Resultado.FAIL,
-            'FAIL': EvaluacionItem.Resultado.FAIL,
-            'NOT_APPLICABLE': EvaluacionItem.Resultado.NOT_ADMINISTERED,
-            'NOT_ADMINISTERED': EvaluacionItem.Resultado.NOT_ADMINISTERED,
-            'INCONCLUSIVE': EvaluacionItem.Resultado.INCONCLUSIVE,
+            "CORRECT": EvaluacionItem.Resultado.PASS,
+            "PASS": EvaluacionItem.Resultado.PASS,
+            "ERROR": EvaluacionItem.Resultado.FAIL,
+            "FAIL": EvaluacionItem.Resultado.FAIL,
+            "NOT_APPLICABLE": EvaluacionItem.Resultado.NOT_ADMINISTERED,
+            "NOT_ADMINISTERED": EvaluacionItem.Resultado.NOT_ADMINISTERED,
+            "INCONCLUSIVE": EvaluacionItem.Resultado.INCONCLUSIVE,
         }
         return mapping.get(str(result).upper(), EvaluacionItem.Resultado.INCONCLUSIVE)
 
     def _to_float(self, value):
-        if value in [None, '']:
+        if value in [None, ""]:
             return None
         try:
             return float(value)
@@ -245,28 +338,30 @@ class Dayc2FlowService:
             return None
 
     def _to_int(self, value):
-        if value in [None, '']:
+        if value in [None, ""]:
             return None
         try:
             return int(value)
         except (TypeError, ValueError):
             return None
 
-    def _effective_evidence_types(self, item_id: str, catalog_item: dict[str, Any]) -> list[str]:
+    def _effective_evidence_types(
+        self, item_id: str, catalog_item: dict[str, Any]
+    ) -> list[str]:
         policy = EvidencePolicy.objects.filter(item_id=item_id, enabled=True).first()
         if policy and policy.evidence_types:
             return policy.evidence_types
-        return catalog_item.get('tipos_evidencia', ['LOG'])
+        return catalog_item.get("tipos_evidencia", ["LOG"])
 
     def _interaction_type(self, catalog_item: dict[str, Any]) -> str:
-        evidence_types = set(catalog_item.get('tipos_evidencia', []))
-        if 'VIDEO' in evidence_types:
-            return 'visual'
-        if 'AUDIO' in evidence_types:
-            return 'audio'
-        if catalog_item.get('pantalla_nino') == 'ACTIVIDAD':
-            return 'mixed'
-        return 'text'
+        evidence_types = set(catalog_item.get("tipos_evidencia", []))
+        if "VIDEO" in evidence_types:
+            return "visual"
+        if "AUDIO" in evidence_types:
+            return "audio"
+        if catalog_item.get("pantalla_nino") == "ACTIVIDAD":
+            return "mixed"
+        return "text"
 
 
 dayc2_flow_service = Dayc2FlowService()

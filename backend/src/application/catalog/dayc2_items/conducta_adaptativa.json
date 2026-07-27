@@ -62,15 +62,16 @@
     "numero": 33,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_033",
     "requiere_revision_psicologo": true,
     "pregunta": "Se lava y se seca manos y cara sin ayuda",
     "descripcion_general": "Se lava y se seca manos y cara sin ayuda"
@@ -176,15 +177,16 @@
     "numero": 39,
     "edad_inicio_min_meses": 36,
     "edad_inicio_max_meses": 47,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_039",
     "requiere_revision_psicologo": true,
     "pregunta": "Manipula botones grandes y cierres",
     "descripcion_general": "Manipula botones grandes y cierres"
@@ -195,15 +197,16 @@
     "numero": 40,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_040",
     "requiere_revision_psicologo": true,
     "pregunta": "Pone la mesa con ayuda (platos, vasos, bandejas)",
     "descripcion_general": "Pone la mesa con ayuda (platos, vasos, bandejas)"
@@ -214,15 +217,16 @@
     "numero": 41,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_041",
     "requiere_revision_psicologo": true,
     "pregunta": "Usa todos los utensilios de comida",
     "descripcion_general": "Usa todos los utensilios de comida"
@@ -252,15 +256,16 @@
     "numero": 43,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_043",
     "requiere_revision_psicologo": true,
     "pregunta": "Se cepilla los dientes independientemente",
     "descripcion_general": "Se cepilla los dientes independientemente"
@@ -290,15 +295,16 @@
     "numero": 45,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_045",
     "requiere_revision_psicologo": true,
     "pregunta": "Se tapa la boca y nariz cuando tose o estornuda",
     "descripcion_general": "Se tapa la boca y nariz cuando tose o estornuda"
@@ -347,15 +353,16 @@
     "numero": 48,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_048",
     "requiere_revision_psicologo": true,
     "pregunta": "Se pone los zapatos en el pie correcto sin ayuda",
     "descripcion_general": "Se pone los zapatos en el pie correcto sin ayuda"
@@ -423,15 +430,16 @@
     "numero": 52,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_052",
     "requiere_revision_psicologo": true,
     "pregunta": "Cruza la calle con seguridad",
     "descripcion_general": "Cruza la calle con seguridad"
@@ -480,15 +488,16 @@
     "numero": 55,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_055",
     "requiere_revision_psicologo": true,
     "pregunta": "Elige la ropa apropiada según temperatura y ocasión",
     "descripcion_general": "Elige la ropa apropiada según temperatura y ocasión"
@@ -575,15 +584,16 @@
     "numero": 60,
     "edad_inicio_min_meses": 48,
     "edad_inicio_max_meses": 59,
-    "modalidad": "PREGUNTA_CUIDADOR",
-    "pantalla_nino": "PANTALLA_NEUTRA",
-    "gamificable": false,
+    "modalidad": "INTERACTIVO_ASISTIDO",
+    "pantalla_nino": "ACTIVIDAD",
+    "gamificable": true,
     "auto_validable": false,
     "requiere_evidencia": true,
     "tipos_evidencia": [
-      "LOG"
+      "LOG",
+      "SCREENSHOT"
     ],
-    "actividad_digital": null,
+    "actividad_digital": "CONDUCTA_ADAPTATIVA_060",
     "requiere_revision_psicologo": true,
     "pregunta": "Pone y limpia la mesa sin ayuda",
     "descripcion_general": "Pone y limpia la mesa sin ayuda"
