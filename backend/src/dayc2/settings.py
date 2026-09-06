@@ -4,6 +4,7 @@ Django settings for DAYC-2 Backend Project
 
 import os
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -69,7 +70,7 @@ DATABASES = {
         "USER": os.environ["POSTGRES_USER"],
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
         "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5433"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5434"),
     }
 }
 
@@ -93,12 +94,28 @@ USE_TZ = True
 STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+PRIVATE_EVIDENCE_ROOT = Path(
+    os.environ.get("PRIVATE_EVIDENCE_ROOT", BASE_DIR / "private_evidence")
+)
+MAX_EVIDENCE_FILE_SIZE = int(os.environ.get("MAX_EVIDENCE_FILE_SIZE", 50 * 1024 * 1024))
+EVIDENCE_RETENTION_DAYS = int(os.environ.get("EVIDENCE_RETENTION_DAYS", 365))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                {
+                    "address": os.environ.get("REDIS_URL", "redis://127.0.0.1:6379/0"),
+                    # BRPOP keeps Channels consumers idle while waiting for
+                    # group messages; its socket timeout must exceed that wait.
+                    "socket_timeout": 30,
+                    "socket_connect_timeout": 5,
+                }
+            ]
+        },
     },
 }
 
@@ -119,6 +136,7 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
 ).split(",")
 
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [*default_headers, "idempotency-key"]
 
 LOGGING = {
     "version": 1,

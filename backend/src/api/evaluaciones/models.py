@@ -4,6 +4,7 @@ import uuid
 from django.conf import settings
 from django.db import models
 from src.api.children.models import Niño
+from .storage import private_evidence_storage
 
 
 def evidencia_upload_path(instance, filename):
@@ -61,6 +62,7 @@ class Evaluación(models.Model):
     current_area = models.CharField(max_length=50, default="COGNITIVO")
     current_area_index = models.IntegerField(default=0)
     current_item_id = models.CharField(max_length=80, null=True, blank=True)
+    version = models.PositiveBigIntegerField(default=0)
     child_data_completed = models.BooleanField(default=True)
     preliminary_calculated_at = models.DateTimeField(null=True, blank=True)
     validated_calculated_at = models.DateTimeField(null=True, blank=True)
@@ -155,6 +157,36 @@ class EvaluacionItem(models.Model):
         return f"{self.item_id} - {self.area} ({self.estado})"
 
 
+class SessionAccessToken(models.Model):
+    """Per-device bearer token stored only as a SHA-256 digest."""
+
+    class ActorRole(models.TextChoices):
+        CHILD = "CHILD", "Niño"
+        ADULT = "ADULT", "Adulto"
+
+    evaluación = models.ForeignKey(
+        Evaluación, on_delete=models.CASCADE, related_name="access_tokens"
+    )
+    token_hash = models.CharField(max_length=64, unique=True)
+    actor_role = models.CharField(
+        max_length=10, choices=ActorRole.choices, null=True, blank=True
+    )
+    device_id = models.CharField(max_length=128, blank=True)
+    expires_at = models.DateTimeField()
+    revoked_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "evaluation_access_tokens"
+        indexes = [
+            models.Index(fields=["evaluación", "expires_at"]),
+            models.Index(
+                fields=["evaluación", "actor_role", "expires_at"],
+                name="eval_token_role_exp_idx",
+            ),
+        ]
+
+
 class Consentimiento(models.Model):
     """Initial consent accepted by the adult companion before evidence capture."""
 
@@ -202,20 +234,33 @@ class Evidencia(models.Model):
         blank=True,
     )
     type = models.CharField(max_length=30, choices=Tipo.choices)
-    file = models.FileField(upload_to=evidencia_upload_path, null=True, blank=True)
+    file = models.FileField(
+        upload_to=evidencia_upload_path,
+        storage=private_evidence_storage,
+        null=True,
+        blank=True,
+    )
     metadata = models.JSONField(default=dict, blank=True)
     duration_ms = models.IntegerField(null=True, blank=True)
     size_bytes = models.IntegerField(null=True, blank=True)
     captured_by = models.CharField(max_length=40, default="CHILD_DEVICE")
+    idempotency_key = models.UUIDField(null=True, blank=True)
     consent_required = models.BooleanField(default=True)
     is_sensitive = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    retention_expires_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = "evidencias"
         verbose_name = "Evidencia"
         verbose_name_plural = "Evidencias"
         indexes = [models.Index(fields=["evaluación", "type", "created_at"])]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["evaluación", "idempotency_key"],
+                name="unique_evidence_idempotency_key",
+            )
+        ]
 
 
 class EvidencePolicy(models.Model):
@@ -261,6 +306,8 @@ class InteractionEvent(models.Model):
     event_type = models.CharField(max_length=80)
     event_payload = models.JSONField(default=dict, blank=True)
     relative_time_ms = models.IntegerField(null=True, blank=True)
+    actor_role = models.CharField(max_length=20, blank=True)
+    device_id = models.CharField(max_length=128, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -268,6 +315,23 @@ class InteractionEvent(models.Model):
         verbose_name = "Evento de Interacción"
         verbose_name_plural = "Eventos de Interacción"
         indexes = [models.Index(fields=["evaluación", "event_type", "timestamp"])]
+
+
+class EvidenceAccessAudit(models.Model):
+    """Immutable audit trail for sensitive evidence operations."""
+
+    evidencia = models.ForeignKey(
+        Evidencia, on_delete=models.CASCADE, related_name="access_audits"
+    )
+    action = models.CharField(max_length=30)
+    actor = models.CharField(max_length=40)
+    actor_id = models.CharField(max_length=64, blank=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "evidence_access_audits"
+        indexes = [models.Index(fields=["evidencia", "action", "created_at"])]
 
 
 class Respuesta(models.Model):
@@ -323,6 +387,7 @@ class Respuesta(models.Model):
     notes = models.TextField(blank=True)
     raw_data = models.JSONField(default=dict, blank=True)
     is_final = models.BooleanField(default=False)
+    idempotency_key = models.UUIDField(null=True, blank=True)
     tiempo_respuesta_ms = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -330,6 +395,12 @@ class Respuesta(models.Model):
         db_table = "respuestas"
         verbose_name = "Respuesta"
         verbose_name_plural = "Respuestas"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["evaluación", "idempotency_key"],
+                name="unique_response_idempotency_key",
+            )
+        ]
 
 
 class ResultadoÁrea(models.Model):

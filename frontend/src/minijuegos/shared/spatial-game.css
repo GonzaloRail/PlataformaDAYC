@@ -1,0 +1,117 @@
+.spt-instruction {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #431407;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.spt-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+}
+
+.spt-reference {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 32px;
+  background: #fef3c7;
+  border: 3px solid #f59e0b;
+  border-radius: 20px;
+}
+
+.spt-ref-emoji {
+  font-size: 3rem;
+}
+
+.spt-ref-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #431407;
+}
+
+.spt-object-row {
+  display: flex;
+  justify-content: center;
+}
+
+.spt-object {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 20px;
+  background: #fff;
+  border: 3px solid #22c55e;
+  border-radius: 14px;
+  cursor: grab;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.spt-object:active {
+  cursor: grabbing;
+}
+
+.spt-object.is-placed {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.spt-obj-emoji {
+  font-size: 2rem;
+}
+
+.spt-obj-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #431407;
+}
+
+.spt-positions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.spt-position {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 20px;
+  border: 3px dashed #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  min-width: 90px;
+}
+
+.spt-position:hover,
+.spt-position:focus-visible {
+  border-color: #f59e0b;
+  background: #fef3c7;
+  transform: scale(1.05);
+}
+
+.spt-position:active {
+  transform: scale(0.97);
+}
+
+.spt-pos-emoji {
+  font-size: 1.5rem;
+}
+
+.spt-pos-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #431407;
+  text-align: center;
+}

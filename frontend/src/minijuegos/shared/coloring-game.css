@@ -1,0 +1,46 @@
+.cg-palette {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 12px;
+}
+
+.cg-color-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.cg-color-swatch:hover,
+.cg-color-swatch:focus-visible {
+  transform: scale(1.15);
+}
+
+.cg-color-swatch.is-selected {
+  border-color: #1c1917;
+  transform: scale(1.2);
+}
+
+.cg-drawing-area {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+.cg-svg {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+}
+
+.cg-zone {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cg-zone:hover {
+  opacity: 0.85;
+}

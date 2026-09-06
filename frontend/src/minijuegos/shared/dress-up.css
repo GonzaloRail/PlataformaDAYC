@@ -1,0 +1,78 @@
+.du-scene {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.du-character-wrap {
+  position: relative;
+  width: 200px;
+  height: 320px;
+}
+
+.du-character {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 300px;
+  background: #fef3c7;
+  border-radius: 60px 60px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.du-character-emoji {
+  font-size: 3rem;
+}
+
+.du-slots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.du-slot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  min-height: 60px;
+  border: 3px dashed #e2e8f0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+  z-index: 10;
+}
+
+.du-slot.is-drag-over {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.du-slot.is-ready {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.du-empty-slot {
+  font-size: 1.5rem;
+  opacity: 0.4;
+}
+
+.du-slot .sg-item {
+  margin: 0;
+  padding: 6px 10px;
+}

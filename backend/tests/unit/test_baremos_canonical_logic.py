@@ -1,11 +1,6 @@
 """Unit tests for canonical baremos.py integration."""
 
 import unittest
-import sys
-from unittest.mock import MagicMock
-
-sys.modules["django.conf"] = MagicMock()
-sys.modules["django.conf"].settings = MagicMock()
 
 
 class TestCanonicalBaremosLogic(unittest.TestCase):

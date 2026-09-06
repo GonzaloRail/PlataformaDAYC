@@ -11,7 +11,7 @@ Domain data: `preguntas_dayc.json` (full DAYC-2 question bank), `greendino.json`
 ## Quick start
 
 ```bash
-# PostgreSQL (port 5433, not 5432)
+# PostgreSQL (port 5434, not 5432)
 docker compose -f backend/docker-compose.yml up -d
 
 # Backend
@@ -30,9 +30,9 @@ cd frontend && npm run dev
 |---|---|
 | `python manage.py runserver` | Dev server on :8000 |
 | `python manage.py makemigrations && python manage.py migrate` | DB schema |
-| `pytest` or `pytest tests/unit/` | Tests (uses `conftest.py` that adds `src/` to `sys.path`) |
-| `black .` | Format |
-| `flake8` | Lint |
+| `python -m pytest` or `python -m pytest tests/unit/` | Tests (uses `conftest.py` that adds `src/` to `sys.path`) |
+| `python -m black .` | Format |
+| `python -m flake8` | Lint |
 
 Django settings module: `src.dayc2.settings`.
 
@@ -48,7 +48,7 @@ Django settings module: `src.dayc2.settings`.
 ### Order of verification
 ```bash
 cd frontend && npm run lint && npm run build
-cd backend && source venv/bin/activate && black --check . && flake8 && pytest
+cd backend && source venv/bin/activate && python -m black --check . && python -m flake8 && python -m pytest
 ```
 
 ## Architecture notes

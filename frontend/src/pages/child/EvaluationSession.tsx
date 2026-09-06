@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ChildQuestionPresenter } from '@/components/child/ChildQuestionPresenter'
 import { DigitalActivityExperience } from '@/components/child/DigitalActivityExperience'
 import { PedagogicalMascot } from '@/components/child/PedagogicalMascot'
 import { MediaPermissionProvider } from '@/components/evidence/MediaPermissionProvider'
-import evaluacionesApi from '@/services/evaluacionesApi'
+import { usePendingEvidenceCount } from '@/components/evidence/EvidenceUploadQueue'
+import evaluacionesApi, { getSessionToken } from '@/services/evaluacionesApi'
+import { ApiError } from '@/services/api'
+import { useEvaluationProgress } from '@/hooks/useEvaluationProgress'
 import type { EvaluationTask, SessionState } from '@/types'
+import { devLog } from '@/utils/logger'
 import './EvaluationSession.css'
 
 type Phase = 'loading' | 'waiting-adult' | 'session' | 'complete' | 'error'
@@ -18,8 +22,6 @@ const areaLabels: Record<string, string> = {
   CONDUCTA_ADAPTATIVA: 'Rutinas diarias',
 }
 
-const sessionAdvanceChannel = 'dayc-session-advance'
-
 export function EvaluationSession() {
   const { sessionCode } = useParams<{ sessionCode: string }>()
   const [phase, setPhase] = useState<Phase>('loading')
@@ -28,25 +30,14 @@ export function EvaluationSession() {
   const [error, setError] = useState<string | null>(null)
   const itemStartRef = useRef(Date.now())
   const activeItemRef = useRef<string | null>(null)
+  const pendingEvidenceCount = usePendingEvidenceCount()
 
-  useEffect(() => {
-    loadSessionState(true).catch((err) => {
-      console.error('[EvaluationSession] loadSessionState falló:', err)
-    })
-    const interval = window.setInterval(() => {
-      loadSessionState(false).catch((err) => {
-        console.error('[EvaluationSession] loadSessionState falló:', err)
-      })
-    }, 2000)
-    return () => window.clearInterval(interval)
-  }, [sessionCode])
-
-  const loadSessionState = async (showLoading: boolean) => {
+  const loadSessionState = useCallback(async (showLoading: boolean) => {
     if (!sessionCode) return
     if (showLoading) setPhase('loading')
     setError(null)
     try {
-      const state = await evaluacionesApi.sessionState(sessionCode)
+      const state = await evaluacionesApi.sessionState(sessionCode, getSessionToken(sessionCode, 'CHILD'))
       const nextTask = state.current_task || null
       setSessionState(state)
       setTask(nextTask)
@@ -66,7 +57,7 @@ export function EvaluationSession() {
       }
 
       if (state.evaluacion.estado !== 'IN_PROGRESS') {
-        const response = await evaluacionesApi.startSession(sessionCode)
+        const response = await evaluacionesApi.startSession(sessionCode, state.evaluacion.version || 0, getSessionToken(sessionCode, 'CHILD'))
         setSessionState((prev) => prev ? { ...prev, evaluacion: response.evaluacion } : prev)
         setTask(response.current_task)
         if (response.current_task?.item_id && activeItemRef.current !== response.current_task.item_id) {
@@ -80,43 +71,27 @@ export function EvaluationSession() {
       setError('No pudimos abrir la sesión. Verifica el código con el adulto.')
       setPhase('error')
     }
-  }
-
-  useEffect(() => {
-    const refreshFromSignal = (rawPayload: string | null) => {
-      if (!rawPayload || !sessionCode) return
-      try {
-        const payload = JSON.parse(rawPayload) as { sessionCode?: string }
-        if (payload.sessionCode === sessionCode) void loadSessionState(false)
-      } catch {
-        return
-      }
-    }
-
-    const onStorage = (event: StorageEvent) => {
-      if (event.key === sessionAdvanceChannel) refreshFromSignal(event.newValue)
-    }
-
-    window.addEventListener('storage', onStorage)
-
-    let channel: BroadcastChannel | null = null
-    if ('BroadcastChannel' in window) {
-      channel = new BroadcastChannel(sessionAdvanceChannel)
-      channel.onmessage = (event) => refreshFromSignal(String(event.data || ''))
-    }
-
-    return () => {
-      window.removeEventListener('storage', onStorage)
-      channel?.close()
-    }
   }, [sessionCode])
 
-  const autoAnswer = async (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawDataExt?: any) => {
+  useEffect(() => {
+    loadSessionState(true).catch((err) => {
+      devLog.error('EvaluationSession', 'loadSessionState fallo:', err)
+    })
+  }, [loadSessionState])
+
+  useEvaluationProgress(
+    sessionState?.evaluacion.id || '',
+    sessionState?.session_token || getSessionToken(sessionCode || '', 'CHILD'),
+    () => void loadSessionState(false),
+  )
+
+  const autoAnswer = async (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawDataExt?: Record<string, unknown>) => {
     if (!task?.evaluacion_id || !task.item_id) return
     const duration = Date.now() - itemStartRef.current
     try {
       const response = await evaluacionesApi.submitAutoResult(task.evaluacion_id, task.item_id, {
         resultado,
+        expected_version: sessionState?.evaluacion.version || 0,
         duration_ms: duration,
         confidence: confidence !== undefined ? confidence : 0.8,
         raw_data: {
@@ -135,10 +110,18 @@ export function EvaluationSession() {
         setTask(response.current_task)
         activeItemRef.current = response.current_task.item_id
         itemStartRef.current = Date.now()
-      } else {
+      }
+      setSessionState((prev) => prev ? {
+        ...prev,
+        evaluacion: { ...prev.evaluacion, version: response.version },
+      } : prev)
+      if (!response.current_task) {
         await loadSessionState(false)
       }
-    } catch {
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 409) {
+        await loadSessionState(false)
+      }
       setError('No se pudo registrar la actividad. Avísale al adulto.')
     }
   }
@@ -187,6 +170,7 @@ export function EvaluationSession() {
     <main className="evaluation-session child-only-session">
       <header className="child-only-header">
         <span>DAYC en juego</span>
+        {pendingEvidenceCount > 0 && <span>{pendingEvidenceCount} evidencia(s) pendiente(s)</span>}
         <strong>{currentAreaLabel}{task?.numero_item ? ` · Ítem ${task.numero_item}` : ''}</strong>
       </header>
 

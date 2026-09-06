@@ -4,6 +4,7 @@ import { useMinigameEvidence } from '@/components/evidence/MinigameEvidenceProvi
 import { canvasToBlob } from '@/utils/media';
 import type { LabEvidenceRecord } from '@/components/evidence/EvidenceSink';
 import type { EvidencePayload } from '@/components/evidence/EvidenceUploadQueue';
+import { devLog } from '@/utils/logger';
 
 interface AutoEvidenceOptions {
   containerRef: React.RefObject<HTMLElement | null>;
@@ -32,7 +33,7 @@ export function useAutoEvidence({
       });
       return await canvasToBlob(canvas);
     } catch (err) {
-      console.warn(`[${activityId}] html2canvas falló:`, err);
+      devLog.warn(activityId, 'html2canvas fallo:', err);
       evidence.recordLog({
         event: 'SCREENSHOT_CAPTURE_FAILED',
         activity: activityId,
@@ -90,7 +91,7 @@ export function useAutoEvidence({
           try {
             await evidence.flushMedia();
           } catch (err) {
-            console.warn(`[${activityId}] flushMedia falló:`, err);
+            devLog.warn(activityId, 'flushMedia fallo:', err);
           }
         })()
       : Promise.resolve();

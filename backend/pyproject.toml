@@ -11,6 +11,7 @@ dependencies = [
     "gunicorn>=21.0",
     "django-cors-headers>=4.0",
     "channels>=4.0",
+    "channels-redis>=4.2",
     "weasyprint>=60.0",
 ]
 
@@ -25,3 +26,20 @@ dev = [
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+exclude = '''
+/(
+    \.git
+  | venv
+  | \.venv
+  | migrations
+)/
+'''
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "dayc2.test_settings"
+pythonpath = [".", "src"]
+testpaths = ["tests"]

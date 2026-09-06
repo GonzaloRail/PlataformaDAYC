@@ -1,0 +1,98 @@
+.if-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.if-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  border: 2px solid #e2e8f0;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.if-step.is-current {
+  border-color: #f59e0b;
+  background: #fef3c7;
+}
+
+.if-step.is-done {
+  border-color: #22c55e;
+  background: #dcfce7;
+}
+
+.if-step-number {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.if-step.is-current .if-step-number {
+  background: #f59e0b;
+  color: #fff;
+}
+
+.if-step.is-done .if-step-number {
+  background: #22c55e;
+  color: #fff;
+}
+
+.if-step-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #431407;
+}
+
+.if-step.is-done .if-step-text {
+  text-decoration: line-through;
+  color: #16a34a;
+}
+
+.if-targets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.if-target {
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  border: 3px solid;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.if-target:hover,
+.if-target:focus-visible {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.if-target:active {
+  transform: scale(0.95);
+}
+
+.if-target-emoji {
+  font-size: 2rem;
+}

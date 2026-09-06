@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import evaluacionesApi from '@/services/evaluacionesApi';
+import evaluacionesApi, { type EvidenceApiItem } from '@/services/evaluacionesApi';
 import { EvidenceCollection } from '@/components/evidence/EvidenceCollection';
 import { normalizeEvidence } from '@/components/evidence/EvidenceNormalizer';
 import './EvidenceViewer.css';
@@ -9,19 +9,8 @@ interface EvidenceViewerProps {
   itemId: string;
 }
 
-interface EvidenceData {
-  id: string;
-  type: string;
-  metadata: Record<string, any>;
-  duration_ms?: number;
-  size_bytes?: number;
-  captured_by: string;
-  created_at: string;
-  download_url?: string;
-}
-
 export const EvidenceViewer: React.FC<EvidenceViewerProps> = ({ evaluacionId, itemId }) => {
-  const [evidences, setEvidences] = useState<EvidenceData[]>([]);
+  const [evidences, setEvidences] = useState<EvidenceApiItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

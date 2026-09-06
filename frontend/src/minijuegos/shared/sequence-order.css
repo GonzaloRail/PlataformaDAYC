@@ -1,0 +1,69 @@
+.so-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 16px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.so-slot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 3px dashed #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  min-height: 52px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.so-slot.is-drag-over {
+  border-color: #f59e0b;
+  background: #fef3c7;
+}
+
+.so-slot.is-ready {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.so-slot.has-step {
+  border-style: solid;
+  background: #fff;
+  cursor: pointer;
+}
+
+.so-slot-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.so-slot.has-step .so-slot-number {
+  background: #22c55e;
+  color: #fff;
+}
+
+.so-slot-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #431407;
+}
+
+.so-slot-empty {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}

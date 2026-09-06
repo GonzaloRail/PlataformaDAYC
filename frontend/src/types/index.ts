@@ -28,6 +28,7 @@ export interface Evaluacion {
   modo_evaluacion?: 'SYNCHRONOUS' | 'DEFERRED' | 'HYBRID';
   current_area?: string;
   current_item_id?: string;
+  version?: number;
   child_data_completed?: boolean;
   consentimiento_aceptado?: boolean;
   started_at?: string;

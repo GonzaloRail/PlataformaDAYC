@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { devLog } from '@/utils/logger';
 
 export function useMediaRecorder(type: 'audio' | 'video') {
   const [isRecording, setIsRecording] = useState(false);
@@ -25,7 +26,7 @@ export function useMediaRecorder(type: 'audio' | 'video') {
       mediaRecorder.start();
       setIsRecording(true);
     } catch (err) {
-      console.error(`Error starting ${type} recording:`, err);
+      devLog.error('MediaRecorder', `Error starting ${type} recording:`, err);
     }
   }, [type]);
 

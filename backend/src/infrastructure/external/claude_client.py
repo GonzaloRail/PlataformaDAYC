@@ -32,9 +32,9 @@ class ClaudeClient:
         """Make API call to Claude (mock for now)"""
 
         return f"""Según la evaluación DAYC-2 aplicada, el niño con GDQ de {gdq} muestra un perfil de desarrollo que requiere atención en áreas específicas.
-        
+
 El análisis de las puntuaciones obtenidas indica fortalezas en ciertas áreas y necesidades de estimulación en otras.
-        
+
 Se recomienda intervención temprana con actividades específicas de estimulación cognitiva."""
 
 

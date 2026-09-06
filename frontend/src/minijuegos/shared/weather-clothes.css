@@ -1,0 +1,67 @@
+.wc-weather {
+  text-align: center;
+  padding: 10px;
+}
+
+.wc-weather-emoji {
+  font-size: 2.2rem;
+  display: block;
+}
+
+.wc-weather-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #431407;
+}
+
+.wc-scene {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: 8px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.wc-character {
+  width: 140px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border: 3px dashed #e2e8f0;
+  border-radius: 20px;
+  background: #fef3c7;
+  transition: border-color 0.2s;
+}
+
+.wc-character.is-dressed {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.wc-character-emoji {
+  font-size: 2.5rem;
+}
+
+.wc-dressed-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.wc-dressed-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid #22c55e;
+  border-radius: 8px;
+  background: #dcfce7;
+  font-size: 0.75rem;
+  cursor: pointer;
+}

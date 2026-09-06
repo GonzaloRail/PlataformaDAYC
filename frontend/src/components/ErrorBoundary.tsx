@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { devLog } from '@/utils/logger';
 
 interface ErrorBoundaryProps {
   fallback?: ReactNode;
@@ -22,7 +23,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    console.error('[ErrorBoundary] uncaught render error:', error, info.componentStack);
+    devLog.error('ErrorBoundary', 'Uncaught render error:', error, info.componentStack);
   }
 
   handleReload = (): void => {

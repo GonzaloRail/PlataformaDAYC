@@ -2,6 +2,8 @@
 
 import secrets
 import string
+import hashlib
+from hmac import compare_digest
 from datetime import timedelta
 from django.utils import timezone
 
@@ -33,6 +35,7 @@ def serialize_evaluación(evaluación):
         "modo_evaluacion": evaluación.modo_evaluacion,
         "current_area": evaluación.current_area,
         "current_item_id": evaluación.current_item_id,
+        "version": evaluación.version,
         "child_data_completed": evaluación.child_data_completed,
         "consentimiento_aceptado": (
             getattr(evaluación, "consentimiento", None).accepted
@@ -87,8 +90,8 @@ def serialize_resultado_area(r):
     }
 
 
-def autorizar_evaluacion(request, evaluación):
-    """Return True if request is from the owning psychologist or a valid child session token."""
+def autorizar_evaluacion(request, evaluación, allowed_roles=None):
+    """Authorize the owner or a participant token with an allowed actor role."""
     is_psychologist = (
         request.user.is_authenticated
         and str(request.user.id) == evaluación.psychologist_id
@@ -96,10 +99,10 @@ def autorizar_evaluacion(request, evaluación):
     bearer = request.headers.get("Authorization", "").replace("Bearer ", "")
     query_token = request.GET.get("session_token") if request.method != "POST" else None
     session_token = bearer or query_token
-    is_valid_child_session = bool(
-        session_token and session_token == evaluación.session_token
+    is_valid_session = verify_session_token(
+        evaluación, session_token, allowed_roles=allowed_roles
     )
-    return is_psychologist or is_valid_child_session
+    return is_psychologist or is_valid_session
 
 
 def client_ip(request):
@@ -109,13 +112,64 @@ def client_ip(request):
     return request.META.get("REMOTE_ADDR")
 
 
-def ensure_session_token(evaluación):
-    if not evaluación.session_token:
-        evaluación.session_token = secrets.token_urlsafe(32)
+def ensure_session_token(evaluación, actor_role, device_id=""):
+    from src.api.evaluaciones.models import SessionAccessToken
+
+    valid_roles = {choice.value for choice in SessionAccessToken.ActorRole}
+    if actor_role not in valid_roles:
+        raise ValueError("Rol de sesión inválido")
     if not evaluación.session_expires_at:
         evaluación.session_expires_at = timezone.now() + timedelta(days=7)
-    evaluación.save(update_fields=["session_token", "session_expires_at"])
-    return evaluación.session_token
+        evaluación.save(update_fields=["session_expires_at"])
+    token = secrets.token_urlsafe(32)
+    SessionAccessToken.objects.create(
+        evaluación=evaluación,
+        token_hash=hashlib.sha256(token.encode()).hexdigest(),
+        actor_role=actor_role,
+        device_id=str(device_id or "")[:128],
+        expires_at=evaluación.session_expires_at,
+    )
+    return token
+
+
+def get_session_access_token(evaluación, token):
+    if (
+        not token
+        or not evaluación.session_expires_at
+        or evaluación.session_expires_at <= timezone.now()
+    ):
+        return None
+    if evaluación.session_token:
+        if compare_digest(token, evaluación.session_token):
+            return "legacy"
+        # Existing evaluations may retain a legacy token while new per-device
+        # tokens are issued during the migration to hashed credentials.
+        if not hasattr(evaluación, "_meta"):
+            return None
+    digest = hashlib.sha256(token.encode()).hexdigest()
+    from src.api.evaluaciones.models import SessionAccessToken
+
+    access_token = SessionAccessToken.objects.filter(token_hash=digest).first()
+    if not access_token:
+        return None
+    if (
+        access_token.evaluación_id != evaluación.id
+        or access_token.revoked_at is not None
+        or access_token.expires_at <= timezone.now()
+    ):
+        return None
+    return access_token
+
+
+def verify_session_token(evaluación, token, allowed_roles=None):
+    access_token = get_session_access_token(evaluación, token)
+    if not access_token:
+        return False
+    if allowed_roles is None:
+        return True
+    if access_token == "legacy":
+        return False
+    return access_token.actor_role in set(allowed_roles)
 
 
 def get_evaluación_by_session(session_code):

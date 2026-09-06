@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
-import { evidenceUploadQueue } from '@/components/evidence/EvidenceUploadQueue'
+import { evidenceUploadQueue, usePendingEvidenceCount } from '@/components/evidence/EvidenceUploadQueue'
 import { Button, Card, Input } from '@/components/ui'
-import evaluacionesApi from '@/services/evaluacionesApi'
+import evaluacionesApi, { getSessionToken, setSessionToken } from '@/services/evaluacionesApi'
+import { ApiError } from '@/services/api'
+import { useEvaluationProgress } from '@/hooks/useEvaluationProgress'
 import type { EvaluationTask, SessionState } from '@/types'
+import { devLog } from '@/utils/logger'
 import './AdultSession.css'
 
 type Phase = 'loading' | 'child-data' | 'consent' | 'control' | 'complete' | 'error'
@@ -31,18 +34,6 @@ const evidenceLabels: Record<string, string> = {
   AUDIO: 'audio',
   SCREENSHOT: 'captura',
   CAMERA_FRAME: 'cámara',
-}
-
-const sessionAdvanceChannel = 'dayc-session-advance'
-
-function notifyChildSessionAdvanced(sessionCode: string, itemId?: string) {
-  const payload = JSON.stringify({ sessionCode, itemId, at: Date.now() })
-  window.localStorage.setItem(sessionAdvanceChannel, payload)
-  if ('BroadcastChannel' in window) {
-    const channel = new BroadcastChannel(sessionAdvanceChannel)
-    channel.postMessage(payload)
-    channel.close()
-  }
 }
 
 function buildAdultHint(task: EvaluationTask | null) {
@@ -89,7 +80,7 @@ async function captureCameraFrame(): Promise<Blob | null> {
     context.drawImage(video, 0, 0, canvas.width, canvas.height)
     return await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.88))
   } catch (error) {
-    console.warn('No se pudo capturar evidencia de camara:', error)
+    devLog.warn('AdultSession', 'No se pudo capturar evidencia de camara:', error)
     return null
   } finally {
     stream?.getTracks().forEach((track) => track.stop())
@@ -107,17 +98,14 @@ export function AdultSession() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const itemStartRef = useRef(Date.now())
+  const pendingEvidenceCount = usePendingEvidenceCount()
 
-  useEffect(() => {
-    void loadSessionState(true)
-  }, [sessionCode])
-
-  const loadSessionState = async (showLoading: boolean) => {
+  const loadSessionState = useCallback(async (showLoading: boolean) => {
     if (!sessionCode) return
     if (showLoading) setPhase('loading')
     setError(null)
     try {
-      const state = await evaluacionesApi.sessionState(sessionCode)
+      const state = await evaluacionesApi.sessionState(sessionCode, getSessionToken(sessionCode, 'ADULT'))
       setSessionState(state)
       setTask(state.current_task || null)
       itemStartRef.current = Date.now()
@@ -130,7 +118,7 @@ export function AdultSession() {
         setPhase('complete')
       } else {
         if (state.evaluacion.estado !== 'IN_PROGRESS') {
-          const response = await evaluacionesApi.startSession(sessionCode)
+          const response = await evaluacionesApi.startSession(sessionCode, state.evaluacion.version || 0, getSessionToken(sessionCode, 'ADULT'))
           setSessionState((prev) => prev ? { ...prev, evaluacion: response.evaluacion } : prev)
           setTask(response.current_task)
         }
@@ -140,7 +128,17 @@ export function AdultSession() {
       setError('No pudimos abrir la sesión. Verifica el código con el profesional.')
       setPhase('error')
     }
-  }
+  }, [sessionCode])
+
+  useEffect(() => {
+    void loadSessionState(true)
+  }, [loadSessionState])
+
+  useEvaluationProgress(
+    sessionState?.evaluacion.id || '',
+    sessionState?.session_token || getSessionToken(sessionCode || '', 'ADULT'),
+    () => void loadSessionState(false),
+  )
 
   const completeChildData = async (event: FormEvent) => {
     event.preventDefault()
@@ -151,7 +149,7 @@ export function AdultSession() {
     setSubmitting(true)
     setError(null)
     try {
-      await evaluacionesApi.completeChildData(sessionCode, childForm)
+      await evaluacionesApi.completeChildData(sessionCode, childForm, sessionState?.evaluacion.version || 0, getSessionToken(sessionCode, 'ADULT'))
       await loadSessionState(false)
     } catch {
       setError('No se pudieron guardar los datos del niño')
@@ -165,7 +163,8 @@ export function AdultSession() {
     setSubmitting(true)
     setError(null)
     try {
-      const response = await evaluacionesApi.acceptConsent(sessionCode)
+      const response = await evaluacionesApi.acceptConsent(sessionCode, sessionState?.evaluacion.version || 0, getSessionToken(sessionCode, 'ADULT'))
+      setSessionToken(sessionCode, 'ADULT', response.session_token)
       setSessionState((prev) => prev ? { ...prev, evaluacion: response.evaluacion, session_token: response.session_token, consent_accepted: true, consent_required: false } : prev)
       setTask(response.current_task)
       setPhase('control')
@@ -184,13 +183,14 @@ export function AdultSession() {
     const token = sessionState?.session_token || undefined
     try {
       recordAdultEvidence(task, resultado, duration, token).catch((err) => {
-        console.warn('[AdultSession] recordAdultEvidence falló:', err)
+        devLog.warn('AdultSession', 'recordAdultEvidence fallo:', err)
       })
 
       const response = await evaluacionesApi.submitRespuesta(task.evaluacion_id, {
         item_id: task.item_id,
         resultado,
         tiempo_respuesta_ms: duration,
+        expected_version: sessionState?.evaluacion.version || 0,
         source: 'ADULT_ASSISTED',
         confidence: resultado === 'NOT_APPLICABLE' ? 0.4 : 0.65,
         raw_data: {
@@ -202,18 +202,24 @@ export function AdultSession() {
 
       setAdultObservation('')
       if (response.evaluation_finished) {
-        if (sessionCode) notifyChildSessionAdvanced(sessionCode)
         setPhase('complete')
         return
       }
       if (response.current_task) {
         setTask(response.current_task)
         itemStartRef.current = Date.now()
-      } else {
+      }
+      setSessionState((prev) => prev ? {
+        ...prev,
+        evaluacion: { ...prev.evaluacion, version: response.version },
+      } : prev)
+      if (!response.current_task) {
         await loadSessionState(false)
       }
-      if (sessionCode) notifyChildSessionAdvanced(sessionCode, response.current_task?.item_id || response.next_item_id)
     } catch (err) {
+      if (err instanceof ApiError && err.status === 409) {
+        await loadSessionState(false)
+      }
       setError(err instanceof Error ? err.message : 'No se pudo registrar la respuesta')
     } finally {
       setSubmitting(false)
@@ -238,7 +244,7 @@ export function AdultSession() {
       relative_time_ms: duration,
       event_payload: metadata,
     }, token).catch((error) => {
-      console.warn('No se pudo registrar el evento del adulto:', error)
+      devLog.warn('AdultSession', 'No se pudo registrar el evento del adulto:', error)
     })
 
     evidenceUploadQueue.add({
@@ -289,9 +295,12 @@ export function AdultSession() {
     setSubmitting(true)
     setError(null)
     try {
-      await evaluacionesApi.finishSession(sessionCode, adultObservation, sessionState?.session_token || undefined)
+      await evaluacionesApi.finishSession(sessionCode, adultObservation, sessionState?.evaluacion.version || 0, sessionState?.session_token || undefined)
       setPhase('complete')
-    } catch {
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 409) {
+        await loadSessionState(false)
+      }
       setError('No se pudo finalizar la sesión')
     } finally {
       setSubmitting(false)
@@ -359,6 +368,7 @@ export function AdultSession() {
     <main className="adult-session">
       <section className="adult-topbar">
         <span>Sesión {sessionCode}</span>
+        {pendingEvidenceCount > 0 && <span>{pendingEvidenceCount} evidencia(s) pendiente(s)</span>}
         <button type="button" onClick={() => void loadSessionState(false)}>Actualizar</button>
       </section>
 

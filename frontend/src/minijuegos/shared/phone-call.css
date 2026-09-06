@@ -1,0 +1,150 @@
+.pc-phone-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+}
+
+.pc-phone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+}
+
+.pc-phone.ringing {
+  animation: pc-ring 0.5s ease infinite alternate;
+}
+
+@keyframes pc-ring {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg); }
+}
+
+.pc-phone-emoji {
+  font-size: 4rem;
+}
+
+.pc-phone-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #431407;
+}
+
+.pc-ring-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f59e0b;
+  animation: pc-blink 0.8s ease infinite alternate;
+}
+
+@keyframes pc-blink {
+  0% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+.pc-answer-btn {
+  padding: 16px 48px;
+  border: none;
+  border-radius: 16px;
+  background: #22c55e;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pc-answer-btn:hover,
+.pc-answer-btn:focus-visible {
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4);
+}
+
+.pc-caller {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.pc-caller-emoji {
+  font-size: 3rem;
+}
+
+.pc-caller-bubble {
+  background: #fff;
+  border: 3px solid #f59e0b;
+  border-radius: 16px;
+  padding: 16px 24px;
+  max-width: 320px;
+  text-align: center;
+}
+
+.pc-caller-bubble strong {
+  display: block;
+  color: #92400e;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.pc-caller-bubble p {
+  color: #431407;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.pc-message-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pc-action-btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 12px;
+  background: #f59e0b;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.pc-action-btn:hover,
+.pc-action-btn:focus-visible {
+  transform: scale(1.05);
+}
+
+.pc-action-btn.pc-skip {
+  background: #94a3b8;
+}
+
+.pc-record {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.pc-review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.pc-review p {
+  font-size: 1.1rem;
+  color: #431407;
+}
+
+.pc-review-actions {
+  display: flex;
+  gap: 12px;
+}

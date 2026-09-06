@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { Diagnostico } from '@/types';
 import { api } from '@/services/api';
+import { devLog } from '@/utils/logger';
 import './DiagnosisEdit.css';
 
 interface DiagnosisEditProps {
@@ -39,7 +40,7 @@ export const DiagnosisEdit: React.FC<DiagnosisEditProps> = ({
       onSave(updatedDiagnostico);
     } catch (err) {
       setError('Error al guardar el diagnóstico. Intenta de nuevo.');
-      console.error('Error saving diagnosis:', err);
+      devLog.error('DiagnosisEdit', 'Error saving diagnosis:', err);
     } finally {
       setIsSaving(false);
     }

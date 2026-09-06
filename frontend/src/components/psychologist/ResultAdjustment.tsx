@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui';
 import type { Resultado } from '@/types';
 import { getScoreCategory, getGdqInterpretation } from '@/utils/scoring';
+import { devLog } from '@/utils/logger';
 import './ResultAdjustment.css';
 
 interface ResultAdjustmentProps {
@@ -52,7 +53,7 @@ export const ResultAdjustment: React.FC<ResultAdjustmentProps> = ({
         )
       );
     } catch (err) {
-      console.error('Error adjusting result:', err);
+      devLog.error('ResultAdjustment', 'Error adjusting result:', err);
     } finally {
       setIsLoading(null);
     }

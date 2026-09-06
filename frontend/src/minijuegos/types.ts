@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
-export type AreaDAYC2 = 'MEMORIA' | 'LENGUAJE' | 'ATENCION' | 'PERCEPCION' | 'MOTORA' | 'COGNITIVA';
+export type AreaDAYC2 = 'COGNITIVO' | 'COMUNICACION' | 'SOCIAL_EMOCIONAL' | 'DESARROLLO_FISICO' | 'CONDUCTA_ADAPTATIVA';
 
 export type ItemResult = 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE';
 
@@ -18,6 +18,11 @@ export interface Answer {
   resultado: ItemResult;
   tiempo_respuesta_ms: number;
   respuesta_usuario?: string;
+}
+
+export interface MinijuegoComponentProps {
+  currentItem: Item;
+  onAnswer: (answer: Answer) => void;
 }
 
 export interface MinijuegoConfig {
@@ -39,7 +44,7 @@ export interface MinijuegoPlugin {
 
 export interface MinijuegoRegistry {
   [key: string]: {
-    component: React.ComponentType<any>;
-    fallback?: React.ComponentType<any>;
+    component: ComponentType<MinijuegoComponentProps>;
+    fallback?: ComponentType<MinijuegoComponentProps>;
   };
 }

@@ -3,11 +3,13 @@ ASGI config for DAYC-2 project.
 """
 
 import os
+from dotenv import load_dotenv
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from channels.security.websocket import AllowedHostsOriginValidator
 
+load_dotenv()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.dayc2.settings")
 
 django_asgi_app = get_asgi_application()

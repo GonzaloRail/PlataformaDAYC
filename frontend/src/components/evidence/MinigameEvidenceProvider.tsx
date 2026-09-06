@@ -4,6 +4,7 @@ import evaluacionesApi from '@/services/evaluacionesApi';
 import { evidenceUploadQueue, uploadEvidenceNow } from '@/components/evidence/EvidenceUploadQueue';
 import type { EvidencePayload } from '@/components/evidence/EvidenceUploadQueue';
 import type { EvidenceSink } from '@/components/evidence/EvidenceSink';
+import { devLog } from '@/utils/logger';
 
 type EvidenceType = EvidencePayload['type'];
 
@@ -76,12 +77,12 @@ export function MinigameEvidenceProvider({ task, sessionToken, sink, flushMedia,
 
   const warnUploadDisabled = useCallback((action: string) => {
     if (task.evaluacion_id && task.item_id && !sessionToken) {
-      console.warn(`Evidencia no subida (${action}): falta sessionToken para ${task.item_id}.`);
+      devLog.warn('MinigameEvidence', `Evidencia no subida (${action}): falta sessionToken para ${task.item_id}.`);
     }
   }, [sessionToken, task.evaluacion_id, task.item_id]);
 
   const warnTypeDisabled = useCallback((action: string, type: string) => {
-    console.warn(`Evidencia no registrada (${action}): tipo "${type}" no esta en tipos_evidencia para ${task.item_id}.`);
+    devLog.warn('MinigameEvidence', `Evidencia no registrada (${action}): tipo "${type}" no esta en tipos_evidencia para ${task.item_id}.`);
   }, [task.item_id]);
 
   const relativeTime = useCallback(() => Date.now() - startedAtRef.current, []);
@@ -148,7 +149,7 @@ export function MinigameEvidenceProvider({ task, sessionToken, sink, flushMedia,
       relative_time_ms: elapsed,
       event_payload: eventPayload,
     }, sessionToken).catch((error) => {
-      console.warn('No se pudo registrar evento de minijuego:', error);
+      devLog.warn('MinigameEvidence', 'No se pudo registrar evento de minijuego:', error);
     });
   }, [canUpload, isTypeAllowed, relativeTime, sessionToken, sink, task.actividad_digital, task.evaluacion_id, task.item_id, task.minijuego, warnTypeDisabled, warnUploadDisabled]);
 
@@ -189,7 +190,7 @@ export function MinigameEvidenceProvider({ task, sessionToken, sink, flushMedia,
       await uploadEvidenceNow(payload);
       return true;
     } catch (error) {
-      console.error('No se pudo subir evidencia critica. Se deja en cola para reintento:', error);
+      devLog.error('MinigameEvidence', 'No se pudo subir evidencia critica. Se deja en cola para reintento:', error);
       evidenceUploadQueue.add(payload);
       return false;
     }
@@ -269,7 +270,7 @@ export function MinigameEvidenceProvider({ task, sessionToken, sink, flushMedia,
       try {
         await flushMedia();
       } catch (err) {
-        console.warn('flushMedia falló:', err);
+        devLog.warn('MinigameEvidence', 'flushMedia fallo:', err);
       }
     }
   }, [flushMedia]);

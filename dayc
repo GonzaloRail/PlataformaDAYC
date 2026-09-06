@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+# dayc — DAYC-2 dev launcher (patrón tmux, estilo "senses").
+# Levanta Docker/Postgres, migra, crea una sesión tmux desatendida con backend
+# + frontend y abre el navegador cuando ambos responden.
+# Uso: dayc [start|kill|attach|status]
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+BACKEND_DIR="$SCRIPT_DIR/backend"
+FRONTEND_DIR="$SCRIPT_DIR/frontend"
+SESSION="dayc"
+CONTAINER="prototipo_dayc_db"
+DB_PORT=5434
+
+wait_until_ready() {
+  local name="$1" url="$2"
+  for _ in $(seq 1 90); do
+    if curl -s -o /dev/null "$url"; then
+      echo "$name listo ($url)"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "ERROR: $name no respondió en 90s ($url). Revisa con: dayc attach"
+  return 1
+}
+
+ensure_docker() {
+  if ! docker info >/dev/null 2>&1; then
+    echo "Abriendo Docker Desktop..."
+    systemctl --user start docker-desktop 2>/dev/null || true
+    if ! docker info >/dev/null 2>&1; then
+      gtk-launch docker-desktop 2>/dev/null || /opt/docker-desktop/bin/docker-desktop >/dev/null 2>&1 &
+    fi
+    for _ in $(seq 1 60); do
+      docker info >/dev/null 2>&1 && break
+      sleep 1
+    done
+  fi
+  echo "Docker listo."
+}
+
+ensure_db() {
+  # Bring every dependency up even when PostgreSQL was already running.
+  # Redis is required by the distributed Channels layer.
+  (cd "$BACKEND_DIR" && docker compose up -d --wait)
+  for _ in $(seq 1 30); do
+    pg_isready -h localhost -p "$DB_PORT" >/dev/null 2>&1 && break
+    sleep 1
+  done
+  echo "PostgreSQL listo (puerto $DB_PORT)."
+}
+
+ensure_backend() {
+  local PY="$BACKEND_DIR/venv/bin/python"
+  if [ ! -x "$PY" ]; then
+    echo "ERROR: venv no encontrado en $BACKEND_DIR/venv. Ejecuta: python3 -m venv venv"
+    exit 1
+  fi
+  if ! "$PY" -c "import django" >/dev/null 2>&1; then
+    echo "Instalando dependencias del backend..."
+    "$PY" -m pip install -r "$BACKEND_DIR/requirements.txt" -q
+  fi
+  echo "Aplicando migraciones..."
+  "$PY" "$BACKEND_DIR/manage.py" migrate --noinput
+  echo "Base de datos lista."
+}
+
+refresh_vite_cache() {
+  local meta="$FRONTEND_DIR/.vite/deps/_metadata.json"
+  local lock="$FRONTEND_DIR/package-lock.json"
+  if [ -f "$meta" ] && [ "$meta" -ot "$lock" ]; then
+    echo "Caché de Vite obsoleto (re-pre-bundle lento). Regenerando..."
+    rm -rf "$FRONTEND_DIR/.vite/deps"
+  fi
+}
+
+start() {
+  ensure_docker
+  ensure_db
+  ensure_backend
+  refresh_vite_cache
+
+  if ! tmux has-session -t "$SESSION" 2>/dev/null; then
+    echo "Creando sesión tmux '$SESSION'..."
+    tmux new-session -d -s "$SESSION" -c "$BACKEND_DIR" -n "$SESSION"
+    tmux send-keys -t "$SESSION" './venv/bin/python -m daphne -b 127.0.0.1 -p 8000 src.dayc2.asgi:application' Enter
+    tmux split-window -h -t "$SESSION" -c "$FRONTEND_DIR"
+    tmux send-keys -t "$SESSION" 'npm run dev' Enter
+    tmux select-pane -l -t "$SESSION"
+  else
+    echo "Sesión tmux '$SESSION' ya existe."
+  fi
+
+  wait_until_ready "Backend"  "http://localhost:8000/"
+  wait_until_ready "Frontend" "http://localhost:5173/"
+
+  xdg-open http://localhost:5173 >/dev/null 2>&1 || true
+  echo "Todo arriba. Navegador abierto en http://localhost:5173"
+  echo "Logs: dayc attach | Detener: dayc kill | Estado: dayc status"
+}
+
+kill_all() {
+  tmux kill-session -t "$SESSION" 2>/dev/null || true
+  docker stop "$CONTAINER" 2>/dev/null || true
+  echo "Sesión tmux '$SESSION' y contenedor $CONTAINER detenidos."
+}
+
+attach() {
+  if tmux has-session -t "$SESSION" 2>/dev/null; then
+    tmux attach -t "$SESSION"
+  else
+    echo "No hay sesión tmux '$SESSION'. Ejecuta 'dayc' para iniciarla."
+  fi
+}
+
+status() {
+  if tmux has-session -t "$SESSION" 2>/dev/null; then
+    echo "tmux: sesión '$SESSION' activa"
+  else
+    echo "tmux: sin sesión '$SESSION'"
+  fi
+  docker ps --filter name="$CONTAINER" --format 'docker: {{.Names}} {{.Status}}'
+}
+
+case "${1:-}" in
+  ""|start) start ;;
+  kill|stop) kill_all ;;
+  attach)    attach ;;
+  status)    status ;;
+  *) echo "Uso: dayc [start|kill|attach|status]"; exit 1 ;;
+esac

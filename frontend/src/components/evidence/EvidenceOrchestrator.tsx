@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo } from 'react';
 import type { EvaluationTask } from '@/types';
 import { evidenceUploadQueue, uploadEvidenceNow } from '@/components/evidence/EvidenceUploadQueue';
 import type { EvidencePayload } from '@/components/evidence/EvidenceUploadQueue';
@@ -12,6 +12,7 @@ interface EvidenceOrchestratorProps {
   task: EvaluationTask;
   sessionToken?: string;
   sink?: EvidenceSink;
+  onMediaReady?: (flush: () => Promise<void>) => void;
   children: ReactNode;
 }
 
@@ -19,9 +20,9 @@ function nowIso(): string {
   return new Date().toISOString();
 }
 
-export function EvidenceOrchestrator({ task, sessionToken, sink, children }: EvidenceOrchestratorProps) {
+export function EvidenceOrchestrator({ task, sessionToken, sink, onMediaReady, children }: EvidenceOrchestratorProps) {
   const evidenceTypesKey = (task.tipos_evidencia || []).join('|');
-  const requestedTypes = useMemo(() => new Set(task.tipos_evidencia || []), [evidenceTypesKey]);
+  const requestedTypes = useMemo(() => new Set(evidenceTypesKey.split('|').filter(Boolean)), [evidenceTypesKey]);
   const needsVideo = requestedTypes.has('VIDEO');
   const needsAudio = requestedTypes.has('AUDIO') && !needsVideo;
   const needsCameraFrame = requestedTypes.has('CAMERA_FRAME');
@@ -149,6 +150,10 @@ export function EvidenceOrchestrator({ task, sessionToken, sink, children }: Evi
     sessionToken,
     task,
   ]);
+
+  useEffect(() => {
+    onMediaReady?.(flushMediaFn);
+  }, [flushMediaFn, onMediaReady]);
 
   return (
     <MinigameEvidenceProvider task={task} sessionToken={sessionToken} sink={sink} flushMedia={flushMediaFn}>

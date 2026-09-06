@@ -1,0 +1,111 @@
+.cw-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.cw-street {
+  width: 100%;
+  max-width: 360px;
+  height: 100px;
+  background: #64748b;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cw-crosswalk {
+  width: 80%;
+  height: 40px;
+  background: repeating-linear-gradient(90deg, #fff 0px, #fff 20px, #64748b 20px, #64748b 40px);
+  border-radius: 4px;
+}
+
+.cw-car {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  animation: cw-car-move 3s linear infinite;
+}
+
+@keyframes cw-car-move {
+  0% { left: 10px; }
+  100% { left: 90%; }
+}
+
+.cw-sidewalk {
+  font-size: 2.2rem;
+}
+
+.cw-light {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: #1c1917;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.cw-light-red, .cw-light-green {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.cw-light-red { background: #ef4444; }
+.cw-light-green { background: #374151; }
+
+.cw-light.green .cw-light-red { background: #7f1d1d; }
+.cw-light.green .cw-light-green { background: #22c55e; }
+
+.cw-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.cw-look-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.cw-look-btn {
+  padding: 8px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cw-look-btn.is-done {
+  border-color: #22c55e;
+  background: #dcfce7;
+}
+
+.cw-cross-btn {
+  padding: 12px 36px;
+  border: none;
+  border-radius: 14px;
+  background: #22c55e;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.cw-cross-btn:hover,
+.cw-cross-btn:focus-visible {
+  transform: scale(1.05);
+}

@@ -32,9 +32,9 @@ class GeminiClient:
         """Make API call to Gemini (mock for now)"""
 
         return f"""El niño presenta un nivel de desarrollo cognitivo {self._interpretar_gdq(gdq)} según el GDQ de {gdq}.
-        
+
 En las áreas evaluadas se observan fortalezas y áreas de oportunidad que serán detalladas en la evaluación completa.
-        
+
         Recomendaciones: Se sugiere continuar con actividades de estimulación cognitiva adecuadas para su edad."""
 
     def _interpretar_gdq(self, gdq: int) -> str:

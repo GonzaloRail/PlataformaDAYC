@@ -5,7 +5,7 @@ import { Item, AreaDAYC2, Answer } from '@/minijuegos/types';
 
 interface DigitalActivityShellProps {
   task: EvaluationTask;
-  onComplete: (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawData?: any) => void;
+  onComplete: (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawData?: Record<string, unknown>) => void;
 }
 
 export const DigitalActivityShell: React.FC<DigitalActivityShellProps> = ({ task, onComplete }) => {
@@ -26,7 +26,7 @@ export const DigitalActivityShell: React.FC<DigitalActivityShellProps> = ({ task
 
   const item: Item = {
     id: task.item_id,
-    area: (task.area?.toUpperCase() || 'COGNITIVA') as AreaDAYC2,
+    area: (task.area?.toUpperCase() || 'COGNITIVO') as AreaDAYC2,
     nivel: 1,
     instruccion: task.instrucciones,
   };

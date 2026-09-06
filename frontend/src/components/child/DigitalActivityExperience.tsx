@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { EvaluationTask } from '@/types'
 import { EvidenceOrchestrator } from '@/components/evidence/EvidenceOrchestrator'
@@ -10,7 +10,7 @@ import './DigitalActivityExperience.css'
 interface DigitalActivityExperienceProps {
   task: EvaluationTask
   areaLabel: string
-  onComplete: (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawData?: any) => void
+  onComplete: (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawData?: Record<string, unknown>) => void | Promise<void>
   sessionToken?: string
   evidenceSink?: EvidenceSink
   introDurationMs?: number
@@ -28,6 +28,7 @@ export function DigitalActivityExperience({
   const [showCompletedBanner, setShowCompletedBanner] = useState(false)
   const bannerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const previousItemRef = useRef<string | null>(null)
+  const flushMediaRef = useRef<() => Promise<void>>(async () => undefined)
   const question = task.pregunta || task.instrucciones || 'Escucha al adulto y sigue la actividad.'
 
   useEffect(() => {
@@ -49,10 +50,15 @@ export function DigitalActivityExperience({
     }
   }, [])
 
-  const completeActivity = (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawData?: any) => {
+  const onMediaReady = useCallback((flush: () => Promise<void>) => {
+    flushMediaRef.current = flush
+  }, [])
+
+  const completeActivity = async (resultado: 'CORRECT' | 'ERROR' | 'NOT_APPLICABLE', confidence?: number, rawData?: Record<string, unknown>) => {
     setShowCompletedBanner(true)
     bannerTimerRef.current = setTimeout(() => setShowCompletedBanner(false), 4000)
-    onComplete(resultado, confidence, rawData)
+    await flushMediaRef.current()
+    await onComplete(resultado, confidence, rawData)
   }
 
   if (phase === 'intro') {
@@ -89,6 +95,7 @@ export function DigitalActivityExperience({
           task={task}
           sessionToken={sessionToken}
           sink={evidenceSink}
+          onMediaReady={onMediaReady}
         >
           <DigitalActivityShell task={task} onComplete={completeActivity} />
         </EvidenceOrchestrator>

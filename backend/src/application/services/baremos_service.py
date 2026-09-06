@@ -76,7 +76,9 @@ class BaremosService:
     def cargar_baremos(self, json_path: str = None) -> None:
         """Carga baremos desde baremos.py (módulo Python) en RAM."""
         if json_path:
-            logger.info("JSON path %s provided but ignored - using baremos.py module", json_path)
+            logger.info(
+                "JSON path %s provided but ignored - using baremos.py module", json_path
+            )
         try:
             from src.application.scoring import baremos as baremos_mod
         except Exception as exc:
@@ -179,9 +181,7 @@ class BaremosService:
                 return regla["texto"]
         return "Fuera de rango"
 
-    def get_rango_edad(
-        self, area: str, edad_meses: int
-    ) -> Optional[Tuple[int, int]]:
+    def get_rango_edad(self, area: str, edad_meses: int) -> Optional[Tuple[int, int]]:
         """Devuelve (min_meses, max_meses) del rango aplicable a la edad."""
         area_code = self.normalizar_area(area)
         for rango in self._tablas.get(area_code, []):
@@ -207,7 +207,9 @@ class BaremosService:
         puntos_reales = items_count_by_area.get(area, 0)
         return puntos_base + puntos_reales
 
-    def calcular_cociente_general(self, puntajes_estandar: List[Optional[int]]) -> Optional[int]:
+    def calcular_cociente_general(
+        self, puntajes_estandar: List[Optional[int]]
+    ) -> Optional[int]:
         """Calcula el GDQ (Cociente General) a partir de los 5 puntajes estándar.
 
         Usa TABLA_COCIENTE del manual DAYC-2 (mapeo directo suma → cociente).
@@ -229,7 +231,9 @@ class BaremosService:
         nearest = min(TABLA_COCIENTE.keys(), key=lambda k: abs(k - suma))
         return TABLA_COCIENTE[nearest]
 
-    def lookup(self, area: str, edad_meses: int, raw_score: int) -> Optional[BaremosLookupResult]:
+    def lookup(
+        self, area: str, edad_meses: int, raw_score: int
+    ) -> Optional[BaremosLookupResult]:
         """Lookup completo: raw → estándar + percentil + interpretación + edad equivalente."""
         if not self._loaded:
             self.cargar_baremos()
@@ -243,7 +247,11 @@ class BaremosService:
         if rango:
             rangos_del_area = self._tablas.get(self.normalizar_area(area), [])
             puntos_del_rango = next(
-                (r["puntos"] for r in rangos_del_area if r["min_meses"] == rango[0] and r["max_meses"] == rango[1]),
+                (
+                    r["puntos"]
+                    for r in rangos_del_area
+                    if r["min_meses"] == rango[0] and r["max_meses"] == rango[1]
+                ),
                 {},
             )
             if puntos_del_rango:

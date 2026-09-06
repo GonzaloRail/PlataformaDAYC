@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { minijuegosRegistry } from '@/components/minijuegos/registry';
-import type { MinijuegoConfig, Answer, Item } from '@/minijuegos/types';
+import type { MinijuegoConfig, Answer, Item, MinijuegoComponentProps } from '@/minijuegos/types';
 import { FallbackProtocolView } from '@/components/fallback/FallbackProtocolView';
 import './MinijuegoLoader.css';
 
@@ -19,8 +19,8 @@ export const MinijuegoLoader: React.FC<MinijuegoLoaderProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [Component, setComponent] = useState<React.ComponentType<any> | null>(null);
-  const [Fallback, setFallback] = React.useState<React.ComponentType<any> | null>(null);
+  const [Component, setComponent] = useState<React.ComponentType<MinijuegoComponentProps> | null>(null);
+  const [Fallback, setFallback] = React.useState<React.ComponentType<MinijuegoComponentProps> | null>(null);
   const [fallbackProtocol, setFallbackProtocol] = useState(false);
 
   useEffect(() => {

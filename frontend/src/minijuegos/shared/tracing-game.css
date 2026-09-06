@@ -1,0 +1,32 @@
+.tg-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tg-model, .tg-draw {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tg-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #431407;
+}
+
+.tg-model-canvas, .tg-draw-canvas {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.tg-draw-canvas {
+  border-color: #f59e0b;
+  cursor: crosshair;
+}

@@ -114,13 +114,14 @@ import COGNITIVO_036 from '@/minijuegos/cognitivo/COGNITIVO_036';
 import COGNITIVO_038 from '@/minijuegos/cognitivo/COGNITIVO_038';
 import COGNITIVO_040 from '@/minijuegos/cognitivo/COGNITIVO_040';
 import COGNITIVO_050 from '@/minijuegos/cognitivo/COGNITIVO_050';
+import type { MinijuegoComponentProps } from '@/minijuegos/types';
 interface MinijuegoEntry {
   nombre: string;
   area: string;
   descripcion: string;
   estado: 'ready' | 'placeholder';
-  component: (props: any) => JSX.Element | null;
-  fallback: (props: any) => JSX.Element | null;
+  component: React.ComponentType<MinijuegoComponentProps>;
+  fallback: React.ComponentType<MinijuegoComponentProps>;
 }
 
 const FallbackManual = () => {

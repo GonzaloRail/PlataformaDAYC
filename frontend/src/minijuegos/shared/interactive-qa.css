@@ -1,0 +1,174 @@
+.iqa-question {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #431407;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.iqa-two-images {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  padding: 16px;
+}
+
+.iqa-image-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  border: 3px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  min-width: 140px;
+}
+
+.iqa-image-option:hover,
+.iqa-image-option:focus-visible {
+  border-color: #f59e0b;
+  transform: scale(1.05);
+}
+
+.iqa-image-option:active {
+  transform: scale(0.97);
+}
+
+.iqa-image-emoji {
+  font-size: 3rem;
+}
+
+.iqa-image-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #431407;
+}
+
+.iqa-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+}
+
+.iqa-scene-image {
+  font-size: 4rem;
+  padding: 24px;
+  background: #fef3c7;
+  border-radius: 16px;
+  border: 2px dashed #f59e0b;
+}
+
+.iqa-scene-targets {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.iqa-scene-target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 20px;
+  border: 3px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  font-size: 1rem;
+}
+
+.iqa-scene-target:hover,
+.iqa-scene-target:focus-visible {
+  border-color: #f59e0b;
+  transform: scale(1.05);
+}
+
+.iqa-scene-target:active {
+  transform: scale(0.97);
+}
+
+.iqa-scene-target span:first-child {
+  font-size: 2rem;
+}
+
+.iqa-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+}
+
+.iqa-stimulus {
+  text-align: center;
+  padding: 12px 20px;
+  background: #fef3c7;
+  border-radius: 12px;
+  border: 2px solid #f59e0b;
+}
+
+.iqa-stimulus-emoji {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.iqa-stimulus-label {
+  font-size: 1.1rem;
+  color: #431407;
+}
+
+.iqa-stimulus-desc {
+  font-size: 0.85rem;
+  color: #7c2d12;
+  margin-top: 4px;
+}
+
+.iqa-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.iqa-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border: 3px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  min-width: 100px;
+}
+
+.iqa-option:hover,
+.iqa-option:focus-visible {
+  border-color: #f59e0b;
+  transform: scale(1.05);
+}
+
+.iqa-option:active {
+  transform: scale(0.97);
+}
+
+.iqa-option-emoji {
+  font-size: 2rem;
+}
+
+.iqa-option-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #431407;
+}

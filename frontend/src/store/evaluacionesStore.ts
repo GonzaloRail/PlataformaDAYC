@@ -2,7 +2,7 @@ import type { StateCreator } from 'zustand'
 import evaluacionesApi from '@/services/evaluacionesApi'
 import type { RootStore, EvaluacionState } from '@/store/types'
 
-export const createEvaluacionesStore: StateCreator<RootStore, [], [], EvaluacionState> = (set) => ({
+export const createEvaluacionesStore: StateCreator<RootStore, [], [], EvaluacionState> = (set, get) => ({
   evaluaciones: [],
   currentEvaluacion: null,
   currentTask: null,
@@ -32,11 +32,16 @@ export const createEvaluacionesStore: StateCreator<RootStore, [], [], Evaluacion
   },
 
   submitRespuesta: async (evaluacion_id, item_id, resultado, tiempo_respuesta_ms) => {
+    const currentEvaluacion = get().currentEvaluacion
     const data = await evaluacionesApi.submitRespuesta(evaluacion_id, {
       item_id,
       resultado,
       tiempo_respuesta_ms,
+      expected_version: currentEvaluacion?.version || 0,
     })
+    if (currentEvaluacion?.id === evaluacion_id) {
+      set({ currentEvaluacion: { ...currentEvaluacion, version: data.version } })
+    }
     return data
   },
 })

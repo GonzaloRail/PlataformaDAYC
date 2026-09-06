@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock
 
-from src.application.services.rules_service import RulesService, rules_service
+from src.application.services.rules_service import RulesService
 
 
 class TestRulesService:

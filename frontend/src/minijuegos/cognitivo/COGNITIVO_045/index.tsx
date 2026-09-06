@@ -152,6 +152,7 @@ async function buildActivityScreenshot(drawingCanvas: HTMLCanvasElement | null, 
 
 export default function COGNITIVO_045({ currentItem, onAnswer }: Cognitivo045Props) {
   const drawing = useDrawingCanvas();
+  const { clearDrawing: resetDrawing } = drawing;
   const [message, setMessage] = useState('Mira la cara de la izquierda y dibujala en el espacio blanco.');
   const [isSavingEvidence, setIsSavingEvidence] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -170,8 +171,8 @@ export default function COGNITIVO_045({ currentItem, onAnswer }: Cognitivo045Pro
   useEffect(() => {
     setMessage('Mira la cara de la izquierda y dibujala en el espacio blanco.');
     setIsSavingEvidence(false);
-    drawing.clearDrawing();
-  }, [currentItem.id]);
+    resetDrawing();
+  }, [currentItem.id, resetDrawing]);
 
   const clearDrawing = () => {
     if (isSavingEvidence) return;

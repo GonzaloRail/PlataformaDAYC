@@ -1,4 +1,11 @@
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: prototipo_dayc_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
   db:
     image: postgres:16
     container_name: prototipo_dayc_db

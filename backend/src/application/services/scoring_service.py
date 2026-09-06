@@ -67,7 +67,9 @@ class ScoringService:
             )
             percentil = baremos_service.get_percentil(estándar)
             interpretacion = baremos_service.get_interpretacion(estándar)
-            edad_eq = baremos_service.get_edad_equivalente(area=area_name, raw_score=raw)
+            edad_eq = baremos_service.get_edad_equivalente(
+                area=area_name, raw_score=raw
+            )
 
             resultado = ResultadoÁrea(
                 evaluación=evaluación,
@@ -110,15 +112,12 @@ class ScoringService:
             edad_meses=edad_meses,
         )
 
-    def _sumar_puntuación(
-        self, respuestas: List[Respuesta], area_name: str
-    ) -> int:
+    def _sumar_puntuación(self, respuestas: List[Respuesta], area_name: str) -> int:
         """Compatibilidad: legacy path basado en Respuesta.Resultado."""
         return sum(
             1
             for r in respuestas
-            if r.area == area_name
-            and r.resultado == Respuesta.Resultado.CORRECT
+            if r.area == area_name and r.resultado == Respuesta.Resultado.CORRECT
         )
 
     def _obtener_áreas_items(self, items: List[EvaluacionItem]) -> List[str]:
@@ -129,7 +128,9 @@ class ScoringService:
 
     def calcular_gdq_global(self, resultados: List[ResultadoÁrea]) -> Optional[int]:
         """GDQ a partir de los ResultadoÁrea guardados."""
-        estándares = [r.puntuación_estándar for r in resultados if r.puntuación_estándar]
+        estándares = [
+            r.puntuación_estándar for r in resultados if r.puntuación_estándar
+        ]
         if len(estándares) != 5:
             return None
         return baremos_service.calcular_cociente_general(estándares)

@@ -4,7 +4,7 @@ import type { EvidenceType } from '@/components/evidence/EvidenceRegistry';
 export interface RawEvidenceLike {
   id: string;
   type: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   duration_ms?: number;
   durationMs?: number;
   size_bytes?: number;
@@ -83,17 +83,18 @@ function cleanValue(value: unknown): string | undefined {
   return undefined;
 }
 
-function getActivityName(metadata: Record<string, any>) {
-  const id = metadata.activity || metadata.activity_id || metadata.minijuego_id || metadata.item_id;
-  return activityLabels[id] || id || 'Actividad';
+function getActivityName(metadata: Record<string, unknown>): string {
+  const rawId = metadata.activity || metadata.activity_id || metadata.minijuego_id || metadata.item_id;
+  const id = cleanValue(rawId);
+  return (id && activityLabels[id]) || id || 'Actividad';
 }
 
-function getEventName(metadata: Record<string, any>) {
-  const raw = metadata.event || metadata.event_type || metadata.action;
-  return eventLabels[raw] || raw;
+function getEventName(metadata: Record<string, unknown>): string | undefined {
+  const raw = cleanValue(metadata.event || metadata.event_type || metadata.action);
+  return raw ? eventLabels[raw] || raw : undefined;
 }
 
-function buildClinicalSummary(type: string, metadata: Record<string, any>, definitionLabel: string) {
+function buildClinicalSummary(type: string, metadata: Record<string, unknown>, definitionLabel: string) {
   const activityName = getActivityName(metadata);
   const eventName = getEventName(metadata);
 
@@ -115,8 +116,8 @@ function buildClinicalSummary(type: string, metadata: Record<string, any>, defin
 export function normalizeEvidence(raw: RawEvidenceLike): NormalizedEvidence {
   const metadata = raw.metadata || {};
   const definition = getEvidenceDefinition(raw.type);
-  const capturedAt = raw.created_at || raw.createdAt || metadata.captured_at;
-  const capturedBy = raw.captured_by || raw.capturedBy || metadata.captured_by;
+  const capturedAt = raw.created_at || raw.createdAt || cleanValue(metadata.captured_at);
+  const capturedBy = raw.captured_by || raw.capturedBy || cleanValue(metadata.captured_by);
   const durationMs = raw.duration_ms ?? raw.durationMs ?? metadata.duration_ms ?? metadata.durationMs;
   const sizeBytes = raw.size_bytes ?? raw.sizeBytes;
   const eventName = getEventName(metadata);
@@ -158,7 +159,7 @@ export function normalizeEvidence(raw: RawEvidenceLike): NormalizedEvidence {
     sizeBytes,
     downloadUrl: raw.download_url,
     objectUrl: raw.objectUrl,
-    fileName: raw.fileName || metadata.file_name,
+    fileName: raw.fileName || cleanValue(metadata.file_name),
     preview: definition.preview,
   };
 }

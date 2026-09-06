@@ -7,6 +7,7 @@ import { DownloadPDFButton } from '@/components/results/DownloadPDFButton';
 import type { Evaluacion, Nino, Resultado, Respuesta } from '@/types';
 import { useEvaluationProgress } from '@/hooks/useEvaluationProgress';
 import api from '@/services/api';
+import { devLog } from '@/utils/logger';
 import './EvaluationDetail.css';
 
 interface EvaluationDetailProps {
@@ -44,7 +45,7 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
       setRespuestas(respuestasData);
       setCurrentTask(currentTaskData.current_task);
     } catch (err) {
-      console.error('Error loading data:', err);
+      devLog.error('EvaluationDetail', 'Error loading data:', err);
     } finally {
       inFlightRef.current = false;
     }
@@ -81,7 +82,7 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
       await loadData();
       onRefresh();
     } catch (err) {
-      console.error('Error submitting response:', err);
+      devLog.error('EvaluationDetail', 'Error submitting response:', err);
     } finally {
       setIsLoading(false);
       setShowManualEntry(false);
@@ -97,7 +98,7 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
       setResultados(data.resultados);
       onRefresh();
     } catch (err) {
-      console.error('Error calculating score:', err);
+      devLog.error('EvaluationDetail', 'Error calculating score:', err);
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +112,7 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
       await loadData();
       onRefresh();
     } catch (err) {
-      console.error('Error adjusting result:', err);
+      devLog.error('EvaluationDetail', 'Error adjusting result:', err);
     }
   };
 

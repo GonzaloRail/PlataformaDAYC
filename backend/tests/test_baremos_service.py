@@ -1,6 +1,5 @@
 """Tests for BaremosService - lookup por rango de edad contra baremos.py"""
 
-import pytest
 from src.application.services.baremos_service import BaremosService, baremos_service
 
 
@@ -119,7 +118,9 @@ class TestBaremosService:
     def test_calcular_cociente_general_incompleto(self):
         # Si no hay 5 estándares válidos, retorna None
         assert self.service.calcular_cociente_general([100, 100, 100]) is None
-        assert self.service.calcular_cociente_general([100, 100, 100, 100, None]) is None
+        assert (
+            self.service.calcular_cociente_general([100, 100, 100, 100, None]) is None
+        )
 
     def test_lookup_completo_caso_ejemplo(self):
         # Niño 30m, COG, inicio=20, 8 items aprobados → raw=28

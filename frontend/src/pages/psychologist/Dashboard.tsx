@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Button, Card, Input, ViewState } from '@/components/ui'
 import { EvaluationDetail } from '@/components/psychologist/EvaluationDetail'
 import { EvaluationList } from '@/components/psychologist/EvaluationList'
@@ -100,18 +100,18 @@ export function PsychologistDashboard() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    void loadDashboard()
-  }, [])
-
-  const loadDashboard = async () => {
+  const loadDashboard = useCallback(async () => {
     setError(null)
     try {
       await Promise.all([fetchNinos(), fetchEvaluaciones()])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo cargar el panel')
     }
-  }
+  }, [fetchEvaluaciones, fetchNinos])
+
+  useEffect(() => {
+    void loadDashboard()
+  }, [loadDashboard])
 
   const activeEvaluaciones = useMemo(
     () => evaluaciones.filter((e) => e.estado === 'INITIATED' || e.estado === 'IN_PROGRESS' || e.estado === 'WAITING_CHILD_DATA' || e.estado === 'WAITING_CONSENT'),

@@ -17,10 +17,9 @@ from src.api.evaluaciones.models import (
     Respuesta,
 )
 from src.application.services.item_catalog_service import (
-    AREA_ORDER,
     item_catalog_service,
 )
-
+from src.application.services.evaluation_state_machine import evaluation_state_machine
 
 _RESULT_NORMALIZATION = {
     "CORRECT": EvaluacionItem.Resultado.PASS,
@@ -37,10 +36,14 @@ def normalize_result_label(label: str) -> str:
     """Map user-facing outcome labels to canonical EvaluacionItem.Resultado values."""
     if not label:
         return EvaluacionItem.Resultado.INCONCLUSIVE
-    return _RESULT_NORMALIZATION.get(str(label).upper(), EvaluacionItem.Resultado.INCONCLUSIVE)
+    return _RESULT_NORMALIZATION.get(
+        str(label).upper(), EvaluacionItem.Resultado.INCONCLUSIVE
+    )
 
 
-def sincronizar_item_con_respuesta(item: EvaluacionItem, final_label: str, *, requires_review: bool = False) -> None:
+def sincronizar_item_con_respuesta(
+    item: EvaluacionItem, final_label: str, *, requires_review: bool = False
+) -> None:
     """Force EvaluacionItem to reflect the latest response when the psychologist hasn't reviewed it yet.
 
     This guarantees that scoring_service has access to final_result for every item
@@ -61,6 +64,7 @@ def sincronizar_item_con_respuesta(item: EvaluacionItem, final_label: str, *, re
     else:
         item.estado = EvaluacionItem.Estado.NEEDS_REVIEW
     item.save(update_fields=["final_result", "requires_review", "estado"])
+
 
 RESULT_TO_LEGACY = {
     EvaluacionItem.Resultado.PASS: Respuesta.Resultado.CORRECT,
@@ -143,9 +147,10 @@ class Dayc2FlowService:
             Evaluación.Estado.INITIATED,
             Evaluación.Estado.WAITING_CONSENT,
         ]:
-            evaluación.estado = Evaluación.Estado.IN_PROGRESS
             evaluación.started_at = evaluación.started_at or timezone.now()
-            evaluación.save(update_fields=["estado", "started_at"])
+            evaluation_state_machine.transition(
+                evaluación, Evaluación.Estado.IN_PROGRESS, ["started_at"]
+            )
         return item
 
     def complete_current_item(
@@ -272,10 +277,13 @@ class Dayc2FlowService:
 
     def _finalizar_evaluacion(self, evaluación: Evaluación) -> None:
         """Move evaluación to PENDING_REVIEW and stamp completion time."""
-        evaluación.estado = Evaluación.Estado.PENDING_REVIEW
         evaluación.completed_at = timezone.now()
         evaluación.current_item_id = None
-        evaluación.save(update_fields=["estado", "completed_at", "current_item_id"])
+        evaluation_state_machine.transition(
+            evaluación,
+            Evaluación.Estado.PENDING_REVIEW,
+            ["completed_at", "current_item_id"],
+        )
 
     def _activate_catalog_item(
         self, evaluación: Evaluación, catalog_item: dict[str, Any]

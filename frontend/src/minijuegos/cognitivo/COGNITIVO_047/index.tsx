@@ -182,19 +182,20 @@ export default function COGNITIVO_047({ currentItem, onAnswer }: Props) {
     [result, trial, intruder, answerOnce, evidence],
   );
 
-  const cardClass = (objectId: string) => {
-    const classes = ['cog047-card'];
-    if (result !== null) {
-      classes.push('is-disabled');
-      if (objectId === selectedId) {
-        classes.push(result === 'correct' ? 'is-correct' : 'is-incorrect');
-      }
-    }
-    return classes.join(' ');
-  };
-
   const playArea = useMemo(
-    () => (
+    () => {
+      const cardClass = (objectId: string) => {
+        const classes = ['cog047-card'];
+        if (result !== null) {
+          classes.push('is-disabled');
+          if (objectId === selectedId) {
+            classes.push(result === 'correct' ? 'is-correct' : 'is-incorrect');
+          }
+        }
+        return classes.join(' ');
+      };
+
+      return (
       <div className="cog047-container" ref={containerRef}>
         <div className="cog047-header" role="heading" aria-level={2}>
           <span className="cog047-header-prompt">
@@ -232,8 +233,9 @@ export default function COGNITIVO_047({ currentItem, onAnswer }: Props) {
           ))}
         </div>
       </div>
-    ),
-    [trial, result, handleSelect, cardClass],
+      );
+    },
+    [trial, result, selectedId, handleSelect],
   );
 
   return (
