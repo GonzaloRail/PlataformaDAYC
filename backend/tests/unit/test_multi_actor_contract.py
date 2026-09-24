@@ -300,3 +300,31 @@ def test_session_mutations_require_csrf_token(evaluation):
     )
 
     assert accepted.status_code == 201
+
+
+@pytest.mark.django_db
+def test_consent_persists_selected_modalities(evaluation):
+    current, _, _ = evaluation
+    token = ensure_session_token(current, SessionAccessToken.ActorRole.ADULT)
+    response = APIClient().post(
+        f"/api/evaluaciones/session/{current.session_code}/consent/",
+        {
+            "accepted": True,
+            "expected_version": current.version,
+            "modalities": {
+                "logs": True,
+                "screenshots": False,
+                "audio": False,
+                "video": True,
+            },
+        },
+        format="json",
+        **bearer(token),
+    )
+
+    assert response.status_code == 200
+    consent = Consentimiento.objects.get(evaluación=current)
+    assert consent.accepted_logs
+    assert not consent.accepted_screenshots
+    assert not consent.accepted_audio
+    assert consent.accepted_video

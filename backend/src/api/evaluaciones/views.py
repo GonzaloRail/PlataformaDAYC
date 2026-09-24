@@ -702,15 +702,35 @@ def accept_consent(request, session_code):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+    modalities = request.data.get("modalities")
+    if not isinstance(modalities, dict):
+        return Response(
+            {"error": "Se requiere la selección de modalidades de evidencia"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    consent_fields = {
+        "logs": "accepted_logs",
+        "screenshots": "accepted_screenshots",
+        "audio": "accepted_audio",
+        "video": "accepted_video",
+    }
+    if set(modalities) != set(consent_fields) or not all(
+        isinstance(value, bool) for value in modalities.values()
+    ):
+        return Response(
+            {"error": "Las modalidades de evidencia son inválidas"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     consentimiento, _ = Consentimiento.objects.update_or_create(
         evaluación=evaluación,
         defaults={
             "accepted": True,
             "accepted_at": timezone.now(),
-            "accepted_logs": True,
-            "accepted_screenshots": True,
-            "accepted_audio": True,
-            "accepted_video": True,
+            **{
+                field: modalities[modality]
+                for modality, field in consent_fields.items()
+            },
             "user_agent": request.META.get("HTTP_USER_AGENT", ""),
             "ip_address": _client_ip(request),
         },
