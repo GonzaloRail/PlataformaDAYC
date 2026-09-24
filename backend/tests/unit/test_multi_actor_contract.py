@@ -9,6 +9,7 @@ from rest_framework.test import APIClient
 from src.api.children.models import Niño, ProfessionalProfile
 from src.api.evaluaciones.models import (
     Consentimiento,
+    ConsentRecord,
     Evaluación,
     EvaluacionItem,
     Evidencia,
@@ -330,6 +331,7 @@ def test_consent_persists_selected_modalities(evaluation):
     assert not consent.accepted_audio
     assert consent.accepted_video
     assert current.assent_records.count() == 1
+    assert current.consent_records.count() == 1
 
 
 @pytest.mark.django_db
@@ -347,6 +349,36 @@ def test_withdrawal_cancels_session_and_revokes_tokens(evaluation):
     assert response.data["evaluacion"]["estado"] == Evaluación.Estado.CANCELLED
     assert current.withdrawal_records.count() == 1
     assert current.access_tokens.filter(revoked_at__isnull=True).count() == 0
+
+
+@pytest.mark.django_db
+def test_partial_withdrawal_revokes_only_selected_modalities(evaluation):
+    current, _, _ = evaluation
+    Consentimiento.objects.create(
+        evaluación=current,
+        accepted=True,
+        accepted_logs=True,
+        accepted_screenshots=True,
+        accepted_audio=True,
+        accepted_video=True,
+    )
+    token = ensure_session_token(current, SessionAccessToken.ActorRole.ADULT)
+    response = APIClient().post(
+        f"/api/evaluaciones/session/{current.session_code}/withdraw/",
+        {"modalities": ["audio", "video"]},
+        format="json",
+        **bearer(token),
+    )
+
+    assert response.status_code == 200
+    current.refresh_from_db()
+    consent = current.consentimiento
+    assert not consent.accepted_audio
+    assert not consent.accepted_video
+    assert consent.accepted_logs
+    assert current.estado == Evaluación.Estado.IN_PROGRESS
+    assert current.withdrawal_records.last().scope == "PARTIAL"
+    assert ConsentRecord.objects.filter(evaluación=current).count() == 1
 
 
 @pytest.mark.django_db

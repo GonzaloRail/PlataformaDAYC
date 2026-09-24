@@ -241,6 +241,23 @@ class Consentimiento(models.Model):
         verbose_name_plural = "Consentimientos"
 
 
+class ConsentRecord(models.Model):
+    """Immutable snapshot of every consent decision for an evaluation."""
+
+    evaluación = models.ForeignKey(
+        Evaluación, on_delete=models.CASCADE, related_name="consent_records"
+    )
+    accepted = models.BooleanField()
+    modalities = models.JSONField(default=dict)
+    consent_text_version = models.CharField(max_length=20)
+    recorded_by_role = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "consent_records"
+        ordering = ["created_at"]
+
+
 class AssentRecord(models.Model):
     class Decision(models.TextChoices):
         ACCEPTED = "ACCEPTED", "Aceptado"
@@ -264,6 +281,7 @@ class WithdrawalRecord(models.Model):
         Evaluación, on_delete=models.CASCADE, related_name="withdrawal_records"
     )
     scope = models.CharField(max_length=20, default="FULL")
+    modalities = models.JSONField(default=list)
     reason = models.TextField(blank=True)
     recorded_by_role = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)

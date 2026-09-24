@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 from src.api.children.permissions import IsApprovedProfessional as IsAuthenticated
 from .models import (
     AssentRecord,
+    ConsentRecord,
     Consentimiento,
     Evaluación,
     EvaluacionItem,
@@ -759,6 +760,13 @@ def accept_consent(request, session_code):
             "ip_address": _client_ip(request),
         },
     )
+    ConsentRecord.objects.create(
+        evaluación=evaluación,
+        accepted=True,
+        modalities=modalities,
+        consent_text_version=consentimiento.consent_text_version,
+        recorded_by_role=SessionAccessToken.ActorRole.ADULT,
+    )
     AssentRecord.objects.create(
         evaluación=evaluación,
         decision=AssentRecord.Decision.ACCEPTED,
@@ -813,11 +821,50 @@ def withdraw_session(request, session_code):
             {"error": "No se puede retirar una sesión ya validada"},
             status=status.HTTP_409_CONFLICT,
         )
+    modalities = request.data.get("modalities", [])
+    valid_modalities = {"logs", "screenshots", "audio", "video"}
+    if not isinstance(modalities, list) or not set(modalities).issubset(
+        valid_modalities
+    ):
+        return Response(
+            {"error": "Las modalidades de retiro son inválidas"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    is_full_withdrawal = not modalities
     WithdrawalRecord.objects.create(
         evaluación=evaluación,
+        scope="FULL" if is_full_withdrawal else "PARTIAL",
+        modalities=modalities,
         reason=request.data.get("reason", ""),
         recorded_by_role=access_token.actor_role,
     )
+    if not is_full_withdrawal:
+        consentimiento = getattr(evaluación, "consentimiento", None)
+        if consentimiento:
+            fields = {
+                "logs": "accepted_logs",
+                "screenshots": "accepted_screenshots",
+                "audio": "accepted_audio",
+                "video": "accepted_video",
+            }
+            for modality in modalities:
+                setattr(consentimiento, fields[modality], False)
+            consentimiento.save(
+                update_fields=[fields[modality] for modality in modalities]
+            )
+            ConsentRecord.objects.create(
+                evaluación=evaluación,
+                accepted=True,
+                modalities={
+                    modality: getattr(consentimiento, field)
+                    for modality, field in fields.items()
+                },
+                consent_text_version=consentimiento.consent_text_version,
+                recorded_by_role=access_token.actor_role,
+            )
+        _advance_evaluation_version(evaluación)
+        _publish_evaluation_progress(evaluación)
+        return Response({"evaluacion": _serialize_evaluación(evaluación)})
     now = timezone.now()
     evaluación.access_tokens.filter(revoked_at__isnull=True).update(revoked_at=now)
     evaluación.evidencias.filter(retention_expires_at__isnull=True).update(
