@@ -310,6 +310,7 @@ def test_consent_persists_selected_modalities(evaluation):
         f"/api/evaluaciones/session/{current.session_code}/consent/",
         {
             "accepted": True,
+            "assent_confirmed": True,
             "expected_version": current.version,
             "modalities": {
                 "logs": True,
@@ -328,6 +329,24 @@ def test_consent_persists_selected_modalities(evaluation):
     assert not consent.accepted_screenshots
     assert not consent.accepted_audio
     assert consent.accepted_video
+    assert current.assent_records.count() == 1
+
+
+@pytest.mark.django_db
+def test_withdrawal_cancels_session_and_revokes_tokens(evaluation):
+    current, _, _ = evaluation
+    token = ensure_session_token(current, SessionAccessToken.ActorRole.ADULT)
+    response = APIClient().post(
+        f"/api/evaluaciones/session/{current.session_code}/withdraw/",
+        {"reason": "Solicitud del cuidador"},
+        format="json",
+        **bearer(token),
+    )
+
+    assert response.status_code == 200
+    assert response.data["evaluacion"]["estado"] == Evaluación.Estado.CANCELLED
+    assert current.withdrawal_records.count() == 1
+    assert current.access_tokens.filter(revoked_at__isnull=True).count() == 0
 
 
 @pytest.mark.django_db

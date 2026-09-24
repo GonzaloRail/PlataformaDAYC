@@ -21,6 +21,7 @@ from rest_framework.response import Response
 logger = logging.getLogger(__name__)
 from src.api.children.permissions import IsApprovedProfessional as IsAuthenticated
 from .models import (
+    AssentRecord,
     Consentimiento,
     Evaluación,
     EvaluacionItem,
@@ -32,6 +33,7 @@ from .models import (
     ResultadoÁrea,
     SessionAccessToken,
     SessionInvitation,
+    WithdrawalRecord,
 )
 
 
@@ -712,9 +714,15 @@ def accept_consent(request, session_code):
         return version_error
 
     accepted = bool(request.data.get("accepted", False))
+    assent_confirmed = bool(request.data.get("assent_confirmed", False))
     if not accepted:
         return Response(
             {"error": "El consentimiento es obligatorio para iniciar"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    if not assent_confirmed:
+        return Response(
+            {"error": "Se requiere registrar el asentimiento antes de iniciar"},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -751,6 +759,12 @@ def accept_consent(request, session_code):
             "ip_address": _client_ip(request),
         },
     )
+    AssentRecord.objects.create(
+        evaluación=evaluación,
+        decision=AssentRecord.Decision.ACCEPTED,
+        recorded_by_role=SessionAccessToken.ActorRole.ADULT,
+        note=request.data.get("assent_note", ""),
+    )
     if evaluación.estado in [
         Evaluación.Estado.INITIATED,
         Evaluación.Estado.WAITING_CONSENT,
@@ -773,6 +787,47 @@ def accept_consent(request, session_code):
             "current_task": dayc2_flow_service.get_current_task_payload(evaluación),
         }
     )
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@transaction.atomic
+def withdraw_session(request, session_code):
+    try:
+        evaluación = _get_locked_evaluation_by_session(session_code)
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Código de sesión inválido"}, status=status.HTTP_404_NOT_FOUND
+        )
+    access_token = _participant_access(request, evaluación)
+    if (
+        not access_token
+        or access_token.actor_role != SessionAccessToken.ActorRole.ADULT
+    ):
+        return Response(
+            {"error": "Token de adulto inválido o faltante"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    if evaluación.estado in {Evaluación.Estado.VALIDATED, Evaluación.Estado.ARCHIVED}:
+        return Response(
+            {"error": "No se puede retirar una sesión ya validada"},
+            status=status.HTTP_409_CONFLICT,
+        )
+    WithdrawalRecord.objects.create(
+        evaluación=evaluación,
+        reason=request.data.get("reason", ""),
+        recorded_by_role=access_token.actor_role,
+    )
+    now = timezone.now()
+    evaluación.access_tokens.filter(revoked_at__isnull=True).update(revoked_at=now)
+    evaluación.evidencias.filter(retention_expires_at__isnull=True).update(
+        retention_expires_at=now
+    )
+    if evaluación.estado != Evaluación.Estado.CANCELLED:
+        evaluation_state_machine.transition(evaluación, Evaluación.Estado.CANCELLED)
+    _advance_evaluation_version(evaluación)
+    _publish_evaluation_progress(evaluación)
+    return Response({"evaluacion": _serialize_evaluación(evaluación)})
 
 
 @api_view(["POST"])

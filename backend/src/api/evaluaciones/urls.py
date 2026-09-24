@@ -38,6 +38,11 @@ urlpatterns = [
         name="resume_session",
     ),
     path(
+        "session/<str:session_code>/withdraw/",
+        views.withdraw_session,
+        name="withdraw_session",
+    ),
+    path(
         "session/<str:session_code>/start/",
         views.start_child_session,
         name="start_child_session",

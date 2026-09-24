@@ -101,6 +101,7 @@ export function AdultSession() {
   const [task, setTask] = useState<EvaluationTask | null>(null)
   const [childForm, setChildForm] = useState(initialChildForm)
   const [consentChecked, setConsentChecked] = useState(false)
+  const [assentConfirmed, setAssentConfirmed] = useState(false)
   const [consentOptions, setConsentOptions] = useState(initialConsentOptions)
   const [adultObservation, setAdultObservation] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -173,7 +174,7 @@ export function AdultSession() {
     setSubmitting(true)
     setError(null)
     try {
-      const response = await evaluacionesApi.acceptConsent(sessionCode, consentOptions, sessionState?.evaluacion.version || 0, getSessionToken(sessionCode, 'ADULT'))
+      const response = await evaluacionesApi.acceptConsent(sessionCode, consentOptions, assentConfirmed, sessionState?.evaluacion.version || 0, getSessionToken(sessionCode, 'ADULT'))
       setSessionToken(sessionCode, 'ADULT', response.session_token)
       setSessionState((prev) => prev ? { ...prev, evaluacion: response.evaluacion, session_token: response.session_token, consent_accepted: true, consent_required: false } : prev)
       setTask(response.current_task)
@@ -335,6 +336,19 @@ export function AdultSession() {
     }
   }
 
+  const withdraw = async () => {
+    if (!sessionCode || !sessionState || !window.confirm('¿Deseas retirar la sesión?')) return
+    setSubmitting(true)
+    try {
+      await evaluacionesApi.withdrawSession(sessionCode, adultObservation, sessionState.session_token || getSessionToken(sessionCode, 'ADULT'))
+      setPhase('complete')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo retirar la sesión')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   if (phase === 'loading') {
     return <main className="adult-session"><div className="adult-loading">Cargando sesión...</div></main>
   }
@@ -373,6 +387,10 @@ export function AdultSession() {
             <input type="checkbox" checked={consentChecked} onChange={(e) => setConsentChecked(e.target.checked)} />
             <span>Acepto el registro de evidencias durante la evaluación.</span>
           </label>
+          <label className="adult-check">
+            <input type="checkbox" checked={assentConfirmed} onChange={(e) => setAssentConfirmed(e.target.checked)} />
+            <span>Confirmo que el niño desea continuar en este momento.</span>
+          </label>
           {Object.entries({
             logs: 'Logs y eventos de interacción',
             screenshots: 'Capturas e imágenes',
@@ -392,7 +410,7 @@ export function AdultSession() {
             </label>
           ))}
           {error && <p className="adult-error">{error}</p>}
-          <Button fullWidth onClick={acceptConsent} disabled={!consentChecked || submitting} isLoading={submitting}>Aceptar e iniciar</Button>
+          <Button fullWidth onClick={acceptConsent} disabled={!consentChecked || !assentConfirmed || submitting} isLoading={submitting}>Aceptar e iniciar</Button>
         </Card>
       </main>
     )
@@ -462,6 +480,7 @@ export function AdultSession() {
 
       <button className="adult-finish" type="button" onClick={() => void finishSession()} disabled={submitting}>Finalizar sesión</button>
       <button className="adult-finish" type="button" onClick={() => void togglePause()} disabled={submitting}>Pausar sesión</button>
+      <button className="adult-finish" type="button" onClick={() => void withdraw()} disabled={submitting}>Retirar sesión</button>
     </main>
   )
 }

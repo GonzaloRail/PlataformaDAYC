@@ -45,12 +45,14 @@ export const evaluacionesApi = {
   sessionState: (sessionCode: string, token?: string) => api.get<SessionState>(`/api/evaluaciones/session/${sessionCode}/state/`, { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
   completeChildData: (sessionCode: string, payload: Record<string, unknown>, expectedVersion: number, token?: string) =>
     api.post<{ evaluacion: Evaluacion }>(`/api/evaluaciones/session/${sessionCode}/complete-child-data/`, { ...payload, expected_version: expectedVersion }, { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
-  acceptConsent: (sessionCode: string, modalities: Record<'logs' | 'screenshots' | 'audio' | 'video', boolean>, expectedVersion: number, token?: string) =>
-    api.post<{ session_token: string; evaluacion: Evaluacion; current_task: EvaluationTask }>(`/api/evaluaciones/session/${sessionCode}/consent/`, { accepted: true, modalities, expected_version: expectedVersion }, { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
+  acceptConsent: (sessionCode: string, modalities: Record<'logs' | 'screenshots' | 'audio' | 'video', boolean>, assentConfirmed: boolean, expectedVersion: number, token?: string) =>
+    api.post<{ session_token: string; evaluacion: Evaluacion; current_task: EvaluationTask }>(`/api/evaluaciones/session/${sessionCode}/consent/`, { accepted: true, modalities, assent_confirmed: assentConfirmed, expected_version: expectedVersion }, { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
   pauseSession: (sessionCode: string, expectedVersion: number, token?: string) =>
     api.post<{ evaluacion: Evaluacion }>(`/api/evaluaciones/session/${sessionCode}/pause/`, { expected_version: expectedVersion }, { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
   resumeSession: (sessionCode: string, expectedVersion: number, token?: string) =>
     api.post<{ evaluacion: Evaluacion }>(`/api/evaluaciones/session/${sessionCode}/resume/`, { expected_version: expectedVersion }, { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
+  withdrawSession: (sessionCode: string, reason: string, token?: string) =>
+    api.post<{ evaluacion: Evaluacion }>(`/api/evaluaciones/session/${sessionCode}/withdraw/`, { reason }, { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
   startSession: (sessionCode: string, expectedVersion: number, token?: string) =>
     api.post<{ evaluacion: Evaluacion; current_task: EvaluationTask }>(`/api/evaluaciones/session/${sessionCode}/start/`, { expected_version: expectedVersion }, { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
   finishSession: (sessionCode: string, adultObservation: string | undefined, expectedVersion: number, token?: string) =>

@@ -241,6 +241,37 @@ class Consentimiento(models.Model):
         verbose_name_plural = "Consentimientos"
 
 
+class AssentRecord(models.Model):
+    class Decision(models.TextChoices):
+        ACCEPTED = "ACCEPTED", "Aceptado"
+        DECLINED = "DECLINED", "Rechazado"
+
+    evaluación = models.ForeignKey(
+        Evaluación, on_delete=models.CASCADE, related_name="assent_records"
+    )
+    decision = models.CharField(max_length=10, choices=Decision.choices)
+    recorded_by_role = models.CharField(max_length=20)
+    note = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "assent_records"
+        ordering = ["created_at"]
+
+
+class WithdrawalRecord(models.Model):
+    evaluación = models.ForeignKey(
+        Evaluación, on_delete=models.CASCADE, related_name="withdrawal_records"
+    )
+    scope = models.CharField(max_length=20, default="FULL")
+    reason = models.TextField(blank=True)
+    recorded_by_role = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "withdrawal_records"
+
+
 class Evidencia(models.Model):
     """Evidence captured during semi-assisted DAYC-2 item administration."""
 
