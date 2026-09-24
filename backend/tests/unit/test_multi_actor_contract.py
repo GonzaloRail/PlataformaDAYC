@@ -1,11 +1,12 @@
-from datetime import date
+from datetime import date, timedelta
 from unittest.mock import patch
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from rest_framework.test import APIClient
 
-from src.api.children.models import Niño
+from src.api.children.models import Niño, ProfessionalProfile
 from src.api.evaluaciones.models import (
     Consentimiento,
     Evaluación,
@@ -13,7 +14,10 @@ from src.api.evaluaciones.models import (
     Evidencia,
     SessionAccessToken,
 )
-from src.api.evaluaciones.serializers import ensure_session_token
+from src.api.evaluaciones.serializers import (
+    create_session_invitation,
+    ensure_session_token,
+)
 from src.application.services.dayc2_flow_service import dayc2_flow_service
 
 
@@ -21,6 +25,10 @@ from src.application.services.dayc2_flow_service import dayc2_flow_service
 def evaluation():
     psychologist = get_user_model().objects.create_user(
         username="owner", password="test-password"
+    )
+    ProfessionalProfile.objects.create(
+        user=psychologist,
+        status=ProfessionalProfile.Status.APPROVED,
     )
     child = Niño.objects.create(
         nombre="Niño de prueba",
@@ -51,12 +59,20 @@ def bearer(token):
 
 @pytest.mark.django_db
 def test_join_issues_actor_scoped_device_token(evaluation):
-    current, _, _ = evaluation
+    current, _, psychologist = evaluation
+    current.session_expires_at = timezone.now() + timedelta(hours=1)
+    current.save(update_fields=["session_expires_at"])
+    invitation_code = create_session_invitation(
+        current,
+        SessionAccessToken.ActorRole.ADULT,
+        psychologist,
+    )
     response = APIClient().post(
         "/api/evaluaciones/join/",
         {
             "session_code": current.session_code,
-            "actor_role": "ADULT",
+            "invitation_code": invitation_code,
+            "actor_role": "CHILD",
             "device_id": "adult-tablet",
         },
         format="json",
@@ -67,6 +83,18 @@ def test_join_issues_actor_scoped_device_token(evaluation):
     token = SessionAccessToken.objects.get()
     assert token.actor_role == SessionAccessToken.ActorRole.ADULT
     assert token.device_id == "adult-tablet"
+
+    replay_response = APIClient().post(
+        "/api/evaluaciones/join/",
+        {
+            "session_code": current.session_code,
+            "invitation_code": invitation_code,
+            "device_id": "other-device",
+        },
+        format="json",
+    )
+
+    assert replay_response.status_code == 403
 
 
 @pytest.mark.django_db
@@ -163,3 +191,87 @@ def test_second_actor_write_with_same_version_is_rejected(evaluation):
     assert first_response.data["version"] == current.version + 1
     assert second_response.status_code == 409
     assert second_response.data["current_version"] == current.version + 1
+
+
+@pytest.mark.django_db
+def test_final_reports_require_validated_evaluation(evaluation):
+    current, _, psychologist = evaluation
+    client = APIClient()
+    client.force_authenticate(psychologist)
+
+    for url in (
+        f"/api/evaluaciones/{current.id}/reporte-pdf/",
+        f"/api/reportes/{current.id}/pdf/",
+    ):
+        response = client.get(url)
+
+        assert response.status_code == 409
+
+
+@pytest.mark.django_db
+def test_diagnosis_api_is_not_published():
+    response = APIClient().get("/api/diagnostico/00000000-0000-0000-0000-000000000000/")
+
+    assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_review_completion_requires_explicit_decision_for_each_pending_item(evaluation):
+    current, item, psychologist = evaluation
+    current.estado = Evaluación.Estado.PENDING_REVIEW
+    current.save(update_fields=["estado"])
+    item.estado = EvaluacionItem.Estado.NEEDS_REVIEW
+    item.save(update_fields=["estado"])
+
+    client = APIClient()
+    client.force_authenticate(psychologist)
+    response = client.post(f"/api/evaluaciones/{current.id}/review/complete/")
+
+    assert response.status_code == 409
+    assert response.data["pending_item_ids"] == [item.item_id]
+    current.refresh_from_db()
+    item.refresh_from_db()
+    assert current.estado == Evaluación.Estado.PENDING_REVIEW
+    assert item.final_result is None
+
+
+@pytest.mark.django_db
+def test_validated_score_requires_explicit_decision_for_each_pending_item(evaluation):
+    current, item, psychologist = evaluation
+    current.estado = Evaluación.Estado.PENDING_REVIEW
+    current.save(update_fields=["estado"])
+    item.estado = EvaluacionItem.Estado.NEEDS_REVIEW
+    item.save(update_fields=["estado"])
+
+    client = APIClient()
+    client.force_authenticate(psychologist)
+    response = client.post(f"/api/evaluaciones/{current.id}/score/validated/")
+
+    assert response.status_code == 409
+    assert response.data["pending_item_ids"] == [item.item_id]
+    item.refresh_from_db()
+    assert item.final_result is None
+
+
+@pytest.mark.django_db
+def test_pending_professional_cannot_access_evaluations(evaluation):
+    _, _, psychologist = evaluation
+    psychologist.professional_profile.status = ProfessionalProfile.Status.PENDING
+    psychologist.professional_profile.save(update_fields=["status"])
+    client = APIClient()
+    client.force_authenticate(psychologist)
+
+    response = client.get("/api/evaluaciones/")
+
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_approved_professional_can_access_evaluations(evaluation):
+    _, _, psychologist = evaluation
+    client = APIClient()
+    client.force_authenticate(psychologist)
+
+    response = client.get("/api/evaluaciones/")
+
+    assert response.status_code == 200

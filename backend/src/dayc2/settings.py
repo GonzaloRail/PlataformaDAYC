@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     "channels",
     "src.api.children",
     "src.api.evaluaciones",
-    "src.api.diagnostico",
     "src.api.metricas",
     "src.api.reportes",
 ]

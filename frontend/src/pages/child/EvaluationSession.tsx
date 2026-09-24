@@ -127,7 +127,6 @@ export function EvaluationSession() {
   }
 
   const hasDigitalActivity = Boolean(task?.actividad_digital)
-  const adultUrl = `${window.location.origin}/adult/session/${sessionCode || ''}`
   const currentAreaLabel = task?.area ? areaLabels[task.area] || task.area : 'Actividad'
 
   if (phase === 'loading') {
@@ -146,7 +145,7 @@ export function EvaluationSession() {
           <p className="child-stage-eyebrow">Esperando al adulto</p>
           <h1>Ya casi empezamos</h1>
           <p className="child-stage-main">El adulto debe abrir su pantalla y aceptar los pasos iniciales.</p>
-          <p className="child-stage-helper">Pantalla adulto: {adultUrl}</p>
+          <p className="child-stage-helper">El adulto debe ingresar con su propia invitación emitida por el profesional.</p>
         </section>
       </main>
     )

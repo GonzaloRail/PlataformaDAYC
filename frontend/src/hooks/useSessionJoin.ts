@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/services/api';
 import { setSessionToken } from '@/services/evaluacionesApi';
 
-export type SessionTarget = 'child' | 'adult';
-
 export interface SessionJoinState {
   sessionCode: string;
   setSessionCode: (code: string) => void;
+  invitationCode: string;
+  setInvitationCode: (code: string) => void;
   isLoading: boolean;
   error: string | null;
-  openSession: (target: SessionTarget) => Promise<void>;
+  openSession: () => Promise<void>;
 }
 
 const MIN_CODE_LENGTH = 6;
@@ -24,30 +24,30 @@ function getDeviceId() {
 }
 
 /**
- * Shared logic for joining a session by code: validates the code, calls the
- * backend, and navigates to the requested target (`/child/evaluation/...` or
- * `/adult/session/...`).
+ * Shared logic for joining a session with a server-issued invitation. The
+ * invitation determines the role; the client cannot select it.
  */
 export function useSessionJoin(): SessionJoinState {
   const [sessionCode, setSessionCode] = useState('');
+  const [invitationCode, setInvitationCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const openSession = async (target: SessionTarget) => {
+  const openSession = async () => {
     const normalizedCode = sessionCode.trim().toUpperCase();
-    if (normalizedCode.length < MIN_CODE_LENGTH) return;
+    const normalizedInvitation = invitationCode.trim();
+    if (normalizedCode.length < MIN_CODE_LENGTH || !normalizedInvitation) return;
     setIsLoading(true);
     setError(null);
     try {
-      const actorRole = target === 'adult' ? 'ADULT' : 'CHILD';
-      const response = await api.post<{ session_token?: string }>('/api/evaluaciones/join/', {
+      const response = await api.post<{ session_token?: string; actor_role: 'CHILD' | 'ADULT' }>('/api/evaluaciones/join/', {
         session_code: normalizedCode,
-        actor_role: actorRole,
+        invitation_code: normalizedInvitation,
         device_id: getDeviceId(),
       });
-      if (response.session_token) setSessionToken(normalizedCode, actorRole, response.session_token);
-      const path = target === 'adult' ? `/adult/session/${normalizedCode}` : `/child/evaluation/${normalizedCode}`;
+      if (response.session_token) setSessionToken(normalizedCode, response.actor_role, response.session_token);
+      const path = response.actor_role === 'ADULT' ? `/adult/session/${normalizedCode}` : `/child/evaluation/${normalizedCode}`;
       navigate(path);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Código de sesión no válido o evaluación no disponible');
@@ -56,5 +56,5 @@ export function useSessionJoin(): SessionJoinState {
     }
   };
 
-  return { sessionCode, setSessionCode, isLoading, error, openSession };
+  return { sessionCode, setSessionCode, invitationCode, setInvitationCode, isLoading, error, openSession };
 }

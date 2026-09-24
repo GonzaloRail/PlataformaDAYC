@@ -38,12 +38,9 @@ class ReporteGenerator:
     def generar(self, evaluación) -> str:
         niño = evaluación.niño
         resultados = list(evaluación.resultados.all())
-        diagnóstico = getattr(evaluación, "diagnóstico", None)
         items = list(evaluación.items.all())
 
-        html_content = self._generar_html(
-            niño, evaluación, resultados, diagnóstico, items
-        )
+        html_content = self._generar_html(niño, evaluación, resultados, items)
 
         output_dir = tempfile.gettempdir()
         pdf_filename = (
@@ -68,7 +65,7 @@ class ReporteGenerator:
 
         return pdf_path
 
-    def _generar_html(self, niño, evaluación, resultados, diagnóstico, items) -> str:
+    def _generar_html(self, niño, evaluación, resultados, items) -> str:
         gdq_values = [
             r.cociente_general_gdq for r in resultados if r.cociente_general_gdq
         ]
@@ -214,20 +211,6 @@ class ReporteGenerator:
     <h2>Resumen de Evidencias Recolectadas</h2>
     <p>El sistema ha registrado un total de {evidencias_count} evidencias objetivas durante la sesión infantil:</p>
     {evidencias_html}
-"""
-
-        if diagnóstico:
-            html += f"""
-    <h2>Resumen Narrativo Asistido</h2>
-    <p>{diagnóstico.contenido}</p>
-
-    <h2>Actividades de Estimulación Sugeridas</h2>
-    <div class="activities">
-"""
-            for act in diagnóstico.actividades_estimulación:
-                html += f"""        <p><strong>{act.get('nombre', 'Actividad')}</strong>: {act.get('descripción', '')} ({act.get('duración_minutos', 10)} min)</p>
-"""
-            html += """    </div>
 """
 
         html += """

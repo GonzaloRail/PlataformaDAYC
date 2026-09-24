@@ -11,7 +11,8 @@ from rest_framework.decorators import (
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from src.api.auth import CsrfExemptSessionAuthentication
-from .models import Niño
+from .models import Niño, ProfessionalProfile
+from .permissions import IsApprovedProfessional
 
 User = get_user_model()
 
@@ -106,8 +107,12 @@ def register_view(request):
         first_name=nombre,
         last_name=apellido,
     )
+    ProfessionalProfile.objects.create(user=user)
     login(request, user)
-    return Response({"user": serialize_user(user)}, status=status.HTTP_201_CREATED)
+    return Response(
+        {"user": serialize_user(user), "professional_status": "PENDING"},
+        status=status.HTTP_201_CREATED,
+    )
 
 
 @api_view(["GET"])
@@ -150,7 +155,7 @@ def _paginate(queryset, request):
 
 
 @api_view(["GET", "POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsApprovedProfessional])
 def listar_niños(request):
     """List all children or create new child"""
     if request.method == "GET":
@@ -180,7 +185,7 @@ def listar_niños(request):
 
 
 @api_view(["GET", "PUT", "DELETE"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsApprovedProfessional])
 def detalle_niño(request, pk):
     """Get, update or delete a child"""
     try:
@@ -219,7 +224,7 @@ def detalle_niño(request, pk):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsApprovedProfessional])
 def evaluaciones_niño(request, pk):
     """Get all evaluations for a child"""
     try:

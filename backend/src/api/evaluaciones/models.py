@@ -187,6 +187,35 @@ class SessionAccessToken(models.Model):
         ]
 
 
+class SessionInvitation(models.Model):
+    """Single-use invitation that assigns a participant role server-side."""
+
+    evaluación = models.ForeignKey(
+        Evaluación, on_delete=models.CASCADE, related_name="invitations"
+    )
+    invitation_hash = models.CharField(max_length=64, unique=True)
+    actor_role = models.CharField(max_length=10, choices=SessionAccessToken.ActorRole)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="issued_session_invitations",
+    )
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+    revoked_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "evaluation_session_invitations"
+        indexes = [
+            models.Index(
+                fields=["evaluación", "actor_role", "expires_at"],
+                name="eval_inv_role_exp_idx",
+            )
+        ]
+
+
 class Consentimiento(models.Model):
     """Initial consent accepted by the adult companion before evidence capture."""
 

@@ -34,6 +34,7 @@ export interface Evaluacion {
   started_at?: string;
   completed_at?: string;
   created_at?: string;
+  participant_invitations?: Partial<Record<'CHILD' | 'ADULT', string>>;
 }
 
 export interface Respuesta {
@@ -61,28 +62,8 @@ export interface Resultado {
   isChanged?: boolean;
 }
 
-export interface ActividadEstimulacion {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  duracion_minutos: number;
-  area?: string;
-}
-
-export interface Diagnostico {
-  id: string;
-  evaluacion_id: string;
-  contenido: string;
-  modelo_ai: string;
-  gdq?: number;
-  modificado_por_psicologo: boolean;
-  actividades_estimulacion?: ActividadEstimulacion[];
-  created_at?: string;
-}
-
 export interface EvaluacionWithResults extends Evaluacion {
   resultados?: Resultado[];
-  diagnostico?: Diagnostico;
 }
 
 export interface EvaluationTask {

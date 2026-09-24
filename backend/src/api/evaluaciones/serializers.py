@@ -23,6 +23,21 @@ def generar_codigo_sesion():
     return "".join(secrets.choice(_SESSION_CODE_ALPHABET) for _ in range(6))
 
 
+def create_session_invitation(evaluación, actor_role, created_by):
+    """Create a one-time participant invitation and return its plaintext once."""
+    from src.api.evaluaciones.models import SessionInvitation
+
+    code = secrets.token_urlsafe(18)
+    SessionInvitation.objects.create(
+        evaluación=evaluación,
+        invitation_hash=hashlib.sha256(code.encode()).hexdigest(),
+        actor_role=actor_role,
+        created_by=created_by,
+        expires_at=evaluación.session_expires_at,
+    )
+    return code
+
+
 def serialize_evaluación(evaluación):
     return {
         "id": str(evaluación.id),

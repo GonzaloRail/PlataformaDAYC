@@ -118,6 +118,7 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
 
   const isActive = evaluacion.estado === 'INITIATED' || evaluacion.estado === 'IN_PROGRESS';
   const isCompleted = evaluacion.estado === 'COMPLETED' || evaluacion.estado === 'STOPPED' || evaluacion.estado === 'PENDING_REVIEW' || evaluacion.estado === 'VALIDATED';
+  const isValidated = evaluacion.estado === 'VALIDATED';
 
   return (
     <Card className="evaluation-detail">
@@ -202,7 +203,7 @@ export const EvaluationDetail: React.FC<EvaluationDetailProps> = ({
             Ajustar Resultados
           </Button>
         )}
-        {isCompleted && (
+        {isValidated && (
           <DownloadPDFButton
             evaluacionId={evaluacion.id}
             ninoNombre={nino?.nombre}

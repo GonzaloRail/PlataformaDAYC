@@ -173,6 +173,9 @@ export function PsychologistDashboard() {
     try {
       const evaluacion = await createEvaluacion(selectedNinoId, ['COGNITIVO_001'])
       setSelectedEvaluacion(evaluacion)
+      setSuccessMessage(
+        `Sesión ${evaluacion.session_code}. Invitación niño: ${evaluacion.participant_invitations?.CHILD || '-'}; invitación adulto: ${evaluacion.participant_invitations?.ADULT || '-'}. Comparte cada invitación solo con el actor correspondiente.`
+      )
       setActiveTab('activas')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo crear la evaluación')

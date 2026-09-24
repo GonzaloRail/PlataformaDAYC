@@ -3,6 +3,7 @@
 import json
 import logging
 import uuid
+import hashlib
 from datetime import timedelta
 
 from django.http import FileResponse
@@ -14,10 +15,11 @@ from channels.layers import get_channel_layer
 from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 logger = logging.getLogger(__name__)
+from src.api.children.permissions import IsApprovedProfessional as IsAuthenticated
 from .models import (
     Consentimiento,
     Evaluación,
@@ -29,6 +31,7 @@ from .models import (
     Respuesta,
     ResultadoÁrea,
     SessionAccessToken,
+    SessionInvitation,
 )
 
 
@@ -135,7 +138,7 @@ def _audit_evidence_access(request, evidencia, action):
     )
 
 
-from src.api.children.models import Niño
+from src.api.children.models import Niño, is_approved_professional
 from src.application.services.edad_service import EdadService
 from src.application.services.rules_service import rules_service
 from src.application.services.baremos_service import baremos_service
@@ -159,6 +162,7 @@ from .serializers import (
     autorizar_evaluacion as _autorizar_evaluacion,
     client_ip as _client_ip,
     ensure_session_token as _ensure_session_token,
+    create_session_invitation as _create_session_invitation,
     get_evaluación_by_session as _get_evaluación_by_session,
     get_session_access_token as _get_session_access_token,
     generar_pdf_evaluacion as _generar_pdf_evaluacion,
@@ -182,6 +186,12 @@ def _is_owner_psychologist(request, evaluación):
 @permission_classes([IsAuthenticated])
 def crear_evaluación(request):
     """Create new evaluation for a child"""
+    if not is_approved_professional(request.user):
+        return Response(
+            {"error": "Se requiere aprobación como profesional autorizado"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
     if request.method == "GET":
         from src.api.children.views import _paginate
 
@@ -206,17 +216,29 @@ def crear_evaluación(request):
 
     edad_meses = EdadService.calcular_edad_meses(niño.fecha_nacimiento)
 
-    evaluación = Evaluación.objects.create(
-        niño=niño,
-        psychologist_id=str(request.user.id),
-        estado=Evaluación.Estado.INITIATED,
-        edad_meses=edad_meses,
-        session_code=generar_codigo_sesion(),
-        started_at=timezone.now(),
-    )
-    dayc2_flow_service.get_current_item(evaluación)
+    with transaction.atomic():
+        evaluación = Evaluación.objects.create(
+            niño=niño,
+            psychologist_id=str(request.user.id),
+            estado=Evaluación.Estado.INITIATED,
+            edad_meses=edad_meses,
+            session_code=generar_codigo_sesion(),
+            session_expires_at=timezone.now() + timedelta(days=7),
+            started_at=timezone.now(),
+        )
+        invitations = {
+            role: _create_session_invitation(evaluación, role, request.user)
+            for role in SessionAccessToken.ActorRole.values
+        }
+        dayc2_flow_service.get_current_item(evaluación)
 
-    return Response(_serialize_evaluación(evaluación), status=status.HTTP_201_CREATED)
+    return Response(
+        {
+            **_serialize_evaluación(evaluación),
+            "participant_invitations": invitations,
+        },
+        status=status.HTTP_201_CREATED,
+    )
 
 
 @api_view(["GET"])
@@ -490,28 +512,45 @@ def registrar_auto_result(request, pk, item_id):
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@transaction.atomic
 def join_evaluación(request):
     session_code = str(request.data.get("session_code") or "").strip().upper()
-    actor_role = str(request.data.get("actor_role") or "").strip().upper()
-    valid_roles = {choice.value for choice in SessionAccessToken.ActorRole}
-    if actor_role not in valid_roles:
+    invitation_code = str(request.data.get("invitation_code") or "").strip()
+    if not invitation_code:
         return Response(
-            {"error": "Rol de sesión inválido"}, status=status.HTTP_400_BAD_REQUEST
+            {"error": "El código de invitación es obligatorio"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
     try:
-        evaluación = Evaluación.objects.get(session_code=session_code)
+        evaluación = Evaluación.objects.select_for_update().get(
+            session_code=session_code
+        )
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Código de sesión inválido"}, status=status.HTTP_404_NOT_FOUND
         )
+    invitation = SessionInvitation.objects.filter(
+        evaluación=evaluación,
+        invitation_hash=hashlib.sha256(invitation_code.encode()).hexdigest(),
+        revoked_at__isnull=True,
+        used_at__isnull=True,
+        expires_at__gt=timezone.now(),
+    ).first()
+    if invitation is None:
+        return Response(
+            {"error": "Código de invitación inválido o vencido"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
     token = _ensure_session_token(
-        evaluación, actor_role, request.data.get("device_id", "")
+        evaluación, invitation.actor_role, request.data.get("device_id", "")
     )
+    invitation.used_at = timezone.now()
+    invitation.save(update_fields=["used_at"])
     return Response(
         {
             **_serialize_evaluación(evaluación),
             "session_token": token,
-            "actor_role": actor_role,
+            "actor_role": invitation.actor_role,
         }
     )
 
@@ -1053,7 +1092,7 @@ def review_item(request, pk, item_id):
     try:
         evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
         item = evaluación.items.get(item_id=item_id)
-    except Evaluación.DoesNotExist, EvaluacionItem.DoesNotExist:
+    except (Evaluación.DoesNotExist, EvaluacionItem.DoesNotExist):
         return Response(
             {"error": "Ítem no encontrado"}, status=status.HTTP_404_NOT_FOUND
         )
@@ -1114,13 +1153,13 @@ def review_complete(request, pk):
         estado=EvaluacionItem.Estado.NEEDS_REVIEW,
         final_result__isnull=True,
     )
-    for item in pendientes:
-        catalog_item = item_catalog_service.get_item(item.item_id) or {}
-        needs_review = bool(catalog_item.get("requiere_revision_psicologo", True))
-        sincronizar_item_con_respuesta(
-            item,
-            Respuesta.Resultado.NOT_APPLICABLE,
-            requires_review=needs_review,
+    if pendientes.exists():
+        return Response(
+            {
+                "error": "La validación requiere una decisión profesional por ítem",
+                "pending_item_ids": list(pendientes.values_list("item_id", flat=True)),
+            },
+            status=status.HTTP_409_CONFLICT,
         )
 
     resultados = scoring_service.calcular_resultados(evaluación)
@@ -1217,7 +1256,7 @@ def ajustar_resultado(request, pk, rid):
     try:
         evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
         resultado = evaluación.resultados.get(pk=rid)
-    except Evaluación.DoesNotExist, ResultadoÁrea.DoesNotExist:
+    except (Evaluación.DoesNotExist, ResultadoÁrea.DoesNotExist):
         return Response(
             {"error": "Resultado no encontrado"}, status=status.HTTP_404_NOT_FOUND
         )
@@ -1322,13 +1361,13 @@ def calcular_puntuación_validada(request, pk):
         estado=EvaluacionItem.Estado.NEEDS_REVIEW,
         final_result__isnull=True,
     )
-    for item in pendientes:
-        catalog_item = item_catalog_service.get_item(item.item_id) or {}
-        needs_review = bool(catalog_item.get("requiere_revision_psicologo", True))
-        sincronizar_item_con_respuesta(
-            item,
-            Respuesta.Resultado.NOT_APPLICABLE,
-            requires_review=needs_review,
+    if pendientes.exists():
+        return Response(
+            {
+                "error": "La validación requiere una decisión profesional por ítem",
+                "pending_item_ids": list(pendientes.values_list("item_id", flat=True)),
+            },
+            status=status.HTTP_409_CONFLICT,
         )
 
     resultados = scoring_service.calcular_resultados(evaluación)
@@ -1383,13 +1422,19 @@ def comparación_resultados(request, pk):
 def reporte_pdf(request, pk):
     try:
         evaluación = (
-            Evaluación.objects.select_related("niño", "diagnóstico")
+            Evaluación.objects.select_related("niño")
             .prefetch_related("resultados", "items")
             .get(pk=pk, psychologist_id=str(request.user.id))
         )
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+    if evaluación.estado != Evaluación.Estado.VALIDATED:
+        return Response(
+            {"error": "El reporte final requiere una evaluación validada"},
+            status=status.HTTP_409_CONFLICT,
         )
 
     return _generar_pdf_evaluacion(evaluación)

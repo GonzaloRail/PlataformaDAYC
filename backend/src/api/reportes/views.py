@@ -2,7 +2,7 @@
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from src.api.children.permissions import IsApprovedProfessional as IsAuthenticated
 from rest_framework.response import Response
 from src.api.evaluaciones.models import Evaluación
 from src.api.evaluaciones.serializers import generar_pdf_evaluacion
@@ -14,7 +14,7 @@ def generar_reporte_pdf(request, evaluación_id):
     """Generate and return PDF report for an evaluation"""
     try:
         evaluación = (
-            Evaluación.objects.select_related("niño", "diagnóstico")
+            Evaluación.objects.select_related("niño")
             .prefetch_related("resultados", "items")
             .get(id=evaluación_id, psychologist_id=str(request.user.id))
         )
@@ -23,13 +23,10 @@ def generar_reporte_pdf(request, evaluación_id):
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
         )
 
-    if evaluación.estado not in [
-        Evaluación.Estado.COMPLETED,
-        Evaluación.Estado.STOPPED,
-        Evaluación.Estado.ARCHIVED,
-    ]:
+    if evaluación.estado != Evaluación.Estado.VALIDATED:
         return Response(
-            {"error": "Evaluación no completada"}, status=status.HTTP_400_BAD_REQUEST
+            {"error": "El reporte final requiere una evaluación validada"},
+            status=status.HTTP_409_CONFLICT,
         )
 
     return generar_pdf_evaluacion(evaluación)
