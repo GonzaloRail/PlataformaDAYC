@@ -939,6 +939,10 @@ def registrar_evento_item(request, pk, item_id):
             status=status.HTTP_403_FORBIDDEN,
         )
 
+    pause_error = _pause_conflict(evaluación)
+    if pause_error:
+        return pause_error
+
     evaluación_item = evaluación.items.filter(item_id=item_id).first()
     access_token = _participant_access(request, evaluación)
     event = InteractionEvent.objects.create(
@@ -988,6 +992,11 @@ def manejar_evidencia_item(request, pk, item_id):
             {"error": "No autorizado para registrar evidencias"},
             status=status.HTTP_403_FORBIDDEN,
         )
+
+    if request.method == "POST":
+        pause_error = _pause_conflict(evaluación)
+        if pause_error:
+            return pause_error
 
     evaluación_item = evaluación.items.filter(item_id=item_id).first()
     if not evaluación_item:

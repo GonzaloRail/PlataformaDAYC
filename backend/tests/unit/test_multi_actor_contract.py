@@ -381,3 +381,32 @@ def test_paused_session_rejects_response_submission(evaluation):
 
     assert response.status_code == 409
     assert response.data["error"] == "La sesión está en pausa"
+
+
+@pytest.mark.django_db
+def test_paused_session_rejects_event_and_evidence_capture(evaluation):
+    current, item, _ = evaluation
+    token = ensure_session_token(current, SessionAccessToken.ActorRole.ADULT)
+    client = APIClient()
+    client.post(
+        f"/api/evaluaciones/session/{current.session_code}/pause/",
+        {"expected_version": current.version},
+        format="json",
+        **bearer(token),
+    )
+
+    event_response = client.post(
+        f"/api/evaluaciones/{current.id}/items/{item.item_id}/events/",
+        {"event_type": "PAUSED_CAPTURE"},
+        format="json",
+        **bearer(token),
+    )
+    evidence_response = client.post(
+        f"/api/evaluaciones/{current.id}/items/{item.item_id}/evidence/",
+        {"type": "LOG"},
+        format="multipart",
+        **bearer(token),
+    )
+
+    assert event_response.status_code == 409
+    assert evidence_response.status_code == 409
