@@ -182,6 +182,14 @@ def _is_owner_psychologist(request, evaluación):
     )
 
 
+def _pause_conflict(evaluación):
+    if evaluación.estado == Evaluación.Estado.PAUSED:
+        return Response(
+            {"error": "La sesión está en pausa"}, status=status.HTTP_409_CONFLICT
+        )
+    return None
+
+
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
 def crear_evaluación(request):
@@ -300,6 +308,10 @@ def registrar_respuesta(request, pk):
             status=status.HTTP_403_FORBIDDEN,
         )
 
+    pause_error = _pause_conflict(evaluación)
+    if pause_error:
+        return pause_error
+
     idempotency_key = _idempotency_key(request)
     if idempotency_key:
         previous = Respuesta.objects.filter(
@@ -405,6 +417,10 @@ def registrar_auto_result(request, pk, item_id):
             {"error": "No autorizado para registrar resultados"},
             status=status.HTTP_403_FORBIDDEN,
         )
+
+    pause_error = _pause_conflict(evaluación)
+    if pause_error:
+        return pause_error
 
     idempotency_key = _idempotency_key(request)
     if (

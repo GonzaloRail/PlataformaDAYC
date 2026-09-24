@@ -353,3 +353,31 @@ def test_adult_can_pause_and_resume_an_active_session(evaluation):
     )
     assert resumed.status_code == 200
     assert resumed.data["evaluacion"]["estado"] == Evaluación.Estado.IN_PROGRESS
+
+
+@pytest.mark.django_db
+def test_paused_session_rejects_response_submission(evaluation):
+    current, item, _ = evaluation
+    token = ensure_session_token(current, SessionAccessToken.ActorRole.ADULT)
+    client = APIClient()
+    paused = client.post(
+        f"/api/evaluaciones/session/{current.session_code}/pause/",
+        {"expected_version": current.version},
+        format="json",
+        **bearer(token),
+    )
+
+    response = client.post(
+        f"/api/evaluaciones/{current.id}/respuesta/",
+        {
+            "item_id": item.item_id,
+            "resultado": "CORRECT",
+            "tiempo_respuesta_ms": 100,
+            "expected_version": paused.data["evaluacion"]["version"],
+        },
+        format="json",
+        **bearer(token),
+    )
+
+    assert response.status_code == 409
+    assert response.data["error"] == "La sesión está en pausa"

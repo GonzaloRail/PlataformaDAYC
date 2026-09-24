@@ -9,7 +9,7 @@ import type { EvaluationTask, SessionState } from '@/types'
 import { devLog } from '@/utils/logger'
 import './AdultSession.css'
 
-type Phase = 'loading' | 'child-data' | 'consent' | 'control' | 'complete' | 'error'
+type Phase = 'loading' | 'child-data' | 'consent' | 'control' | 'paused' | 'complete' | 'error'
 
 const initialChildForm = {
   nombre: '',
@@ -124,6 +124,8 @@ export function AdultSession() {
         setPhase('consent')
       } else if (state.evaluacion.estado === 'PENDING_REVIEW' || state.evaluacion.estado === 'VALIDATED') {
         setPhase('complete')
+      } else if (state.evaluacion.estado === 'PAUSED') {
+        setPhase('paused')
       } else {
         if (state.evaluacion.estado !== 'IN_PROGRESS') {
           const response = await evaluacionesApi.startSession(sessionCode, state.evaluacion.version || 0, getSessionToken(sessionCode, 'ADULT'))
@@ -315,6 +317,24 @@ export function AdultSession() {
     }
   }
 
+  const togglePause = async () => {
+    if (!sessionCode || !sessionState) return
+    setSubmitting(true)
+    setError(null)
+    try {
+      const token = sessionState.session_token || getSessionToken(sessionCode, 'ADULT')
+      const response = sessionState.evaluacion.estado === 'PAUSED'
+        ? await evaluacionesApi.resumeSession(sessionCode, sessionState.evaluacion.version || 0, token)
+        : await evaluacionesApi.pauseSession(sessionCode, sessionState.evaluacion.version || 0, token)
+      setSessionState((current) => current ? { ...current, evaluacion: response.evaluacion } : current)
+      setPhase(response.evaluacion.estado === 'PAUSED' ? 'paused' : 'control')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo cambiar el estado de pausa')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   if (phase === 'loading') {
     return <main className="adult-session"><div className="adult-loading">Cargando sesión...</div></main>
   }
@@ -390,6 +410,20 @@ export function AdultSession() {
     )
   }
 
+  if (phase === 'paused') {
+    return (
+      <main className="adult-session">
+        <Card className="adult-card adult-complete" padding="lg">
+          <p className="adult-eyebrow">Sesión en pausa</p>
+          <h1>La captura está detenida</h1>
+          <p>No se registrarán respuestas ni evidencias hasta que el adulto reanude la sesión.</p>
+          {error && <p className="adult-error">{error}</p>}
+          <Button fullWidth onClick={() => void togglePause()} disabled={submitting} isLoading={submitting}>Reanudar sesión</Button>
+        </Card>
+      </main>
+    )
+  }
+
   return (
     <main className="adult-session">
       <section className="adult-topbar">
@@ -427,6 +461,7 @@ export function AdultSession() {
       </Card>
 
       <button className="adult-finish" type="button" onClick={() => void finishSession()} disabled={submitting}>Finalizar sesión</button>
+      <button className="adult-finish" type="button" onClick={() => void togglePause()} disabled={submitting}>Pausar sesión</button>
     </main>
   )
 }

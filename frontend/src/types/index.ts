@@ -22,7 +22,7 @@ export interface Evaluacion {
   nino_id: string;
   nino?: Nino;
   psychologist_id: string;
-  estado: 'INITIATED' | 'IN_PROGRESS' | 'COMPLETED' | 'STOPPED' | 'ARCHIVED' | 'WAITING_CHILD_DATA' | 'WAITING_CONSENT' | 'PENDING_REVIEW' | 'REVIEW_IN_PROGRESS' | 'VALIDATED' | 'CANCELLED';
+  estado: 'INITIATED' | 'IN_PROGRESS' | 'COMPLETED' | 'STOPPED' | 'ARCHIVED' | 'WAITING_CHILD_DATA' | 'WAITING_CONSENT' | 'PENDING_REVIEW' | 'REVIEW_IN_PROGRESS' | 'PAUSED' | 'VALIDATED' | 'CANCELLED';
   edad_meses: number;
   session_code?: string;
   modo_evaluacion?: 'SYNCHRONOUS' | 'DEFERRED' | 'HYBRID';
