@@ -2,15 +2,14 @@
 
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.utils.dateparse import parse_date
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.decorators import (
     api_view,
-    authentication_classes,
     permission_classes,
 )
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from src.api.auth import CsrfExemptSessionAuthentication
 from .models import Niño, ProfessionalProfile
 from .permissions import IsApprovedProfessional
 
@@ -45,7 +44,6 @@ def serialize_niño(niño, include_edad=False):
 
 
 @api_view(["POST"])
-@authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
 def login_view(request):
     """Authenticate psychologist with email and password."""
@@ -76,7 +74,6 @@ def login_view(request):
 
 
 @api_view(["POST"])
-@authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
 def register_view(request):
     """Create a psychologist user and start a session."""
@@ -115,8 +112,15 @@ def register_view(request):
     )
 
 
+@ensure_csrf_cookie
 @api_view(["GET"])
-@authentication_classes([CsrfExemptSessionAuthentication])
+@permission_classes([AllowAny])
+def csrf_view(request):
+    """Issue a CSRF cookie for the separate frontend origin."""
+    return Response({"status": "ok"})
+
+
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def me_view(request):
     """Return the current authenticated user."""
@@ -124,7 +128,6 @@ def me_view(request):
 
 
 @api_view(["POST"])
-@authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
     """End the current authenticated session."""

@@ -275,3 +275,28 @@ def test_approved_professional_can_access_evaluations(evaluation):
     response = client.get("/api/evaluaciones/")
 
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_session_mutations_require_csrf_token(evaluation):
+    _, _, psychologist = evaluation
+    client = APIClient(enforce_csrf_checks=True)
+    assert client.login(username=psychologist.username, password="test-password")
+
+    blocked = client.post(
+        "/api/children/",
+        {"nombre": "Sin token", "fecha_nacimiento": "2021-01-01"},
+        format="json",
+    )
+    assert blocked.status_code == 403
+
+    csrf_response = client.get("/api/auth/csrf/")
+    csrf_token = csrf_response.cookies["csrftoken"].value
+    accepted = client.post(
+        "/api/children/",
+        {"nombre": "Con token", "fecha_nacimiento": "2021-01-01"},
+        format="json",
+        HTTP_X_CSRFTOKEN=csrf_token,
+    )
+
+    assert accepted.status_code == 201

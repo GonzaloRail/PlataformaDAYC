@@ -49,6 +49,26 @@ const defaultOptions: RequestOptions = {
   credentials: 'include',
 };
 
+let csrfRequest: Promise<void> | null = null;
+
+function getCookie(name: string): string | undefined {
+  const prefix = `${name}=`;
+  return document.cookie.split('; ').find((cookie) => cookie.startsWith(prefix))?.slice(prefix.length);
+}
+
+async function ensureCsrfToken(): Promise<void> {
+  if (getCookie('csrftoken')) return;
+  csrfRequest ||= fetch(toApiUrl('/api/auth/csrf/'), {
+    credentials: 'include',
+    cache: 'no-store',
+  }).then((response) => {
+    if (!response.ok) throw new Error('No se pudo inicializar la protección CSRF');
+  }).finally(() => {
+    csrfRequest = null;
+  });
+  await csrfRequest;
+}
+
 async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { timeout = 30000, ...fetchOptions } = options;
 
@@ -56,10 +76,17 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
+    const headers = new Headers(fetchOptions.headers);
+    if (!['GET', 'HEAD', 'OPTIONS'].includes(fetchOptions.method || 'GET')) {
+      await ensureCsrfToken();
+      const csrfToken = getCookie('csrftoken');
+      if (csrfToken) headers.set('X-CSRFToken', csrfToken);
+    }
     const response = await fetch(toApiUrl(endpoint), {
       ...defaultOptions,
       cache: 'no-store',
       ...fetchOptions,
+      headers,
       signal: controller.signal,
     });
 
