@@ -328,3 +328,28 @@ def test_consent_persists_selected_modalities(evaluation):
     assert not consent.accepted_screenshots
     assert not consent.accepted_audio
     assert consent.accepted_video
+
+
+@pytest.mark.django_db
+def test_adult_can_pause_and_resume_an_active_session(evaluation):
+    current, _, _ = evaluation
+    token = ensure_session_token(current, SessionAccessToken.ActorRole.ADULT)
+    client = APIClient()
+
+    paused = client.post(
+        f"/api/evaluaciones/session/{current.session_code}/pause/",
+        {"expected_version": current.version},
+        format="json",
+        **bearer(token),
+    )
+    assert paused.status_code == 200
+    assert paused.data["evaluacion"]["estado"] == Evaluación.Estado.PAUSED
+
+    resumed = client.post(
+        f"/api/evaluaciones/session/{current.session_code}/resume/",
+        {"expected_version": paused.data["evaluacion"]["version"]},
+        format="json",
+        **bearer(token),
+    )
+    assert resumed.status_code == 200
+    assert resumed.data["evaluacion"]["estado"] == Evaluación.Estado.IN_PROGRESS

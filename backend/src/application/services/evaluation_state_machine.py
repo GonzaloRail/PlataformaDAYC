@@ -26,7 +26,12 @@ class EvaluationStateMachine:
         },
         Evaluación.Estado.IN_PROGRESS: {
             Evaluación.Estado.PENDING_REVIEW,
+            Evaluación.Estado.PAUSED,
             Evaluación.Estado.STOPPED,
+            Evaluación.Estado.CANCELLED,
+        },
+        Evaluación.Estado.PAUSED: {
+            Evaluación.Estado.IN_PROGRESS,
             Evaluación.Estado.CANCELLED,
         },
         Evaluación.Estado.PENDING_REVIEW: {

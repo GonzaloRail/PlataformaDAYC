@@ -762,6 +762,67 @@ def accept_consent(request, session_code):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @transaction.atomic
+def pause_session(request, session_code):
+    try:
+        evaluación = _get_locked_evaluation_by_session(session_code)
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Código de sesión inválido"}, status=status.HTTP_404_NOT_FOUND
+        )
+    if not _autorizar_evaluacion(
+        request, evaluación, [SessionAccessToken.ActorRole.ADULT]
+    ):
+        return Response(
+            {"error": "Token de sesión inválido o faltante"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    version_error = _require_expected_version(request, evaluación)
+    if version_error:
+        return version_error
+    if evaluación.estado != Evaluación.Estado.IN_PROGRESS:
+        return Response(
+            {"error": "Solo una sesión en progreso puede pausarse"},
+            status=status.HTTP_409_CONFLICT,
+        )
+    evaluation_state_machine.transition(evaluación, Evaluación.Estado.PAUSED)
+    _advance_evaluation_version(evaluación)
+    _publish_evaluation_progress(evaluación)
+    return Response({"evaluacion": _serialize_evaluación(evaluación)})
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@transaction.atomic
+def resume_session(request, session_code):
+    try:
+        evaluación = _get_locked_evaluation_by_session(session_code)
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Código de sesión inválido"}, status=status.HTTP_404_NOT_FOUND
+        )
+    if not _autorizar_evaluacion(
+        request, evaluación, [SessionAccessToken.ActorRole.ADULT]
+    ):
+        return Response(
+            {"error": "Token de sesión inválido o faltante"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    version_error = _require_expected_version(request, evaluación)
+    if version_error:
+        return version_error
+    if evaluación.estado != Evaluación.Estado.PAUSED:
+        return Response(
+            {"error": "La sesión no está en pausa"}, status=status.HTTP_409_CONFLICT
+        )
+    evaluation_state_machine.transition(evaluación, Evaluación.Estado.IN_PROGRESS)
+    _advance_evaluation_version(evaluación)
+    _publish_evaluation_progress(evaluación)
+    return Response({"evaluacion": _serialize_evaluación(evaluación)})
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@transaction.atomic
 def start_child_session(request, session_code):
     try:
         evaluación = _get_locked_evaluation_by_session(session_code)

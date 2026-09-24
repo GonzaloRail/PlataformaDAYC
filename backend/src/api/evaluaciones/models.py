@@ -28,6 +28,7 @@ class Evaluación(models.Model):
         WAITING_CONSENT = "WAITING_CONSENT", "Esperando consentimiento"
         PENDING_REVIEW = "PENDING_REVIEW", "Pendiente de revisión"
         REVIEW_IN_PROGRESS = "REVIEW_IN_PROGRESS", "Revisión en progreso"
+        PAUSED = "PAUSED", "En pausa"
         VALIDATED = "VALIDATED", "Validada"
         CANCELLED = "CANCELLED", "Cancelada"
 

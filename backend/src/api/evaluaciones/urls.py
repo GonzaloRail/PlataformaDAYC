@@ -30,6 +30,14 @@ urlpatterns = [
         name="accept_consent",
     ),
     path(
+        "session/<str:session_code>/pause/", views.pause_session, name="pause_session"
+    ),
+    path(
+        "session/<str:session_code>/resume/",
+        views.resume_session,
+        name="resume_session",
+    ),
+    path(
         "session/<str:session_code>/start/",
         views.start_child_session,
         name="start_child_session",
