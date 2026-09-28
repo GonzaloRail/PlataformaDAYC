@@ -178,6 +178,7 @@ def test_evidence_actor_is_derived_from_token(evaluation):
     assert evidence.capture_authorization == "CHILD:child-device"
     assert evidence.capture_custodian == "CHILD_DEVICE"
     assert evidence.capture_quality == "UNSPECIFIED"
+    assert evidence.absence_reason == "NO_FILE_CAPTURED"
 
 
 @pytest.mark.django_db
@@ -217,7 +218,6 @@ def test_withdrawal_race_serializations_erase_prior_capture_and_reject_later_cap
     )
     assert after_withdrawal.status_code == 403
     assert Evidencia.objects.filter(evaluación=current).count() == 1
-    assert evidence.absence_reason == "NO_FILE_CAPTURED"
 
 
 @pytest.mark.django_db
