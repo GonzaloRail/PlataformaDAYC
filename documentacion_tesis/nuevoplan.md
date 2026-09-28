@@ -307,13 +307,15 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 
 ## Fase 9: Evaluación confirmatoria
 
-- [ ] Congelar código, infraestructura, dependencias, scripts y semillas.
-- [ ] Sellar corpus sintético confirmatorio y umbrales antes de abrir resultados.
-- [ ] Ejecutar todas las combinaciones aplicables de escenario y carga.
-- [ ] Comparar contra oráculos externos.
-- [ ] Clasificar cada indicador como cumple, no cumple, indeterminado o no aplicable.
-- [ ] Reportar resultados negativos y limitaciones.
-- [ ] No modificar código durante la ejecución confirmatoria.
+- [x] Congelar código, infraestructura, dependencias, scripts y semillas.
+- [x] Sellar corpus sintético confirmatorio y umbrales antes de abrir resultados.
+- [x] Ejecutar todas las combinaciones aplicables de escenario y carga.
+- [x] Comparar contra oráculos externos.
+- [x] Clasificar cada indicador como cumple, no cumple, indeterminado o no aplicable.
+- [x] Reportar resultados negativos y limitaciones.
+- [x] No modificar código durante la ejecución confirmatoria.
+
+**Resultado:** el 2026-09-28, el commit congelado `7802712a518f13cdaf47d05fc17a440b44e473ae` completó las 138 celdas de la matriz v2 con veredicto `pass` del oráculo independiente. El detalle, alcance y el intento invalidado previo se registran en `evidencias_ejecucion/fase_09/resultado_confirmatorio_v2.md`.
 
 ## Orden de ejecución
 
