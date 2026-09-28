@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Calculator, ChevronLeft, ChevronRight, KeyRound, LayoutDashboard, LineChart, LogOut, Menu, X } from 'lucide-react'
+import { Calculator, ChevronLeft, ChevronRight, GitBranch, KeyRound, LayoutDashboard, LineChart, LogOut, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { store } from '@/store'
 import './PsychologistLayout.css'
@@ -22,6 +22,7 @@ export function PsychologistLayout() {
     if (location.pathname.startsWith('/psychologist/minijuegos')) return 'Catalogo de minijuegos'
     if (location.pathname.startsWith('/psychologist/session-access')) return 'Entrada por codigo'
     if (location.pathname.startsWith('/psychologist/calculo-resultados')) return 'Calculo de resultados'
+    if (location.pathname.startsWith('/psychologist/lineage')) return 'Linaje y procedencia'
     return 'Panel de evaluaciones'
   }, [location.pathname])
 
@@ -30,6 +31,7 @@ export function PsychologistLayout() {
     { to: '/psychologist/minijuegos', label: 'Minijuegos', icon: <LayoutDashboard size={18} /> },
     { to: '/psychologist/lab-prototypes', label: 'Lab Prototipos', icon: <LayoutDashboard size={18} /> },
     { to: '/psychologist/calculo-resultados', label: 'Calculo Resultados', icon: <Calculator size={18} /> },
+    { to: '/psychologist/lineage', label: 'Linaje', icon: <GitBranch size={18} /> },
     { to: '/research/metrics', label: 'Metricas', icon: <LineChart size={18} /> },
     { to: '/psychologist/session-access', label: 'Entrada', icon: <KeyRound size={18} /> },
   ]

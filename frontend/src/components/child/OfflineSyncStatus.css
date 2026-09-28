@@ -1,0 +1,48 @@
+.offline-sync-status {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  color: #49636f;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.offline-sync-status > span,
+.offline-sync-status > small {
+  border-radius: 999px;
+  padding: 0.42rem 0.7rem;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 28px rgba(27, 74, 92, 0.08);
+}
+
+.offline-sync-connection {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #237152;
+}
+
+.offline-sync-connection i {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.offline-sync-connection[data-online='false'] {
+  color: #a65a25;
+}
+
+.offline-sync-status-attention > span:not(.offline-sync-connection),
+.offline-sync-status small {
+  color: #943231;
+  background: #fff0ed;
+}
+
+@media (max-width: 768px) {
+  .offline-sync-status {
+    justify-content: flex-start;
+  }
+}

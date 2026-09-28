@@ -21,6 +21,7 @@ def build_request(token=None):
 def build_evaluation(expires_at):
     return SimpleNamespace(
         psychologist_id="psychologist-1",
+        professional_id=None,
         session_token="valid-token",
         session_expires_at=expires_at,
     )

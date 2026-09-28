@@ -17,6 +17,11 @@ urlpatterns = [
     path("", views.crear_evaluación, name="crear_evaluación"),
     path("join/", views.join_evaluación, name="join_evaluación"),
     path(
+        "<uuid:pk>/credentials/rotate/",
+        views.rotate_session_credentials,
+        name="rotate_session_credentials",
+    ),
+    path(
         "session/<str:session_code>/state/", views.session_state, name="session_state"
     ),
     path(
@@ -28,6 +33,11 @@ urlpatterns = [
         "session/<str:session_code>/consent/",
         views.accept_consent,
         name="accept_consent",
+    ),
+    path(
+        "session/<str:session_code>/assent/",
+        views.record_assent,
+        name="record_assent",
     ),
     path(
         "session/<str:session_code>/pause/", views.pause_session, name="pause_session"
@@ -85,13 +95,43 @@ urlpatterns = [
         views.descargar_evidencia,
         name="descargar_evidencia",
     ),
+    path(
+        "evidencias/<int:evidence_id>/audit-integrity/",
+        views.verificar_auditoria_evidencia,
+        name="verificar_auditoria_evidencia",
+    ),
     path("<uuid:pk>/review/", views.review_overview, name="review_overview"),
+    path("<uuid:pk>/review/assignment/receive/", views.receive_review_assignment, name="receive_review_assignment"),
     path("<uuid:pk>/review/pending/", views.review_pending, name="review_pending"),
     path(
         "<uuid:pk>/items/<str:item_id>/review/", views.review_item, name="review_item"
     ),
     path("<uuid:pk>/review/complete/", views.review_complete, name="review_complete"),
+    path("<uuid:pk>/review/reopen/", views.reopen_review, name="reopen_review"),
     path("<uuid:pk>/respuestas/", views.listar_respuestas, name="listar_respuestas"),
+    path(
+        "<uuid:pk>/provenance/graph/", views.provenance_graph, name="provenance_graph"
+    ),
+    path(
+        "<uuid:pk>/provenance/export/",
+        views.provenance_export,
+        name="provenance_export",
+    ),
+    path(
+        "<uuid:pk>/provenance/issues/",
+        views.provenance_issues,
+        name="provenance_issues",
+    ),
+    path(
+        "<uuid:pk>/resultados/<uuid:rid>/provenance/sources/",
+        views.provenance_result_sources,
+        name="provenance_result_sources",
+    ),
+    path(
+        "evidencias/<int:evidence_id>/provenance/uses/",
+        views.provenance_evidence_uses,
+        name="provenance_evidence_uses",
+    ),
     path("<uuid:pk>/progress/", views.progreso_evaluación, name="progreso_evaluación"),
     path("<uuid:pk>/score/", views.calcular_puntuación, name="calcular_puntuación"),
     path(

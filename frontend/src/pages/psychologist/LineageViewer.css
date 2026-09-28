@@ -1,0 +1,38 @@
+.lineage-page { max-width: 1400px; margin: 0 auto; padding: clamp(1rem, 3vw, 2.5rem); color: var(--color-matisse-900); }
+.lineage-header { display: flex; gap: 1.5rem; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; }
+.lineage-kicker { margin: 0 0 .45rem; color: var(--color-accent-strong); font-size: .72rem; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
+.lineage-header h1 { margin: 0; font-size: clamp(1.8rem, 4vw, 2.7rem); letter-spacing: -.045em; line-height: 1; }
+.lineage-header p:not(.lineage-kicker) { max-width: 650px; margin: .75rem 0 0; color: var(--color-text-soft); line-height: 1.55; }
+.lineage-export { display: inline-flex; align-items: center; gap: .5rem; flex: 0 0 auto; padding: .72rem 1rem; border-radius: 12px; background: var(--color-primary); color: #fff; text-decoration: none; font-size: .88rem; font-weight: 900; box-shadow: 0 10px 24px rgba(15, 107, 122, .18); }
+.lineage-search, .lineage-panel, .lineage-summary { border: 1px solid rgba(24, 50, 71, .1); border-radius: 20px; background: rgba(255, 255, 255, .72); box-shadow: var(--shadow-xs); }
+.lineage-search { padding: 1rem; margin-bottom: 1.25rem; }
+.lineage-search label { display: block; margin-bottom: .5rem; color: var(--color-text-soft); font-size: .76rem; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; }
+.lineage-search div { display: flex; gap: .75rem; }
+.lineage-search input { min-width: 0; flex: 1; border: 1px solid rgba(24, 50, 71, .16); border-radius: 12px; padding: .72rem .85rem; color: var(--color-matisse-900); font: inherit; background: #fff; }
+.lineage-search input:focus { outline: 3px solid rgba(15, 107, 122, .2); border-color: var(--color-primary); }
+.lineage-summary { display: grid; grid-template-columns: repeat(4, 1fr); margin-bottom: 1.25rem; overflow: hidden; }
+.lineage-summary div { padding: 1rem 1.15rem; border-right: 1px solid rgba(24, 50, 71, .08); }
+.lineage-summary div:last-child { border-right: 0; }
+.lineage-summary span, .lineage-node dt { display: block; color: var(--color-text-soft); font-size: .72rem; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+.lineage-summary strong { display: block; margin-top: .35rem; font-size: 1.25rem; letter-spacing: -.03em; }
+.lineage-content-grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(270px, .75fr); gap: 1.25rem; }
+.lineage-panel { padding: 1.2rem; }
+.lineage-panel-heading { display: flex; gap: .7rem; align-items: flex-start; margin-bottom: 1rem; color: var(--color-primary); }
+.lineage-panel-heading h2 { margin: 0; color: var(--color-matisse-900); font-size: 1.05rem; letter-spacing: -.02em; }
+.lineage-panel-heading p { margin: .2rem 0 0; color: var(--color-text-soft); font-size: .85rem; line-height: 1.4; }
+.lineage-nodes { display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: .85rem; }
+.lineage-node { position: relative; border: 1px solid rgba(24, 50, 71, .1); border-left: 4px solid var(--lineage-type); border-radius: 14px; padding: .9rem; background: #fff; }
+.lineage-node--entity { --lineage-type: #0f6b7a; }
+.lineage-node--activity { --lineage-type: #d97706; }
+.lineage-node--agent { --lineage-type: #7c3aed; }
+.lineage-node-heading { display: flex; justify-content: space-between; gap: .4rem; align-items: center; }
+.lineage-node-type, .lineage-integrity { border-radius: 99px; padding: .22rem .45rem; font-size: .66rem; font-weight: 950; letter-spacing: .04em; text-transform: uppercase; }
+.lineage-node-type { color: var(--lineage-type); background: color-mix(in srgb, var(--lineage-type) 10%, white); }
+.lineage-integrity--verified { color: #166534; background: #dcfce7; }.lineage-integrity--unverified { color: #92400e; background: #fef3c7; }.lineage-integrity--failed { color: #b91c1c; background: #fee2e2; }
+.lineage-node h3 { margin: .75rem 0 .35rem; font-size: .96rem; line-height: 1.25; }.lineage-node p { margin: 0 0 .8rem; color: var(--color-text-soft); font-size: .8rem; line-height: 1.4; }
+.lineage-node dl { display: grid; gap: .45rem; margin: 0; }.lineage-node dl div { display: grid; gap: .12rem; }.lineage-node dd { margin: 0; overflow: hidden; color: var(--color-matisse-800); font-size: .74rem; text-overflow: ellipsis; white-space: nowrap; }
+.lineage-gaps { display: grid; gap: .65rem; padding: 0; margin: 0; list-style: none; }.lineage-gap { border-left: 3px solid; border-radius: 8px; padding: .65rem .7rem; background: #fff; }.lineage-gap--info { border-color: #0f6b7a; }.lineage-gap--warning { border-color: #d97706; }.lineage-gap--error { border-color: #dc2626; }.lineage-gap strong { font-size: .73rem; }.lineage-gap p { margin: .3rem 0; color: var(--color-text-soft); font-size: .82rem; line-height: 1.4; }.lineage-gap small { color: var(--color-text-soft); font-size: .7rem; }
+.lineage-clear, .lineage-empty { margin: 1rem 0 0; color: var(--color-text-soft); font-size: .9rem; }.lineage-clear { color: #166534; }
+.lineage-chain-panel { margin-top: 1.25rem; }.lineage-relations { display: grid; gap: .55rem; padding: 0; margin: 0; list-style: none; }.lineage-relation { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: .65rem; padding: .75rem .85rem; border-radius: 10px; background: rgba(15, 107, 122, .045); font-size: .85rem; }.lineage-relation span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.lineage-relation strong { color: var(--color-primary); font-size: .72rem; text-transform: uppercase; }
+@media (max-width: 820px) { .lineage-header { flex-direction: column; }.lineage-summary { grid-template-columns: repeat(2, 1fr); }.lineage-summary div:nth-child(2) { border-right: 0; }.lineage-summary div:nth-child(-n+2) { border-bottom: 1px solid rgba(24, 50, 71, .08); }.lineage-content-grid { grid-template-columns: 1fr; } }
+@media (max-width: 540px) { .lineage-page { padding: 1rem; }.lineage-search div { flex-direction: column; }.lineage-search .btn { width: 100%; }.lineage-summary { grid-template-columns: 1fr; }.lineage-summary div { border-right: 0; border-bottom: 1px solid rgba(24, 50, 71, .08); }.lineage-summary div:last-child { border-bottom: 0; }.lineage-relation { grid-template-columns: 1fr; gap: .25rem; }.lineage-relation strong::before { content: 'Relación: '; } }

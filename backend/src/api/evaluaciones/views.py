@@ -9,9 +9,8 @@ from datetime import timedelta
 from django.http import FileResponse
 from django.db import transaction
 from django.conf import settings
+from django.core.cache import cache
 from django.utils import timezone
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -24,28 +23,34 @@ from .models import (
     AssentRecord,
     ConsentRecord,
     Consentimiento,
+    DistributedOperation,
     Evaluación,
     EvaluacionItem,
     Evidencia,
+    EvidenceAsset,
     EvidenceAccessAudit,
     EvidencePolicy,
     InteractionEvent,
+    OutboxEvent,
+    PauseRecord,
+    ProfessionalReviewAssignment,
+    ItemReview,
+    EvaluationClosure,
     Respuesta,
     ResultadoÁrea,
     SessionAccessToken,
     SessionInvitation,
     WithdrawalRecord,
 )
+from .storage import inspect_uploaded_evidence
+from src.application.services.provenance_service import provenance_service
+from src.application.services.operation_context import bind_operation, clear_operation
+from src.application.services.telemetry_service import record_telemetry
 
 
-def _publish_evaluation_progress(evaluación):
-    """Publish the persisted evaluation state to connected observers."""
-    channel_layer = get_channel_layer()
-    if channel_layer is None:
-        return
-
+def _evaluation_progress_payload(evaluación):
     completed = evaluación.respuestas.count()
-    payload = {
+    return {
         "event_id": str(uuid.uuid4()),
         "evaluation_id": str(evaluación.id),
         "total_items": evaluación.items.count(),
@@ -55,13 +60,32 @@ def _publish_evaluation_progress(evaluación):
         "version": evaluación.version,
         "server_time": timezone.now().isoformat(),
     }
-    try:
-        async_to_sync(channel_layer.group_send)(
-            f"evaluation_{evaluación.id}",
-            {"type": "evaluation_update", "event": "progress", "data": payload},
+
+
+def _publish_evaluation_progress(evaluación, operation=None):
+    """Persist progress before attempting post-commit publication."""
+    payload = _evaluation_progress_payload(evaluación)
+    if operation is None:
+        operation = DistributedOperation.objects.create(
+            evaluación=evaluación,
+            actor_role="SYSTEM",
+            aggregate_type="EVALUATION",
+            aggregate_id=str(evaluación.id),
+            operation_type="EVALUATION_PROGRESS",
+            base_version=evaluación.version,
+            payload=payload,
+            status=DistributedOperation.Status.APPLIED,
+            result={"version": evaluación.version},
+            applied_at=timezone.now(),
         )
-    except Exception:
-        logger.exception("Could not publish progress for evaluation %s", evaluación.id)
+    payload["operation_id"] = str(operation.operation_id)
+    event = OutboxEvent.objects.create(
+        evaluación=evaluación,
+        operation=operation,
+        event_type="EVALUATION_PROGRESS",
+        payload=payload,
+    )
+    transaction.on_commit(lambda event_id=event.id: deliver_outbox_event(event_id))
 
 
 def _idempotency_key(request):
@@ -74,6 +98,168 @@ def _idempotency_key(request):
         return uuid.UUID(str(raw_key))
     except (TypeError, ValueError, AttributeError):
         return None
+
+
+def _operation_actor(request, evaluación):
+    access_token = _participant_access(request, evaluación)
+    if request.user.is_authenticated:
+        return "PSYCHOLOGIST", str(request.user.id), ""
+    if access_token:
+        return access_token.actor_role, access_token.device_id, access_token.device_id
+    return "SYSTEM", "", ""
+
+
+def _operation_payload(request, operation_type):
+    payload = dict(request.data)
+    try:
+        json.dumps(payload)
+    except TypeError:
+        payload = {"operation_type": operation_type}
+    return payload
+
+
+def _receive_operation(
+    request,
+    evaluación,
+    operation_type,
+    aggregate_type,
+    aggregate_id,
+    require_client_id=False,
+):
+    """Create an inbox record before applying an effect, or return its replay."""
+    clear_operation()
+    operation_id = _idempotency_key(request)
+    if operation_id is None and require_client_id:
+        return None, Response(
+            {"error": "Idempotency-Key válido es obligatorio"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    operation_id = operation_id or uuid.uuid4()
+
+    existing = DistributedOperation.objects.filter(operation_id=operation_id).first()
+    if existing:
+        if existing.evaluación_id != evaluación.id:
+            return None, Response(
+                {"error": "operation_id ya pertenece a otra evaluación"},
+                status=status.HTTP_409_CONFLICT,
+            )
+        if existing.status in {
+            DistributedOperation.Status.APPLIED,
+            DistributedOperation.Status.CONFLICT,
+            DistributedOperation.Status.REJECTED,
+        }:
+            record_telemetry(
+                "DUPLICATE",
+                operation=existing,
+                attributes={"response_status": existing.response_status or 200},
+            )
+            return None, Response(
+                {**existing.result, "idempotent_replay": True},
+                status=existing.response_status or status.HTTP_200_OK,
+            )
+        return None, Response(
+            {
+                "error": "La operación ya se encuentra en procesamiento",
+                "operation_id": str(operation_id),
+            },
+            status=status.HTTP_409_CONFLICT,
+        )
+
+    actor_role, actor_id, device_id = _operation_actor(request, evaluación)
+    raw_sequence = request.data.get("device_sequence")
+    try:
+        device_sequence = int(raw_sequence) if raw_sequence is not None else None
+    except (TypeError, ValueError):
+        return None, Response(
+            {"error": "device_sequence debe ser un entero no negativo"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    if device_sequence is not None and device_sequence < 0:
+        return None, Response(
+            {"error": "device_sequence debe ser un entero no negativo"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    latest_sequence = (
+        DistributedOperation.objects.filter(
+            evaluación=evaluación,
+            device_id=device_id,
+            device_sequence__isnull=False,
+        )
+        .order_by("-device_sequence")
+        .values_list("device_sequence", flat=True)
+        .first()
+    )
+    if (
+        latest_sequence is not None
+        and device_sequence is not None
+        and device_sequence < latest_sequence
+    ):
+        return None, Response(
+            {
+                "error": "La operación llegó fuera de orden",
+                "operation_id": str(operation_id),
+                "current_sequence": latest_sequence,
+                "action": "Recuperar el estado canónico y reenviar en orden",
+            },
+            status=status.HTTP_409_CONFLICT,
+        )
+    operation = DistributedOperation.objects.create(
+        operation_id=operation_id,
+        evaluación=evaluación,
+        actor_role=actor_role,
+        actor_id=actor_id,
+        device_id=device_id,
+        device_sequence=device_sequence,
+        aggregate_type=aggregate_type,
+        aggregate_id=str(aggregate_id),
+        operation_type=operation_type,
+        base_version=request.data.get("expected_version"),
+        payload=_operation_payload(request, operation_type),
+        status=DistributedOperation.Status.RECEIVED,
+    )
+    bind_operation(operation.operation_id)
+    return operation, None
+
+
+def _finalize_operation(operation, operation_status, result, response_status):
+    result.setdefault("operation_id", str(operation.operation_id))
+    if operation_status == DistributedOperation.Status.CONFLICT:
+        evaluation = operation.evaluación
+        result.setdefault("operation_id", str(operation.operation_id))
+        result.setdefault("current_version", evaluation.version)
+        result.setdefault("estado", evaluation.estado)
+        result.setdefault(
+            "recoverable_state",
+            {
+                "version": evaluation.version,
+                "estado": evaluation.estado,
+                "current_item_id": evaluation.current_item_id,
+            },
+        )
+        result.setdefault(
+            "action", "Recuperar el estado canónico y resolver el conflicto"
+        )
+    operation.status = operation_status
+    operation.result = result
+    operation.applied_at = timezone.now()
+    operation.response_status = response_status
+    operation.save(update_fields=["status", "result", "response_status", "applied_at"])
+    if operation_status == DistributedOperation.Status.CONFLICT:
+        record_telemetry("CONFLICT", operation=operation)
+    elif operation_status in {
+        DistributedOperation.Status.REJECTED,
+        DistributedOperation.Status.QUARANTINED,
+    }:
+        record_telemetry(
+            "ERROR", operation=operation, attributes={"status": operation_status}
+        )
+    clear_operation()
+
+
+def _apply_operation(operation, result, response_status=status.HTTP_200_OK):
+    _finalize_operation(
+        operation, DistributedOperation.Status.APPLIED, result, response_status
+    )
 
 
 def _advance_evaluation_version(evaluación):
@@ -107,6 +293,13 @@ def _require_expected_version(request, evaluación):
                 "current_version": evaluación.version,
                 "estado": evaluación.estado,
                 "current_item_id": evaluación.current_item_id,
+                "operation_id": str(_idempotency_key(request) or ""),
+                "recoverable_state": {
+                    "version": evaluación.version,
+                    "estado": evaluación.estado,
+                    "current_item_id": evaluación.current_item_id,
+                },
+                "action": "Recuperar el estado canónico y reenviar con la versión actual",
             },
             status=status.HTTP_409_CONFLICT,
         )
@@ -124,7 +317,7 @@ def _get_locked_evaluation_by_session(session_code):
 def _audit_evidence_access(request, evidencia, action):
     user = getattr(request, "user", None)
     access_token = _participant_access(request, evidencia.evaluación)
-    EvidenceAccessAudit.objects.create(
+    EvidenceAccessAudit.record(
         evidencia=evidencia,
         action=action,
         actor=(
@@ -157,6 +350,7 @@ from src.application.services.response_submission_service import (
     InvalidResponseSubmission,
     validate_response_submission,
 )
+from src.application.services.outbox_service import deliver_outbox_event
 from .serializers import (
     generar_codigo_sesion,
     serialize_evaluación as _serialize_evaluación,
@@ -180,17 +374,59 @@ def _participant_access(request, evaluación):
 
 
 def _is_owner_psychologist(request, evaluación):
-    return request.user.is_authenticated and str(request.user.id) == str(
-        evaluación.psychologist_id
+    return (
+        request.user.is_authenticated and evaluación.professional_id == request.user.id
     )
 
 
-def _pause_conflict(evaluación):
+def _conflict_response(request, evaluación, error, action, **details):
+    return Response(
+        {
+            "error": error,
+            "operation_id": str(_idempotency_key(request) or ""),
+            "current_version": evaluación.version,
+            "estado": evaluación.estado,
+            "recoverable_state": {
+                "version": evaluación.version,
+                "estado": evaluación.estado,
+                "current_item_id": evaluación.current_item_id,
+            },
+            "action": action,
+            **details,
+        },
+        status=status.HTTP_409_CONFLICT,
+    )
+
+
+def _pause_conflict(request, evaluación):
+    if evaluación.estado == Evaluación.Estado.CANCELLED:
+        return _conflict_response(
+            request,
+            evaluación,
+            "La sesión fue retirada",
+            "No se permiten nuevas capturas",
+        )
     if evaluación.estado == Evaluación.Estado.PAUSED:
-        return Response(
-            {"error": "La sesión está en pausa"}, status=status.HTTP_409_CONFLICT
+        return _conflict_response(
+            request,
+            evaluación,
+            "La sesión está en pausa",
+            "Reanudar la sesión autorizadamente",
+        )
+    latest_assent = evaluación.assent_records.order_by("-created_at").first()
+    if latest_assent and latest_assent.decision != AssentRecord.Decision.ACCEPTED:
+        return _conflict_response(
+            request,
+            evaluación,
+            "El asentimiento vigente no permite continuar la captura",
+            "Registrar asentimiento vigente antes de continuar",
         )
     return None
+
+
+def _join_attempt_key(request, session_code):
+    raw = f"{_client_ip(request)}:{session_code}".encode()
+    return f"session-join:{hashlib.sha256(raw).hexdigest()}"
 
 
 @api_view(["GET", "POST"])
@@ -208,7 +444,7 @@ def crear_evaluación(request):
 
         evaluaciones_qs = (
             Evaluación.objects.select_related("niño")
-            .filter(psychologist_id=str(request.user.id))
+            .filter(professional=request.user)
             .order_by("-created_at")
         )
         evaluaciones, meta = _paginate(evaluaciones_qs, request)
@@ -231,6 +467,7 @@ def crear_evaluación(request):
         evaluación = Evaluación.objects.create(
             niño=niño,
             psychologist_id=str(request.user.id),
+            professional=request.user,
             estado=Evaluación.Estado.INITIATED,
             edad_meses=edad_meses,
             session_code=generar_codigo_sesion(),
@@ -258,7 +495,7 @@ def detalle_evaluación(request, pk):
     """Get evaluation details"""
     try:
         evaluación = Evaluación.objects.select_related("niño").get(
-            pk=pk, psychologist_id=str(request.user.id)
+            pk=pk, professional=request.user
         )
     except Evaluación.DoesNotExist:
         return Response(
@@ -311,36 +548,43 @@ def registrar_respuesta(request, pk):
             status=status.HTTP_403_FORBIDDEN,
         )
 
-    pause_error = _pause_conflict(evaluación)
+    pause_error = _pause_conflict(request, evaluación)
     if pause_error:
         return pause_error
 
-    idempotency_key = _idempotency_key(request)
-    if idempotency_key:
-        previous = Respuesta.objects.filter(
-            evaluación=evaluación, idempotency_key=idempotency_key
-        ).first()
-        if previous:
-            return Response(
-                {
-                    "evaluación_estado": evaluación.estado,
-                    "estado": evaluación.estado,
-                    "idempotent_replay": True,
-                    "current_task": dayc2_flow_service.get_current_task_payload(
-                        evaluación
-                    ),
-                    "version": evaluación.version,
-                }
-            )
+    operation, replay = _receive_operation(
+        request,
+        evaluación,
+        "RESPONSE_SUBMITTED",
+        "EVALUATION_ITEM",
+        request.data.get("item_id", ""),
+        require_client_id=True,
+    )
+    if replay:
+        return replay
 
+    idempotency_key = _idempotency_key(request)
     version_error = _require_expected_version(request, evaluación)
     if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
         return version_error
 
     try:
         validate_response_submission(evaluación, request.data.get("item_id"))
     except InvalidResponseSubmission as exc:
-        return Response({"error": str(exc)}, status=status.HTTP_409_CONFLICT)
+        result = {"error": str(exc)}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
 
     raw_result = request.data.get("resultado", request.data.get("result", "CORRECT"))
     participant = _participant_access(request, evaluación)
@@ -379,26 +623,27 @@ def registrar_respuesta(request, pk):
             )
 
     evaluación.refresh_from_db()
+    idempotency_key = _idempotency_key(request)
     if idempotency_key and item:
         Respuesta.objects.filter(
             evaluación=evaluación, evaluación_item=item, idempotency_key__isnull=True
         ).order_by("-created_at").update(idempotency_key=idempotency_key)
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
-    return Response(
-        {
-            "evaluación_estado": evaluación.estado,
-            "estado": evaluación.estado,
-            "item": _serialize_item(item) if item else None,
-            "stop_triggered": bool(advance_info.get("area_finished_by_rule")),
-            "area_finished": bool(advance_info.get("area_finished")),
-            "evaluation_finished": bool(advance_info.get("evaluation_finished")),
-            "next_area": advance_info.get("next_area"),
-            "next_item_id": advance_info.get("next_item_id"),
-            "current_task": dayc2_flow_service.get_current_task_payload(evaluación),
-            "version": evaluación.version,
-        }
-    )
+    result = {
+        "evaluación_estado": evaluación.estado,
+        "estado": evaluación.estado,
+        "item": _serialize_item(item) if item else None,
+        "stop_triggered": bool(advance_info.get("area_finished_by_rule")),
+        "area_finished": bool(advance_info.get("area_finished")),
+        "evaluation_finished": bool(advance_info.get("evaluation_finished")),
+        "next_area": advance_info.get("next_area"),
+        "next_item_id": advance_info.get("next_item_id"),
+        "current_task": dayc2_flow_service.get_current_task_payload(evaluación),
+        "version": evaluación.version,
+    }
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
@@ -421,42 +666,53 @@ def registrar_auto_result(request, pk, item_id):
             status=status.HTTP_403_FORBIDDEN,
         )
 
-    pause_error = _pause_conflict(evaluación)
+    pause_error = _pause_conflict(request, evaluación)
     if pause_error:
         return pause_error
 
+    operation, replay = _receive_operation(
+        request,
+        evaluación,
+        "AUTO_RESULT_SUBMITTED",
+        "EVALUATION_ITEM",
+        item_id,
+        require_client_id=True,
+    )
+    if replay:
+        return replay
     idempotency_key = _idempotency_key(request)
-    if (
-        idempotency_key
-        and Evidencia.objects.filter(
-            evaluación=evaluación, idempotency_key=idempotency_key
-        ).exists()
-    ):
-        return Response(
-            {
-                "evaluación_estado": evaluación.estado,
-                "estado": evaluación.estado,
-                "idempotent_replay": True,
-                "current_task": dayc2_flow_service.get_current_task_payload(evaluación),
-                "version": evaluación.version,
-            }
-        )
-
     version_error = _require_expected_version(request, evaluación)
     if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
         return version_error
 
     try:
         validate_response_submission(evaluación, item_id)
     except InvalidResponseSubmission as exc:
-        return Response({"error": str(exc)}, status=status.HTTP_409_CONFLICT)
+        result = {"error": str(exc)}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
 
     evaluación_item = evaluación.items.filter(item_id=item_id).first()
     if not evaluación_item:
-        return Response(
-            {"error": "Ítem no encontrado en la evaluación"},
-            status=status.HTTP_404_NOT_FOUND,
+        result = {"error": "Ítem no encontrado en la evaluación"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_404_NOT_FOUND,
         )
+        return Response(result, status=status.HTTP_404_NOT_FOUND)
 
     resultado = request.data.get("resultado", "INCONCLUSIVE")
     confidence = request.data.get("confidence", 1.0)
@@ -509,24 +765,24 @@ def registrar_auto_result(request, pk, item_id):
 
     evaluación.refresh_from_db()
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
-    return Response(
-        {
-            "evaluación_estado": evaluación.estado,
-            "estado": evaluación.estado,
-            "stop_triggered": bool(advance_info.get("area_finished_by_rule")),
-            "area_finished": bool(advance_info.get("area_finished")),
-            "evaluation_finished": bool(advance_info.get("evaluation_finished")),
-            "next_area": advance_info.get("next_area"),
-            "next_item_id": advance_info.get("next_item_id"),
-            "current_task": (
-                dayc2_flow_service.get_current_task_payload(evaluación)
-                if not advance_info.get("evaluation_finished")
-                else None
-            ),
-            "version": evaluación.version,
-        }
-    )
+    result = {
+        "evaluación_estado": evaluación.estado,
+        "estado": evaluación.estado,
+        "stop_triggered": bool(advance_info.get("area_finished_by_rule")),
+        "area_finished": bool(advance_info.get("area_finished")),
+        "evaluation_finished": bool(advance_info.get("evaluation_finished")),
+        "next_area": advance_info.get("next_area"),
+        "next_item_id": advance_info.get("next_item_id"),
+        "current_task": (
+            dayc2_flow_service.get_current_task_payload(evaluación)
+            if not advance_info.get("evaluation_finished")
+            else None
+        ),
+        "version": evaluación.version,
+    }
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
@@ -534,6 +790,13 @@ def registrar_auto_result(request, pk, item_id):
 @transaction.atomic
 def join_evaluación(request):
     session_code = str(request.data.get("session_code") or "").strip().upper()
+    attempt_key = _join_attempt_key(request, session_code)
+    attempts = cache.get(attempt_key, 0)
+    if attempts >= settings.SESSION_JOIN_MAX_ATTEMPTS:
+        return Response(
+            {"error": "Demasiados intentos. Intenta nuevamente más tarde."},
+            status=status.HTTP_429_TOO_MANY_REQUESTS,
+        )
     invitation_code = str(request.data.get("invitation_code") or "").strip()
     if not invitation_code:
         return Response(
@@ -545,6 +808,8 @@ def join_evaluación(request):
             session_code=session_code
         )
     except Evaluación.DoesNotExist:
+        cache.add(attempt_key, 0, settings.SESSION_JOIN_WINDOW_SECONDS)
+        cache.incr(attempt_key)
         return Response(
             {"error": "Código de sesión inválido"}, status=status.HTTP_404_NOT_FOUND
         )
@@ -556,6 +821,8 @@ def join_evaluación(request):
         expires_at__gt=timezone.now(),
     ).first()
     if invitation is None:
+        cache.add(attempt_key, 0, settings.SESSION_JOIN_WINDOW_SECONDS)
+        cache.incr(attempt_key)
         return Response(
             {"error": "Código de invitación inválido o vencido"},
             status=status.HTTP_403_FORBIDDEN,
@@ -565,6 +832,7 @@ def join_evaluación(request):
     )
     invitation.used_at = timezone.now()
     invitation.save(update_fields=["used_at"])
+    cache.delete(attempt_key)
     return Response(
         {
             **_serialize_evaluación(evaluación),
@@ -660,8 +928,19 @@ def complete_child_data(request, session_code):
             status=status.HTTP_403_FORBIDDEN,
         )
 
+    operation, replay = _receive_operation(
+        request, evaluación, "CHILD_DATA_COMPLETED", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
     version_error = _require_expected_version(request, evaluación)
     if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
         return version_error
 
     niño = evaluación.niño
@@ -687,8 +966,10 @@ def complete_child_data(request, session_code):
     evaluation_state_machine.transition(evaluación, Evaluación.Estado.WAITING_CONSENT)
     dayc2_flow_service.get_current_item(evaluación)
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
-    return Response({"evaluacion": _serialize_evaluación(evaluación)})
+    result = {"evaluacion": _serialize_evaluación(evaluación)}
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
@@ -710,29 +991,52 @@ def accept_consent(request, session_code):
             status=status.HTTP_403_FORBIDDEN,
         )
 
+    operation, replay = _receive_operation(
+        request, evaluación, "CONSENT_ACCEPTED", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
     version_error = _require_expected_version(request, evaluación)
     if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
         return version_error
 
     accepted = bool(request.data.get("accepted", False))
     assent_confirmed = bool(request.data.get("assent_confirmed", False))
     if not accepted:
-        return Response(
-            {"error": "El consentimiento es obligatorio para iniciar"},
-            status=status.HTTP_400_BAD_REQUEST,
+        result = {"error": "El consentimiento es obligatorio para iniciar"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
         )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
     if not assent_confirmed:
-        return Response(
-            {"error": "Se requiere registrar el asentimiento antes de iniciar"},
-            status=status.HTTP_400_BAD_REQUEST,
+        result = {"error": "Se requiere registrar el asentimiento antes de iniciar"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
         )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
 
     modalities = request.data.get("modalities")
     if not isinstance(modalities, dict):
-        return Response(
-            {"error": "Se requiere la selección de modalidades de evidencia"},
-            status=status.HTTP_400_BAD_REQUEST,
+        result = {"error": "Se requiere la selección de modalidades de evidencia"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
         )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
     consent_fields = {
         "logs": "accepted_logs",
         "screenshots": "accepted_screenshots",
@@ -742,16 +1046,23 @@ def accept_consent(request, session_code):
     if set(modalities) != set(consent_fields) or not all(
         isinstance(value, bool) for value in modalities.values()
     ):
-        return Response(
-            {"error": "Las modalidades de evidencia son inválidas"},
-            status=status.HTTP_400_BAD_REQUEST,
+        result = {"error": "Las modalidades de evidencia son inválidas"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
         )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
 
     consentimiento, _ = Consentimiento.objects.update_or_create(
         evaluación=evaluación,
         defaults={
             "accepted": True,
             "accepted_at": timezone.now(),
+            "consent_text_hash": hashlib.sha256(
+                settings.CONSENT_TEXT.encode()
+            ).hexdigest(),
             **{
                 field: modalities[modality]
                 for modality, field in consent_fields.items()
@@ -765,11 +1076,13 @@ def accept_consent(request, session_code):
         accepted=True,
         modalities=modalities,
         consent_text_version=consentimiento.consent_text_version,
+        consent_text_hash=consentimiento.consent_text_hash,
         recorded_by_role=SessionAccessToken.ActorRole.ADULT,
     )
     AssentRecord.objects.create(
         evaluación=evaluación,
         decision=AssentRecord.Decision.ACCEPTED,
+        checkpoint="INITIAL",
         recorded_by_role=SessionAccessToken.ActorRole.ADULT,
         note=request.data.get("assent_note", ""),
     )
@@ -783,18 +1096,87 @@ def accept_consent(request, session_code):
         )
 
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
+    result = {
+        "session_token": request.headers.get("Authorization", "").replace(
+            "Bearer ", ""
+        ),
+        "consentimiento_id": str(consentimiento.id),
+        "evaluacion": _serialize_evaluación(evaluación),
+        "current_task": dayc2_flow_service.get_current_task_payload(evaluación),
+    }
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
-    return Response(
-        {
-            "session_token": request.headers.get("Authorization", "").replace(
-                "Bearer ", ""
-            ),
-            "consentimiento_id": str(consentimiento.id),
-            "evaluacion": _serialize_evaluación(evaluación),
-            "current_task": dayc2_flow_service.get_current_task_payload(evaluación),
-        }
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@transaction.atomic
+def record_assent(request, session_code):
+    try:
+        evaluación = _get_locked_evaluation_by_session(session_code)
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Código de sesión inválido"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+    if not _autorizar_evaluacion(
+        request, evaluación, [SessionAccessToken.ActorRole.ADULT]
+    ):
+        return Response(
+            {"error": "Token de adulto inválido o faltante"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    operation, replay = _receive_operation(
+        request, evaluación, "ASSENT_RECORDED", "EVALUATION", evaluación.id
     )
+    if replay:
+        return replay
+    version_error = _require_expected_version(request, evaluación)
+    if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
+        return version_error
+
+    decision = request.data.get("decision")
+    if decision not in AssentRecord.Decision.values:
+        result = {"error": "Decisión de asentimiento inválida"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
+        )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
+    access_token = _participant_access(request, evaluación)
+    AssentRecord.objects.create(
+        evaluación=evaluación,
+        decision=decision,
+        checkpoint=str(request.data.get("checkpoint") or "SESSION")[:80],
+        recorded_by_role=access_token.actor_role,
+        note=request.data.get("note", ""),
+    )
+    if (
+        decision != AssentRecord.Decision.ACCEPTED
+        and evaluación.estado == Evaluación.Estado.IN_PROGRESS
+    ):
+        evaluation_state_machine.transition(evaluación, Evaluación.Estado.PAUSED)
+        PauseRecord.objects.create(
+            evaluación=evaluación,
+            action=PauseRecord.Action.PAUSED,
+            reason="Asentimiento no vigente",
+            recorded_by_role=access_token.actor_role,
+            device_id=access_token.device_id,
+        )
+    _advance_evaluation_version(evaluación)
+    result = {"evaluacion": _serialize_evaluación(evaluación)}
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
@@ -817,9 +1199,11 @@ def withdraw_session(request, session_code):
             status=status.HTTP_403_FORBIDDEN,
         )
     if evaluación.estado in {Evaluación.Estado.VALIDATED, Evaluación.Estado.ARCHIVED}:
-        return Response(
-            {"error": "No se puede retirar una sesión ya validada"},
-            status=status.HTTP_409_CONFLICT,
+        return _conflict_response(
+            request,
+            evaluación,
+            "No se puede retirar una sesión ya validada",
+            "Solicitar reapertura controlada",
         )
     modalities = request.data.get("modalities", [])
     valid_modalities = {"logs", "screenshots", "audio", "video"}
@@ -830,6 +1214,11 @@ def withdraw_session(request, session_code):
             {"error": "Las modalidades de retiro son inválidas"},
             status=status.HTTP_400_BAD_REQUEST,
         )
+    operation, replay = _receive_operation(
+        request, evaluación, "SESSION_WITHDRAWN", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
     is_full_withdrawal = not modalities
     WithdrawalRecord.objects.create(
         evaluación=evaluación,
@@ -860,11 +1249,14 @@ def withdraw_session(request, session_code):
                     for modality, field in fields.items()
                 },
                 consent_text_version=consentimiento.consent_text_version,
+                consent_text_hash=consentimiento.consent_text_hash,
                 recorded_by_role=access_token.actor_role,
             )
         _advance_evaluation_version(evaluación)
-        _publish_evaluation_progress(evaluación)
-        return Response({"evaluacion": _serialize_evaluación(evaluación)})
+        result = {"evaluacion": _serialize_evaluación(evaluación)}
+        _apply_operation(operation, result)
+        _publish_evaluation_progress(evaluación, operation)
+        return Response(result)
     now = timezone.now()
     evaluación.access_tokens.filter(revoked_at__isnull=True).update(revoked_at=now)
     evaluación.evidencias.filter(retention_expires_at__isnull=True).update(
@@ -873,8 +1265,45 @@ def withdraw_session(request, session_code):
     if evaluación.estado != Evaluación.Estado.CANCELLED:
         evaluation_state_machine.transition(evaluación, Evaluación.Estado.CANCELLED)
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
-    return Response({"evaluacion": _serialize_evaluación(evaluación)})
+    result = {"evaluacion": _serialize_evaluación(evaluación)}
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@transaction.atomic
+def rotate_session_credentials(request, pk):
+    try:
+        evaluación = Evaluación.objects.select_for_update().get(
+            pk=pk, professional=request.user
+        )
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
+        )
+    actor_role = request.data.get("actor_role")
+    if actor_role not in SessionAccessToken.ActorRole.values:
+        return Response(
+            {"error": "Rol de invitación inválido"}, status=status.HTTP_400_BAD_REQUEST
+        )
+    operation, replay = _receive_operation(
+        request, evaluación, "SESSION_CREDENTIALS_ROTATED", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
+    now = timezone.now()
+    evaluación.invitations.filter(
+        actor_role=actor_role, revoked_at__isnull=True
+    ).update(revoked_at=now)
+    evaluación.access_tokens.filter(
+        actor_role=actor_role, revoked_at__isnull=True
+    ).update(revoked_at=now)
+    code = _create_session_invitation(evaluación, actor_role, request.user)
+    result = {"actor_role": actor_role, "invitation_code": code}
+    _apply_operation(operation, result)
+    return Response(result)
 
 
 @api_view(["POST"])
@@ -894,18 +1323,43 @@ def pause_session(request, session_code):
             {"error": "Token de sesión inválido o faltante"},
             status=status.HTTP_403_FORBIDDEN,
         )
+    operation, replay = _receive_operation(
+        request, evaluación, "SESSION_PAUSED", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
     version_error = _require_expected_version(request, evaluación)
     if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
         return version_error
     if evaluación.estado != Evaluación.Estado.IN_PROGRESS:
-        return Response(
-            {"error": "Solo una sesión en progreso puede pausarse"},
-            status=status.HTTP_409_CONFLICT,
+        result = {"error": "Solo una sesión en progreso puede pausarse"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_409_CONFLICT,
         )
+        return Response(result, status=status.HTTP_409_CONFLICT)
     evaluation_state_machine.transition(evaluación, Evaluación.Estado.PAUSED)
+    access_token = _participant_access(request, evaluación)
+    PauseRecord.objects.create(
+        evaluación=evaluación,
+        action=PauseRecord.Action.PAUSED,
+        reason=request.data.get("reason", ""),
+        recorded_by_role=access_token.actor_role,
+        device_id=access_token.device_id,
+    )
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
-    return Response({"evaluacion": _serialize_evaluación(evaluación)})
+    result = {"evaluacion": _serialize_evaluación(evaluación)}
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
@@ -925,17 +1379,53 @@ def resume_session(request, session_code):
             {"error": "Token de sesión inválido o faltante"},
             status=status.HTTP_403_FORBIDDEN,
         )
+    operation, replay = _receive_operation(
+        request, evaluación, "SESSION_RESUMED", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
     version_error = _require_expected_version(request, evaluación)
     if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
         return version_error
     if evaluación.estado != Evaluación.Estado.PAUSED:
-        return Response(
-            {"error": "La sesión no está en pausa"}, status=status.HTTP_409_CONFLICT
+        result = {"error": "La sesión no está en pausa"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_409_CONFLICT,
         )
+        return Response(result, status=status.HTTP_409_CONFLICT)
+    latest_assent = evaluación.assent_records.order_by("-created_at").first()
+    if latest_assent and latest_assent.decision != AssentRecord.Decision.ACCEPTED:
+        result = {"error": "Se requiere asentimiento vigente para reanudar"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
     evaluation_state_machine.transition(evaluación, Evaluación.Estado.IN_PROGRESS)
+    access_token = _participant_access(request, evaluación)
+    PauseRecord.objects.create(
+        evaluación=evaluación,
+        action=PauseRecord.Action.RESUMED,
+        reason=request.data.get("reason", ""),
+        recorded_by_role=access_token.actor_role,
+        device_id=access_token.device_id,
+    )
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
-    return Response({"evaluacion": _serialize_evaluación(evaluación)})
+    result = {"evaluacion": _serialize_evaluación(evaluación)}
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
@@ -959,28 +1449,43 @@ def start_child_session(request, session_code):
             status=status.HTTP_403_FORBIDDEN,
         )
 
+    operation, replay = _receive_operation(
+        request, evaluación, "SESSION_ITEM_STARTED", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
     version_error = _require_expected_version(request, evaluación)
     if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
         return version_error
 
     if (
         not getattr(evaluación, "consentimiento", None)
         or not evaluación.consentimiento.accepted
     ):
-        return Response(
-            {"error": "Consentimiento requerido"}, status=status.HTTP_400_BAD_REQUEST
+        result = {"error": "Consentimiento requerido"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
         )
-
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
     item = dayc2_flow_service.start_current_item(evaluación)
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
-    return Response(
-        {
-            "evaluacion": _serialize_evaluación(evaluación),
-            "item": _serialize_item(item) if item else None,
-            "current_task": dayc2_flow_service.get_current_task_payload(evaluación),
-        }
-    )
+    result = {
+        "evaluacion": _serialize_evaluación(evaluación),
+        "item": _serialize_item(item) if item else None,
+        "current_task": dayc2_flow_service.get_current_task_payload(evaluación),
+    }
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
@@ -1003,8 +1508,19 @@ def finish_child_session(request, session_code):
             status=status.HTTP_403_FORBIDDEN,
         )
 
+    operation, replay = _receive_operation(
+        request, evaluación, "SESSION_FINISHED", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
     version_error = _require_expected_version(request, evaluación)
     if version_error:
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            version_error.data,
+            status.HTTP_409_CONFLICT,
+        )
         return version_error
 
     consentimiento = getattr(evaluación, "consentimiento", None)
@@ -1017,12 +1533,15 @@ def finish_child_session(request, session_code):
         evaluación, Evaluación.Estado.PENDING_REVIEW, ["completed_at"]
     )
     _advance_evaluation_version(evaluación)
-    _publish_evaluation_progress(evaluación)
-    return Response({"evaluacion": _serialize_evaluación(evaluación)})
+    result = {"evaluacion": _serialize_evaluación(evaluación)}
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@transaction.atomic
 def registrar_evento_item(request, pk, item_id):
     try:
         evaluación = Evaluación.objects.get(pk=pk)
@@ -1041,11 +1560,20 @@ def registrar_evento_item(request, pk, item_id):
             status=status.HTTP_403_FORBIDDEN,
         )
 
-    pause_error = _pause_conflict(evaluación)
+    pause_error = _pause_conflict(request, evaluación)
     if pause_error:
         return pause_error
 
     evaluación_item = evaluación.items.filter(item_id=item_id).first()
+    operation, replay = _receive_operation(
+        request,
+        evaluación,
+        "INTERACTION_EVENT_RECORDED",
+        "EVALUATION_ITEM",
+        evaluación_item.id if evaluación_item else item_id,
+    )
+    if replay:
+        return replay
     access_token = _participant_access(request, evaluación)
     event = InteractionEvent.objects.create(
         evaluación=evaluación,
@@ -1060,9 +1588,9 @@ def registrar_evento_item(request, pk, item_id):
         ),
         device_id=getattr(access_token, "device_id", ""),
     )
-    return Response(
-        {"id": str(event.id), "status": "ok"}, status=status.HTTP_201_CREATED
-    )
+    result = {"id": str(event.id), "status": "ok"}
+    _apply_operation(operation, result, status.HTTP_201_CREATED)
+    return Response(result, status=status.HTTP_201_CREATED)
 
 
 @api_view(["GET", "POST"])
@@ -1096,7 +1624,7 @@ def manejar_evidencia_item(request, pk, item_id):
         )
 
     if request.method == "POST":
-        pause_error = _pause_conflict(evaluación)
+        pause_error = _pause_conflict(request, evaluación)
         if pause_error:
             return pause_error
 
@@ -1166,39 +1694,42 @@ def manejar_evidencia_item(request, pk, item_id):
             {"error": "El archivo de evidencia excede el tamaño permitido"},
             status=status.HTTP_400_BAD_REQUEST,
         )
+    file_facts = None
     if uploaded_file:
-        expected_media_type = {
-            Evidencia.Tipo.SCREENSHOT: "image/",
-            Evidencia.Tipo.CAMERA_FRAME: "image/",
-            Evidencia.Tipo.AUDIO: "audio/",
-            Evidencia.Tipo.VIDEO: "video/",
-        }.get(evidence_type)
-        if expected_media_type and not uploaded_file.content_type.startswith(
-            expected_media_type
-        ):
+        if evidence_type not in {
+            Evidencia.Tipo.SCREENSHOT,
+            Evidencia.Tipo.CAMERA_FRAME,
+            Evidencia.Tipo.AUDIO,
+            Evidencia.Tipo.VIDEO,
+        }:
             return Response(
-                {"error": "El archivo no coincide con el tipo de evidencia"},
+                {"error": "Este tipo de evidencia no admite archivos"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        try:
+            file_facts = inspect_uploaded_evidence(uploaded_file, evidence_type)
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
     idempotency_key = _idempotency_key(request)
-    if idempotency_key:
-        previous = Evidencia.objects.filter(
-            evaluación=evaluación, idempotency_key=idempotency_key
-        ).first()
-        if previous:
-            return Response(
-                {
-                    "id": str(previous.id),
-                    "type": previous.type,
-                    "idempotent_replay": True,
-                }
-            )
+    operation, replay = _receive_operation(
+        request,
+        evaluación,
+        "EVIDENCE_RECORDED",
+        "EVALUATION_ITEM",
+        evaluación_item.id,
+    )
+    if replay:
+        return replay
     metadata_raw = request.data.get("metadata", "{}")
     if isinstance(metadata_raw, str):
         try:
             metadata_raw = json.loads(metadata_raw)
         except json.JSONDecodeError:
             metadata_raw = {}
+    if not isinstance(metadata_raw, dict):
+        return Response(
+            {"error": "metadata debe ser un objeto"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     access_token = _participant_access(request, evaluación)
     captured_by = "PSYCHOLOGIST"
@@ -1213,18 +1744,48 @@ def manejar_evidencia_item(request, pk, item_id):
         metadata=metadata_raw,
         duration_ms=request.data.get("duration_ms"),
         size_bytes=(
-            uploaded_file.size if uploaded_file else request.data.get("size_bytes")
+            file_facts["size_bytes"] if file_facts else request.data.get("size_bytes")
         ),
         captured_by=captured_by,
+        capture_actor=captured_by,
+        capture_session=evaluación.session_code,
+        capture_task=metadata_raw.get("task_id", evaluación_item.item_id),
+        capture_item=evaluación_item.item_id,
+        capture_authorization=(
+            f"{access_token.actor_role}:{access_token.device_id}"
+            if access_token
+            else f"PSYCHOLOGIST:{request.user.id}"
+        ),
+        capture_custodian=metadata_raw.get("custodian", captured_by),
+        capture_quality=metadata_raw.get("quality", "UNSPECIFIED"),
+        absence_reason=metadata_raw.get(
+            "absence_reason", "NOT_APPLICABLE" if uploaded_file else "NO_FILE_CAPTURED"
+        ),
         idempotency_key=idempotency_key,
         retention_expires_at=timezone.now()
         + timedelta(days=settings.EVIDENCE_RETENTION_DAYS),
     )
-    _audit_evidence_access(request, evidencia, "CREATED")
-    return Response(
-        {"id": str(evidencia.id), "type": evidencia.type},
-        status=status.HTTP_201_CREATED,
+    if file_facts:
+        EvidenceAsset.objects.create(
+            evidencia=evidencia,
+            kind=EvidenceAsset.Kind.ORIGINAL,
+            file=evidencia.file,
+            sha256=file_facts["sha256"],
+            size_bytes=file_facts["size_bytes"],
+            media_type=file_facts["media_type"],
+            signature_type=file_facts["signature_type"],
+        )
+    provenance_service.record(
+        evaluación,
+        "evidence_capture",
+        [("Evidence", evidencia.id, f"Evidencia {evidencia.type}", evidencia.metadata)],
+        [("EvaluationItem", evaluación_item.id, evaluación_item.item_id, {})],
+        actor=captured_by,
     )
+    _audit_evidence_access(request, evidencia, "CREATED")
+    result = {"id": str(evidencia.id), "type": evidencia.type}
+    _apply_operation(operation, result, status.HTTP_201_CREATED)
+    return Response(result, status=status.HTTP_201_CREATED)
 
 
 @api_view(["GET"])
@@ -1256,9 +1817,42 @@ def descargar_evidencia(request, evidence_id):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+def verificar_auditoria_evidencia(request, evidence_id):
+    try:
+        evidencia = Evidencia.objects.select_related("evaluación").get(pk=evidence_id)
+    except Evidencia.DoesNotExist:
+        return Response(
+            {"error": "Evidencia no encontrada"}, status=status.HTTP_404_NOT_FOUND
+        )
+    if not _is_owner_psychologist(request, evidencia.evaluación):
+        return Response(
+            {"error": "Solo el psicólogo puede verificar evidencias"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    valid = EvidenceAccessAudit.verify_chain(evidencia)
+    provenance_service.record(
+        evidencia.evaluación,
+        "evidence_verification",
+        [
+            (
+                "EvidenceVerification",
+                evidencia.id,
+                "Verificación de evidencia",
+                {"valid": valid},
+            )
+        ],
+        [("Evidence", evidencia.id, f"Evidencia {evidencia.type}", {})],
+        actor=str(request.user.id),
+        actor_kind="PERSON",
+    )
+    return Response({"evidence_id": str(evidencia.id), "valid": valid})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def review_overview(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1283,7 +1877,7 @@ def review_overview(request, pk):
 @permission_classes([IsAuthenticated])
 def review_pending(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1294,22 +1888,159 @@ def review_pending(request, pk):
     return Response([_serialize_item(item) for item in items])
 
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@transaction.atomic
+def receive_review_assignment(request, pk):
+    """Record the owner's explicit acceptance of responsibility for review."""
+    try:
+        evaluación = Evaluación.objects.select_for_update().get(
+            pk=pk, professional=request.user
+        )
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+    assignment, created = ProfessionalReviewAssignment.objects.get_or_create(
+        evaluación=evaluación,
+        professional=request.user,
+        active=True,
+        defaults={
+            "assigned_by": request.user,
+            "motive": request.data.get("motive", ""),
+        },
+    )
+    if assignment.received_at is None:
+        assignment.received_at = timezone.now()
+        assignment.save(update_fields=["received_at"])
+    provenance_service.record(
+        evaluación,
+        "professional_review_assignment",
+        [("ReviewAssignment", assignment.id, "Recepción de revisión profesional", {})],
+        actor=str(request.user.id),
+        actor_kind="PERSON",
+    )
+    return Response(
+        {
+            "assignment_id": str(assignment.id),
+            "received_at": assignment.received_at.isoformat(),
+            "created": created,
+        },
+        status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+    )
+
+
 @api_view(["PATCH", "PUT"])
 @permission_classes([IsAuthenticated])
+@transaction.atomic
 def review_item(request, pk, item_id):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.select_for_update().get(
+            pk=pk, professional=request.user
+        )
         item = evaluación.items.get(item_id=item_id)
     except (Evaluación.DoesNotExist, EvaluacionItem.DoesNotExist):
         return Response(
             {"error": "Ítem no encontrado"}, status=status.HTTP_404_NOT_FOUND
         )
 
+    operation, replay = _receive_operation(
+        request, evaluación, "ITEM_REVIEWED", "EVALUATION_ITEM", item.id
+    )
+    if replay:
+        return replay
+
+    if not ProfessionalReviewAssignment.objects.filter(
+        evaluación=evaluación,
+        professional=request.user,
+        active=True,
+        received_at__isnull=False,
+    ).exists():
+        result = {
+            "error": "La recepción explícita de la asignación profesional es obligatoria"
+        }
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
+
+    if evaluación.estado in {Evaluación.Estado.VALIDATED, Evaluación.Estado.ARCHIVED}:
+        result = {
+            "error": "No se puede editar una evaluación cerrada",
+            "estado": evaluación.estado,
+            "action": "Solicitar reapertura controlada",
+        }
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
     final_result = request.data.get("final_result")
     if final_result not in [choice.value for choice in EvaluacionItem.Resultado]:
-        return Response(
-            {"error": "Resultado final inválido"}, status=status.HTTP_400_BAD_REQUEST
+        result = {"error": "Resultado final inválido"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
         )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+    motive = str(request.data.get("motive", "")).strip()
+    if not motive:
+        result = {"error": "El motivo de la revisión o corrección es obligatorio"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
+        )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+    review_version = item.review_versions.order_by("-version").first()
+    expected_version = request.data.get("expected_review_version")
+    current_version = review_version.version if review_version else 0
+    if expected_version is not None and str(expected_version) != str(current_version):
+        result = {
+            "error": "Conflicto de revisión concurrente",
+            "current_review_version": current_version,
+        }
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
+
+    evidence_ids = request.data.get("evidence_consulted", [])
+    if not isinstance(evidence_ids, list):
+        result = {"error": "evidence_consulted debe ser una lista"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
+        )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
+    evidence = list(
+        Evidencia.objects.filter(evaluación=evaluación, id__in=evidence_ids)
+    )
+    if len(evidence) != len(set(str(value) for value in evidence_ids)):
+        result = {"error": "La evidencia consultada no pertenece a la evaluación"}
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.REJECTED,
+            result,
+            status.HTTP_400_BAD_REQUEST,
+        )
+        return Response(result, status=status.HTTP_400_BAD_REQUEST)
 
     previous_system_result = item.system_result
     item.final_result = final_result
@@ -1321,11 +2052,22 @@ def review_item(request, pk, item_id):
     )
     item.save()
 
+    review = ItemReview.objects.create(
+        evaluación=evaluación,
+        item=item,
+        version=current_version + 1,
+        final_result=final_result,
+        motive=motive,
+        notes=item.psychologist_notes,
+        responsible=request.user,
+    )
+    review.evidence_consulted.set(evidence)
+
     validation_status = Respuesta.ValidationStatus.PSYCHOLOGIST_CONFIRMED
     if previous_system_result and previous_system_result != final_result:
         validation_status = Respuesta.ValidationStatus.PSYCHOLOGIST_CORRECTED
 
-    Respuesta.objects.create(
+    response = Respuesta.objects.create(
         evaluación=evaluación,
         evaluación_item=item,
         minijuego_id=item.item_id,
@@ -1342,33 +2084,165 @@ def review_item(request, pk, item_id):
         notes=item.psychologist_notes,
         is_final=True,
     )
+    provenance_service.record(
+        evaluación,
+        (
+            "professional_correction"
+            if validation_status == Respuesta.ValidationStatus.PSYCHOLOGIST_CORRECTED
+            else "professional_review"
+        ),
+        [
+            (
+                "Response",
+                response.id,
+                f"Revisión {item.item_id}",
+                {"final_result": final_result},
+            ),
+            (
+                "ItemReview",
+                review.id,
+                f"Revisión versionada {item.item_id}",
+                {"version": review.version, "motive": motive},
+            ),
+        ],
+        [
+            (
+                "EvaluationItem",
+                item.id,
+                item.item_id,
+                {"system_result": previous_system_result},
+            )
+        ]
+        + [
+            ("Evidence", evidence.id, f"Evidencia {evidence.type}", {})
+            for evidence in evidence
+        ],
+        actor=str(request.user.id),
+        actor_kind="PERSON",
+    )
+    if previous_system_result and previous_system_result != final_result:
+        previous = provenance_service.entity(
+            evaluación, "EvaluationItem", item.id, item.item_id
+        )
+        provenance_service.record_revision(
+            previous,
+            "professional_correction",
+            str(request.user.id),
+            {"final_result": final_result},
+        )
     for evidencia in item.evidencias.all():
         _audit_evidence_access(request, evidencia, "REVIEWED")
-    return Response({"item": _serialize_item(item)})
+    result = {"item": _serialize_item(item), "review_version": review.version}
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
 
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
+@transaction.atomic
 def review_complete(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.select_for_update().get(
+            pk=pk, professional=request.user
+        )
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
         )
+
+    operation, replay = _receive_operation(
+        request, evaluación, "EVALUATION_VALIDATED", "EVALUATION", evaluación.id
+    )
+    if replay:
+        return replay
 
     pendientes = evaluación.items.filter(
         estado=EvaluacionItem.Estado.NEEDS_REVIEW,
         final_result__isnull=True,
     )
     if pendientes.exists():
-        return Response(
-            {
-                "error": "La validación requiere una decisión profesional por ítem",
-                "pending_item_ids": list(pendientes.values_list("item_id", flat=True)),
-            },
-            status=status.HTTP_409_CONFLICT,
+        result = {
+            "error": "La validación requiere una decisión profesional por ítem",
+            "pending_item_ids": list(pendientes.values_list("item_id", flat=True)),
+        }
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            result,
+            status.HTTP_409_CONFLICT,
         )
+        return Response(result, status=status.HTTP_409_CONFLICT)
+
+    if not ProfessionalReviewAssignment.objects.filter(
+        evaluación=evaluación,
+        professional=request.user,
+        active=True,
+        received_at__isnull=False,
+    ).exists():
+        result = {
+            "error": "La recepción explícita de la asignación profesional es obligatoria"
+        }
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
+
+    incomplete_items = evaluación.items.exclude(
+        estado__in=[
+            EvaluacionItem.Estado.REVIEWED,
+            EvaluacionItem.Estado.AUTO_VALIDATED,
+            EvaluacionItem.Estado.INCONCLUSIVE,
+            EvaluacionItem.Estado.NOT_ADMINISTERED,
+        ]
+    ) | evaluación.items.filter(final_result__isnull=True)
+    if incomplete_items.exists():
+        result = {
+            "error": "El cierre requiere todos los ítems completos con resultado final",
+            "incomplete_item_ids": list(
+                incomplete_items.values_list("item_id", flat=True).distinct()
+            ),
+        }
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
+
+    unreviewed = evaluación.items.filter(requires_review=True).exclude(
+        review_versions__isnull=False
+    )
+    if unreviewed.exists():
+        result = {
+            "error": "El cierre requiere trazabilidad de revisión para cada ítem requerido",
+            "unreviewed_item_ids": list(unreviewed.values_list("item_id", flat=True)),
+        }
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
+
+    lineage_issues = provenance_service.detect_issues(evaluación)
+    if lineage_issues:
+        result = {
+            "error": "La trazabilidad no es válida",
+            "lineage_issues": lineage_issues,
+        }
+        _finalize_operation(
+            operation,
+            DistributedOperation.Status.CONFLICT,
+            result,
+            status.HTTP_409_CONFLICT,
+        )
+        return Response(result, status=status.HTTP_409_CONFLICT)
 
     resultados = scoring_service.calcular_resultados(evaluación)
     gdq_global = scoring_service.calcular_gdq_global(resultados)
@@ -1377,12 +2251,88 @@ def review_complete(request, pk):
     evaluation_state_machine.transition(
         evaluación, Evaluación.Estado.VALIDATED, ["validated_calculated_at"]
     )
+    closure = EvaluationClosure.objects.create(
+        evaluación=evaluación,
+        closed_by=request.user,
+        motive=str(request.data.get("motive", "")).strip()
+        or "Cierre profesional validado",
+        lineage_checked_at=timezone.now(),
+    )
+    provenance_service.record(
+        evaluación,
+        "evaluation_closure",
+        [("EvaluationClosure", closure.id, "Cierre profesional", {})],
+        [
+            (
+                "ItemReview",
+                review.id,
+                f"Revisión {review.item.item_id}",
+                {"version": review.version},
+            )
+            for review in evaluación.item_reviews.select_related("item").all()
+        ],
+        actor=str(request.user.id),
+        actor_kind="PERSON",
+    )
 
+    result = {
+        "evaluacion": _serialize_evaluación(evaluación),
+        "resultados": [_serialize_resultado_area(r) for r in resultados],
+        "gdq_global": gdq_global,
+    }
+    _apply_operation(operation, result)
+    _publish_evaluation_progress(evaluación, operation)
+    return Response(result)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@transaction.atomic
+def reopen_review(request, pk):
+    """Reopen a validated evaluation without discarding its prior closure or reports."""
+    try:
+        evaluación = Evaluación.objects.select_for_update().get(
+            pk=pk, professional=request.user
+        )
+        closure = evaluación.closures.order_by("-closed_at").first()
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Cierre de evaluación no encontrado"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    if closure is None:
+        return Response(
+            {"error": "Cierre de evaluación no encontrado"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    motive = str(request.data.get("motive", "")).strip()
+    if evaluación.estado != Evaluación.Estado.VALIDATED:
+        return Response(
+            {"error": "Solo una evaluación validada puede reabrirse"},
+            status=status.HTTP_409_CONFLICT,
+        )
+    if not motive:
+        return Response(
+            {"error": "El motivo de reapertura es obligatorio"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    closure.reopened_by = request.user
+    closure.reopened_at = timezone.now()
+    closure.reopening_motive = motive
+    closure.save(update_fields=["reopened_by", "reopened_at", "reopening_motive"])
+    evaluation_state_machine.transition(
+        evaluación, Evaluación.Estado.REVIEW_IN_PROGRESS
+    )
+    previous = provenance_service.entity(
+        evaluación, "EvaluationClosure", closure.id, "Cierre profesional"
+    )
+    provenance_service.record_revision(
+        previous, "controlled_reopening", str(request.user.id), {"motive": motive}
+    )
     return Response(
         {
             "evaluacion": _serialize_evaluación(evaluación),
-            "resultados": [_serialize_resultado_area(r) for r in resultados],
-            "gdq_global": gdq_global,
+            "reopened_at": closure.reopened_at.isoformat(),
         }
     )
 
@@ -1391,7 +2341,7 @@ def review_complete(request, pk):
 @permission_classes([IsAuthenticated])
 def listar_respuestas(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1410,6 +2360,81 @@ def listar_respuestas(request, pk):
             for r in evaluación.respuestas.order_by("created_at")
         ]
     )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def provenance_graph(request, pk):
+    try:
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
+        )
+    entity_id = request.query_params.get("entity_id")
+    direction = request.query_params.get("direction", "both")
+    if direction not in {"both", "upstream"}:
+        return Response(
+            {"error": "direction inválida"}, status=status.HTTP_400_BAD_REQUEST
+        )
+    try:
+        depth = int(request.query_params.get("depth", 3))
+    except ValueError:
+        return Response({"error": "depth inválida"}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(provenance_service.graph(evaluación, entity_id, direction, depth))
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def provenance_result_sources(request, pk, rid):
+    try:
+        result = ResultadoÁrea.objects.select_related("evaluación").get(
+            pk=rid, evaluación_id=pk, evaluación__professional=request.user
+        )
+    except ResultadoÁrea.DoesNotExist:
+        return Response(
+            {"error": "Resultado no encontrado"}, status=status.HTTP_404_NOT_FOUND
+        )
+    return Response(provenance_service.sources_for_result(result))
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def provenance_evidence_uses(request, evidence_id):
+    try:
+        evidence = Evidencia.objects.select_related("evaluación").get(
+            pk=evidence_id, evaluación__professional=request.user
+        )
+    except Evidencia.DoesNotExist:
+        return Response(
+            {"error": "Evidencia no encontrada"}, status=status.HTTP_404_NOT_FOUND
+        )
+    return Response(provenance_service.uses_for_evidence(evidence))
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def provenance_export(request, pk):
+    try:
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
+        )
+    return Response(provenance_service.graph(evaluación, depth=20))
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def provenance_issues(request, pk):
+    try:
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
+    except Evaluación.DoesNotExist:
+        return Response(
+            {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
+        )
+    issues = provenance_service.detect_issues(evaluación)
+    return Response({"compatible": not issues, "issues": issues})
 
 
 @api_view(["GET"])
@@ -1445,7 +2470,7 @@ def progreso_evaluación(request, pk):
 @permission_classes([IsAuthenticated])
 def listar_resultados(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1462,7 +2487,7 @@ def listar_resultados(request, pk):
 @permission_classes([IsAuthenticated])
 def ajustar_resultado(request, pk, rid):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
         resultado = evaluación.resultados.get(pk=rid)
     except (Evaluación.DoesNotExist, ResultadoÁrea.DoesNotExist):
         return Response(
@@ -1480,7 +2505,7 @@ def ajustar_resultado(request, pk, rid):
 @permission_classes([IsAuthenticated])
 def reglas_status(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1500,7 +2525,7 @@ def reglas_status(request, pk):
 def calcular_puntuación(request, pk):
     """Calculate standard scores for completed evaluation"""
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1532,7 +2557,7 @@ def calcular_puntuación(request, pk):
 @permission_classes([IsAuthenticated])
 def calcular_puntuación_preliminar(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1559,7 +2584,7 @@ def calcular_puntuación_preliminar(request, pk):
 @permission_classes([IsAuthenticated])
 def calcular_puntuación_validada(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1570,12 +2595,12 @@ def calcular_puntuación_validada(request, pk):
         final_result__isnull=True,
     )
     if pendientes.exists():
-        return Response(
-            {
-                "error": "La validación requiere una decisión profesional por ítem",
-                "pending_item_ids": list(pendientes.values_list("item_id", flat=True)),
-            },
-            status=status.HTTP_409_CONFLICT,
+        return _conflict_response(
+            request,
+            evaluación,
+            "La validación requiere una decisión profesional por ítem",
+            "Completar las decisiones pendientes",
+            pending_item_ids=list(pendientes.values_list("item_id", flat=True)),
         )
 
     resultados = scoring_service.calcular_resultados(evaluación)
@@ -1600,7 +2625,7 @@ def calcular_puntuación_validada(request, pk):
 @permission_classes([IsAuthenticated])
 def comparación_resultados(request, pk):
     try:
-        evaluación = Evaluación.objects.get(pk=pk, psychologist_id=str(request.user.id))
+        evaluación = Evaluación.objects.get(pk=pk, professional=request.user)
     except Evaluación.DoesNotExist:
         return Response(
             {"error": "Evaluación no encontrada"}, status=status.HTTP_404_NOT_FOUND
@@ -1632,7 +2657,7 @@ def reporte_pdf(request, pk):
         evaluación = (
             Evaluación.objects.select_related("niño")
             .prefetch_related("resultados", "items")
-            .get(pk=pk, psychologist_id=str(request.user.id))
+            .get(pk=pk, professional=request.user)
         )
     except Evaluación.DoesNotExist:
         return Response(
@@ -1640,11 +2665,14 @@ def reporte_pdf(request, pk):
         )
 
     if evaluación.estado != Evaluación.Estado.VALIDATED:
-        return Response(
-            {"error": "El reporte final requiere una evaluación validada"},
-            status=status.HTTP_409_CONFLICT,
+        return _conflict_response(
+            request,
+            evaluación,
+            "El reporte final requiere una evaluación validada",
+            "Completar la revisión y validación profesional",
         )
 
+    evaluación._report_generated_by = request.user
     return _generar_pdf_evaluacion(evaluación)
 
 

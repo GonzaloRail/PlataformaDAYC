@@ -107,6 +107,26 @@ export interface EvaluacionItem {
   duration_ms?: number | null;
   started_at?: string | null;
   completed_at?: string | null;
+  review_version?: number;
+}
+
+export interface ReviewAssignment {
+  professional_id?: string | null;
+  professional_name?: string | null;
+  received_at?: string | null;
+  assigned_at?: string | null;
+  due_at?: string | null;
+}
+
+export interface ReviewHistoryEntry {
+  id: string;
+  event_type: 'RECEIVED' | 'ASSIGNED' | 'REASSIGNED' | 'REVIEWED' | 'CORRECTED' | 'CLOSED' | 'REOPENED' | string;
+  occurred_at: string;
+  actor_name?: string | null;
+  item_id?: string | null;
+  version?: number | null;
+  reason?: string | null;
+  detail?: string | null;
 }
 
 export interface SessionState {
@@ -123,6 +143,10 @@ export interface ReviewOverview {
   items: EvaluacionItem[];
   pending_count: number;
   reviewed_count: number;
+  assignment?: ReviewAssignment | null;
+  review_version?: number;
+  can_reopen?: boolean;
+  history?: ReviewHistoryEntry[];
 }
 
 export interface ScoreComparison {
@@ -155,4 +179,43 @@ export interface CalculoOnlineResponse {
   resultados: CalculoOnlineResultado[];
   gdq: CalculoOnlineGDQ | null;
   suma_puntajes_estandar: number;
+}
+
+export type ProvenanceNodeType = 'ENTITY' | 'ACTIVITY' | 'AGENT';
+
+export interface ProvenanceNode {
+  id: string;
+  type: ProvenanceNodeType;
+  label: string;
+  description?: string | null;
+  created_at?: string | null;
+  version?: string | null;
+  integrity_status?: 'VERIFIED' | 'UNVERIFIED' | 'FAILED' | null;
+  metadata?: Record<string, unknown>;
+}
+
+export interface ProvenanceEdge {
+  id: string;
+  source_id: string;
+  target_id: string;
+  relation: 'generatedBy' | 'derivedFrom' | 'attributedTo' | 'used' | 'associatedWith' | 'invalidatedBy' | 'revisionOf' | string;
+  created_at?: string | null;
+}
+
+export interface ProvenanceGap {
+  id: string;
+  code: string;
+  message: string;
+  severity: 'INFO' | 'WARNING' | 'ERROR';
+  node_id?: string | null;
+}
+
+export interface LineageResponse {
+  schema_version: string;
+  evaluacion_id: string;
+  root_node_id?: string | null;
+  generated_at?: string;
+  nodes: ProvenanceNode[];
+  edges: ProvenanceEdge[];
+  gaps: ProvenanceGap[];
 }

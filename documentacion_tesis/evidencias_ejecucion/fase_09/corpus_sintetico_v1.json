@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "corpus_id": "dayc2-confirmatorio-sintetico-v1",
+  "classification": "synthetic-only-no-human-data",
+  "execution_seed": 9022026,
+  "session_template": {
+    "age_months": 60,
+    "item_id": "COGNITIVO_045",
+    "response": "CORRECT",
+    "response_time_ms": 100,
+    "actors": ["ADULT", "CHILD", "PROFESSIONAL"],
+    "evidence_kinds": ["LOG", "SCREENSHOT", "AUDIO", "VIDEO"]
+  },
+  "fault_catalog": {
+    "E2": ["delayed_offline_operation"],
+    "E3": ["pending_outbox_reconnect"],
+    "E4": ["operation_replay"],
+    "E5": ["expected_operation_omission"],
+    "E6": ["duplicate_device_sequence"],
+    "E7": ["publisher_restart", "storage_write_failure"],
+    "E8": ["stale_base_version_conflict"],
+    "E9": ["combined_available_faults"]
+  },
+  "expected_contract": {
+    "operation_outcomes": ["applied", "replay", "conflict"],
+    "durable_assets_after_storage_failure": 0,
+    "extra_business_effects": 0,
+    "lost_committed_events": 0,
+    "invalid_precedences": 0,
+    "conflict_detection_percent": 100,
+    "recovery_percent": 100,
+    "convergence_percent": 100,
+    "lightweight_load_publication_percent": 100
+  },
+  "prohibited_content": ["real_child_data", "real_credentials", "real_media", "personal_identifiers"]
+}

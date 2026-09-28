@@ -31,6 +31,9 @@ const MetricsDashboard = lazy(() =>
 const CalculoResultados = lazy(() =>
   import('@/pages/psychologist/CalculoResultados').then((m) => ({ default: m.CalculoResultados }))
 )
+const LineageViewer = lazy(() =>
+  import('@/pages/psychologist/LineageViewer').then((m) => ({ default: m.LineageViewer }))
+)
 
 function PageFallback() {
   return (
@@ -73,6 +76,7 @@ function App() {
             <Route path="/psychologist/lab-prototypes" element={<LabPrototypes />} />
             <Route path="/psychologist/session-access" element={<SessionAccess />} />
             <Route path="/psychologist/calculo-resultados" element={<CalculoResultados />} />
+            <Route path="/psychologist/lineage" element={<LineageViewer />} />
             <Route path="/research/metrics" element={<MetricsDashboard />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />

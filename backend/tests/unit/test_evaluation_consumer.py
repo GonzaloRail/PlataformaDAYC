@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 import pytest
 from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from channels.routing import URLRouter
 from channels.testing import WebsocketCommunicator
 from django.contrib.auth import get_user_model
@@ -31,6 +32,7 @@ def create_evaluation():
     evaluation = Evaluación.objects.create(
         niño=child,
         psychologist_id=str(user.id),
+        professional=user,
         estado=Evaluación.Estado.IN_PROGRESS,
         edad_meses=48,
         session_code="ABC123",
@@ -98,6 +100,35 @@ def test_participant_cannot_publish_progress_payloads():
         message = await communicator.receive_json_from()
 
         assert message == {"type": "error", "message": "Unsupported action"}
+        await communicator.disconnect()
+
+    async_to_sync(exercise_consumer)()
+
+
+@pytest.mark.django_db(transaction=True)
+def test_websocket_preserves_operation_id_from_outbox_payload():
+    evaluation, token = create_evaluation()
+
+    async def exercise_consumer():
+        communicator = WebsocketCommunicator(
+            application,
+            f"/ws/evaluation/{evaluation.id}/",
+            subprotocols=[f"dayc-session.{token}"],
+        )
+        connected, _ = await communicator.connect()
+        assert connected
+        await communicator.receive_json_from()
+
+        await get_channel_layer().group_send(
+            f"evaluation_{evaluation.id}",
+            {
+                "type": "evaluation_update",
+                "data": {"version": 2, "operation_id": "operation-123"},
+            },
+        )
+        message = await communicator.receive_json_from()
+
+        assert message["data"]["operation_id"] == "operation-123"
         await communicator.disconnect()
 
     async_to_sync(exercise_consumer)()

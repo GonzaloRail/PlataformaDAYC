@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom'
 import { ChildQuestionPresenter } from '@/components/child/ChildQuestionPresenter'
 import { DigitalActivityExperience } from '@/components/child/DigitalActivityExperience'
 import { PedagogicalMascot } from '@/components/child/PedagogicalMascot'
+import { OfflineSyncStatus } from '@/components/child/OfflineSyncStatus'
 import { MediaPermissionProvider } from '@/components/evidence/MediaPermissionProvider'
 import { usePendingEvidenceCount } from '@/components/evidence/EvidenceUploadQueue'
-import evaluacionesApi, { getSessionToken } from '@/services/evaluacionesApi'
+import evaluacionesApi, { evaluacionesOfflineQueue, getSessionToken } from '@/services/evaluacionesApi'
 import { ApiError } from '@/services/api'
 import { useEvaluationProgress } from '@/hooks/useEvaluationProgress'
 import type { EvaluationTask, SessionState } from '@/types'
@@ -170,6 +171,7 @@ export function EvaluationSession() {
       <header className="child-only-header">
         <span>DAYC en juego</span>
         {pendingEvidenceCount > 0 && <span>{pendingEvidenceCount} evidencia(s) pendiente(s)</span>}
+        <OfflineSyncStatus queue={evaluacionesOfflineQueue} sessionCode={sessionCode} />
         <strong>{currentAreaLabel}{task?.numero_item ? ` · Ítem ${task.numero_item}` : ''}</strong>
       </header>
 

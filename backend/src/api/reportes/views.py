@@ -16,7 +16,7 @@ def generar_reporte_pdf(request, evaluación_id):
         evaluación = (
             Evaluación.objects.select_related("niño")
             .prefetch_related("resultados", "items")
-            .get(id=evaluación_id, psychologist_id=str(request.user.id))
+            .get(id=evaluación_id, professional=request.user)
         )
     except Evaluación.DoesNotExist:
         return Response(
@@ -29,4 +29,5 @@ def generar_reporte_pdf(request, evaluación_id):
             status=status.HTTP_409_CONFLICT,
         )
 
+    evaluación._report_generated_by = request.user
     return generar_pdf_evaluacion(evaluación)

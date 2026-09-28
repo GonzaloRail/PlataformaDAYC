@@ -55,11 +55,13 @@ class EvaluationConsumer(AsyncWebsocketConsumer):
             )
 
     async def evaluation_update(self, event):
+        data = event["data"]
+        data.setdefault("cursor", str(data.get("version", 0)))
         await self.send(
             text_data=json.dumps(
                 {
                     "type": "progress",
-                    "data": event["data"],
+                    "data": data,
                 }
             )
         )
@@ -80,7 +82,7 @@ class EvaluationConsumer(AsyncWebsocketConsumer):
             return False
 
         if user is not None and user.is_authenticated:
-            return str(user.id) == evaluación.psychologist_id
+            return evaluación.professional_id == user.id
 
         token = self.session_token()
         return verify_session_token(evaluación, token)
@@ -113,6 +115,7 @@ class EvaluationConsumer(AsyncWebsocketConsumer):
                 ).count(),
                 "current_item": evaluación.current_item_id or "",
                 "version": evaluación.version,
+                "cursor": str(evaluación.version),
                 "server_time": timezone.now().isoformat(),
             }
         except Evaluación.DoesNotExist:

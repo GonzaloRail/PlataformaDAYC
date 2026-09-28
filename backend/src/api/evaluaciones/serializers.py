@@ -5,6 +5,9 @@ import string
 import hashlib
 from hmac import compare_digest
 from datetime import timedelta
+from django.core.files import File
+from django.db import transaction
+from django.http import FileResponse
 from django.utils import timezone
 
 _SESSION_CODE_ALPHABET = string.ascii_uppercase + string.digits  # 36 chars
@@ -43,7 +46,9 @@ def serialize_evaluación(evaluación):
         "id": str(evaluación.id),
         "nino_id": str(evaluación.niño.id),
         "niño": {"id": str(evaluación.niño.id), "nombre": evaluación.niño.nombre},
-        "psychologist_id": evaluación.psychologist_id,
+        "psychologist_id": str(evaluación.professional_id)
+        if evaluación.professional_id
+        else evaluación.psychologist_id,
         "estado": evaluación.estado,
         "edad_meses": evaluación.edad_meses,
         "session_code": evaluación.session_code,
@@ -109,7 +114,7 @@ def autorizar_evaluacion(request, evaluación, allowed_roles=None):
     """Authorize the owner or a participant token with an allowed actor role."""
     is_psychologist = (
         request.user.is_authenticated
-        and str(request.user.id) == evaluación.psychologist_id
+        and evaluación.professional_id == request.user.id
     )
     bearer = request.headers.get("Authorization", "").replace("Bearer ", "")
     query_token = request.GET.get("session_token") if request.method != "POST" else None
@@ -198,23 +203,64 @@ def get_evaluación_by_session(session_code):
 def get_evaluación_for_psychologist(pk, user):
     """Fetch a single evaluación scoped to the requesting psychologist.
 
-    Centralizes the `psychologist_id=str(user.id)` pattern (and its absence in
-    the AllowAny routes) so view code can use a single helper.
+    Centralizes referential professional ownership for active routes.
     """
     from src.api.evaluaciones.models import Evaluación
 
-    return Evaluación.objects.get(pk=pk, psychologist_id=str(user.id))
+    return Evaluación.objects.get(pk=pk, professional=user)
 
 
 def generar_pdf_evaluacion(evaluación):
-    """Generate a PDF report and return it as a FileResponse attachment."""
-    from django.http import FileResponse
+    """Generate and preserve a versioned PDF report before serving it."""
     from src.infrastructure.pdf.reporte_generator import ReporteGenerator
+    from src.api.evaluaciones.models import Evaluación, VersionedReport
+    from src.application.services.provenance_service import provenance_service
 
-    pdf_path = ReporteGenerator().generar(evaluación)
+    user = getattr(evaluación, "_report_generated_by", None)
+    if user is None:
+        raise ValueError("Se requiere el profesional generador del reporte")
+    with transaction.atomic():
+        locked = Evaluación.objects.select_for_update().get(pk=evaluación.pk)
+        latest_version = locked.versioned_reports.order_by("-version").values_list(
+            "version", flat=True
+        ).first()
+        version = (latest_version or 0) + 1
+        pdf_path = ReporteGenerator().generar(locked)
+        report = VersionedReport(
+            evaluación=locked,
+            version=version,
+            generated_by=user,
+            evaluation_version=locked.version,
+            snapshot={
+                "evaluation": serialize_evaluación(locked),
+                "results": [
+                    serialize_resultado_area(result) for result in locked.resultados.all()
+                ],
+                "items": [serialize_item(item) for item in locked.items.all()],
+            },
+        )
+        filename = (
+            f"reporte_DAYC2_{locked.niño.nombre}_{locked.created_at.date()}_v{version}.pdf"
+        )
+        with open(pdf_path, "rb") as pdf_file:
+            report.file.save(filename, File(pdf_file), save=False)
+        report.save()
+        provenance_service.record(
+            locked,
+            "report_generation",
+            [
+                ("VersionedReport", report.id, "Reporte PDF DAYC-2", {"version": version})
+            ],
+            [
+                ("ScoreResult", result.id, f"Resultado {result.área}", {})
+                for result in locked.resultados.all()
+            ],
+            actor=str(user.id),
+            actor_kind="PERSON",
+        )
     return FileResponse(
-        open(pdf_path, "rb"),
+        report.file.open("rb"),
         content_type="application/pdf",
         as_attachment=True,
-        filename=f"reporte_DAYC2_{evaluación.niño.nombre}_{evaluación.created_at.date()}.pdf",
+        filename=filename,
     )

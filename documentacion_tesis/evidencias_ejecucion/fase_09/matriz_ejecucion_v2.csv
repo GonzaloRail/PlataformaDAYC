@@ -1,0 +1,11 @@
+scenario,description,loads,repetitions,pytest_selector,indicators
+E0,operacion_nominal,1,3,test_normal_delayed_offline_replay_and_conflict,"I07-C;I11;I12"
+E1,carga_concurrente,"1;10;25;50;100",3,test_lightweight_load_without_locust,"I08;I05-descriptivo"
+E2,desconexion_diferida,"1;10;25;50;100",3,test_normal_delayed_offline_replay_and_conflict,"I01;I02-C;I08"
+E3,reconexion,"1;10;25;50;100",3,test_reconnect_and_restart_publish_durable_outbox,"I02-C;I07-C;I08"
+E4,replay,"1;10;25;50;100",3,test_normal_delayed_offline_replay_and_conflict,"I08;I09"
+E5,omision,"1;10;25;50;100",3,test_reordering_and_omission_oracles_are_deterministic,"I16"
+E6,reordenamiento,"1;10;25;50;100",3,test_reordering_and_omission_oracles_are_deterministic,"I10"
+E7,reinicio_y_fallo_almacenamiento,"1;10;25;50;100",3,"test_reconnect_and_restart_publish_durable_outbox or test_storage_failure_does_not_create_durable_asset","I02-C;I08;I17"
+E8,conflicto_concurrente,"1;10;25;50;100",3,test_normal_delayed_offline_replay_and_conflict,"I07-C;I11;I12"
+E9,recorrido_integral,"1;10;25;50;100",3,tests/technical/test_reproducible_harness.py,"I01;I02-C;I07-C;I08-I12;I16;I17"

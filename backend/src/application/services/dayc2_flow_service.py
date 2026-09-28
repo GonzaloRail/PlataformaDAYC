@@ -20,6 +20,7 @@ from src.application.services.item_catalog_service import (
     item_catalog_service,
 )
 from src.application.services.evaluation_state_machine import evaluation_state_machine
+from src.application.services.provenance_service import provenance_service
 
 _RESULT_NORMALIZATION = {
     "CORRECT": EvaluacionItem.Resultado.PASS,
@@ -193,7 +194,7 @@ class Dayc2FlowService:
             item.final_result = normalized_result
         item.save()
 
-        Respuesta.objects.create(
+        response = Respuesta.objects.create(
             evaluación=evaluación,
             evaluación_item=item,
             minijuego_id=catalog_item.get("actividad_digital") or item.item_id,
@@ -214,6 +215,20 @@ class Dayc2FlowService:
             raw_data=raw_data or {},
             is_final=not needs_review,
             tiempo_respuesta_ms=duration_ms,
+        )
+        provenance_service.record(
+            evaluación,
+            "response_capture",
+            [
+                (
+                    "Response",
+                    response.id,
+                    f"Respuesta {item.item_id}",
+                    {"source": source},
+                )
+            ],
+            [("EvaluationItem", item.id, item.item_id, {"area": item.area})],
+            actor=source,
         )
 
         advance_info = self.advance_after_item(evaluación, item)

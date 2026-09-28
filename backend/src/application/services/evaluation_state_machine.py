@@ -44,7 +44,10 @@ class EvaluationStateMachine:
             Evaluación.Estado.VALIDATED,
         },
         Evaluación.Estado.STOPPED: {Evaluación.Estado.PENDING_REVIEW},
-        Evaluación.Estado.VALIDATED: {Evaluación.Estado.ARCHIVED},
+        Evaluación.Estado.VALIDATED: {
+            Evaluación.Estado.ARCHIVED,
+            Evaluación.Estado.REVIEW_IN_PROGRESS,
+        },
         Evaluación.Estado.COMPLETED: {Evaluación.Estado.PENDING_REVIEW},
         Evaluación.Estado.ARCHIVED: set(),
         Evaluación.Estado.CANCELLED: set(),

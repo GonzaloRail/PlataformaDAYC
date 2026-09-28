@@ -20,6 +20,7 @@ from src.api.evaluaciones.models import (
     ResultadoÁrea,
 )
 from src.application.services.baremos_service import baremos_service
+from src.application.services.provenance_service import provenance_service
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,19 @@ class ScoringService:
     @transaction.atomic
     def calcular_resultados(self, evaluación: Evaluación) -> List[ResultadoÁrea]:
         """Calcula los resultados por área y el GDQ global."""
+        previous_results = list(evaluación.resultados.all())
+        if previous_results:
+            activity = provenance_service.activity(evaluación, "score_recalculation")
+            for previous in previous_results:
+                entity = provenance_service.entity(
+                    evaluación, "ScoreResult", previous.id, f"Resultado {previous.área}"
+                )
+                provenance_service.relate(
+                    evaluación,
+                    "invalidatedBy",
+                    source=entity,
+                    activity=activity,
+                )
         evaluación.resultados.all().delete()
 
         items = list(evaluación.items.all())
@@ -89,6 +103,30 @@ class ScoringService:
         for r in resultados:
             r.cociente_general_gdq = gdq
             r.save()
+
+        inputs = [
+            ("EvaluationItem", item.id, item.item_id, {"area": item.area})
+            for item in items
+        ]
+        inputs.extend(
+            ("Response", response.id, f"Respuesta {response.item_id}", {})
+            for response in evaluación.respuestas.all()
+        )
+        provenance_service.record(
+            evaluación,
+            "scoring",
+            [
+                (
+                    "ScoreResult",
+                    result.id,
+                    f"Resultado {result.área}",
+                    {"area": result.área},
+                )
+                for result in resultados
+            ],
+            inputs,
+            actor="DAYC2_SCORING_SERVICE",
+        )
 
         return resultados
 

@@ -4,6 +4,7 @@ import { devLog } from '@/utils/logger';
 
 export interface ProgressInfo {
   eventId: string;
+  operationId: string;
   totalItems: number;
   completedItems: number;
   currentItem: string;
@@ -14,6 +15,7 @@ export interface ProgressInfo {
 
 interface ProgressPayload {
   event_id?: string;
+  operation_id?: string;
   total_items?: number;
   completed_items?: number;
   current_item?: string;
@@ -23,6 +25,7 @@ interface ProgressPayload {
   currentItem?: string;
   version?: number;
   server_time?: string;
+  operationId?: string;
 }
 
 export function parseProgressMessage(rawMessage: string): ProgressInfo | null {
@@ -32,6 +35,7 @@ export function parseProgressMessage(rawMessage: string): ProgressInfo | null {
     const payload = data.data || data;
     return {
       eventId: payload.event_id ?? '',
+      operationId: payload.operation_id ?? payload.operationId ?? '',
       totalItems: payload.total_items ?? payload.totalItems ?? 0,
       completedItems: payload.completed_items ?? payload.completedItems ?? 0,
       currentItem: payload.current_item ?? payload.currentItem ?? '',
@@ -69,6 +73,7 @@ export const useEvaluationProgress = (
     try {
       const data = await api.get<{
         event_id?: string;
+        operation_id?: string;
         total_items: number;
         completed_items: number;
         current_item: string;
@@ -81,6 +86,7 @@ export const useEvaluationProgress = (
 
       setProgress({
         eventId: data.event_id ?? '',
+        operationId: data.operation_id ?? '',
         totalItems: data.total_items,
         completedItems: data.completed_items,
         currentItem: data.current_item,
@@ -132,6 +138,7 @@ export const useEvaluationProgress = (
           ));
           setProgress({
             eventId: nextProgress.eventId,
+            operationId: nextProgress.operationId,
             totalItems: nextProgress.totalItems ?? previous?.totalItems ?? 0,
             completedItems: nextProgress.completedItems ?? previous?.completedItems ?? 0,
             currentItem: nextProgress.currentItem,

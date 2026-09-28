@@ -150,6 +150,14 @@ export function MinigameEvidenceProvider({ task, sessionToken, sink, flushMedia,
       event_payload: eventPayload,
     }, sessionToken).catch((error) => {
       devLog.warn('MinigameEvidence', 'No se pudo registrar evento de minijuego:', error);
+      evidenceUploadQueue.addEvent({
+        evaluacionId,
+        itemId: task.item_id,
+        eventType,
+        eventPayload,
+        relativeTimeMs: elapsed,
+        sessionToken,
+      });
     });
   }, [canUpload, isTypeAllowed, relativeTime, sessionToken, sink, task.actividad_digital, task.evaluacion_id, task.item_id, task.minijuego, warnTypeDisabled, warnUploadDisabled]);
 

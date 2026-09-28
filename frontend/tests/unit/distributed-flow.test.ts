@@ -11,6 +11,7 @@ describe('progress WebSocket contract', () => {
         current_item: 'COGNITIVO_004',
         estado: 'IN_PROGRESS',
         event_id: 'event-123',
+        operation_id: 'operation-123',
         version: 7,
         server_time: '2026-09-05T12:00:00Z',
       },
@@ -20,6 +21,7 @@ describe('progress WebSocket contract', () => {
       currentItem: 'COGNITIVO_004',
       estado: 'IN_PROGRESS',
       eventId: 'event-123',
+      operationId: 'operation-123',
       version: 7,
       serverTime: '2026-09-05T12:00:00Z',
     });
