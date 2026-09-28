@@ -319,6 +319,8 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 
 **Resultado:** el 2026-09-28, el commit congelado `7802712a518f13cdaf47d05fc17a440b44e473ae` completó las 138 celdas de la matriz v2 con veredicto `pass` del oráculo independiente. El detalle, alcance y el intento invalidado previo se registran en `evidencias_ejecucion/fase_09/resultado_confirmatorio_v2.md`.
 
+**Evidencia de entorno real:** la ejecución local con Playwright, Locust, Toxiproxy, PostgreSQL y Redis se registra en `evidencias_ejecucion/fase_08_validacion_entorno_real.md`.
+
 ## Orden de ejecución
 
 | Orden | Fase | Dependencia |
