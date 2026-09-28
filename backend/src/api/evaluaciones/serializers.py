@@ -46,9 +46,11 @@ def serialize_evaluación(evaluación):
         "id": str(evaluación.id),
         "nino_id": str(evaluación.niño.id),
         "niño": {"id": str(evaluación.niño.id), "nombre": evaluación.niño.nombre},
-        "psychologist_id": str(evaluación.professional_id)
-        if evaluación.professional_id
-        else evaluación.psychologist_id,
+        "psychologist_id": (
+            str(evaluación.professional_id)
+            if evaluación.professional_id
+            else evaluación.psychologist_id
+        ),
         "estado": evaluación.estado,
         "edad_meses": evaluación.edad_meses,
         "session_code": evaluación.session_code,
@@ -112,8 +114,10 @@ def serialize_resultado_area(r):
 
 def autorizar_evaluacion(request, evaluación, allowed_roles=None):
     """Authorize the owner or a participant token with an allowed actor role."""
+    from src.api.children.models import is_approved_professional
+
     is_psychologist = (
-        request.user.is_authenticated
+        is_approved_professional(request.user)
         and evaluación.professional_id == request.user.id
     )
     bearer = request.headers.get("Authorization", "").replace("Bearer ", "")
@@ -221,9 +225,11 @@ def generar_pdf_evaluacion(evaluación):
         raise ValueError("Se requiere el profesional generador del reporte")
     with transaction.atomic():
         locked = Evaluación.objects.select_for_update().get(pk=evaluación.pk)
-        latest_version = locked.versioned_reports.order_by("-version").values_list(
-            "version", flat=True
-        ).first()
+        latest_version = (
+            locked.versioned_reports.order_by("-version")
+            .values_list("version", flat=True)
+            .first()
+        )
         version = (latest_version or 0) + 1
         pdf_path = ReporteGenerator().generar(locked)
         report = VersionedReport(
@@ -234,14 +240,13 @@ def generar_pdf_evaluacion(evaluación):
             snapshot={
                 "evaluation": serialize_evaluación(locked),
                 "results": [
-                    serialize_resultado_area(result) for result in locked.resultados.all()
+                    serialize_resultado_area(result)
+                    for result in locked.resultados.all()
                 ],
                 "items": [serialize_item(item) for item in locked.items.all()],
             },
         )
-        filename = (
-            f"reporte_DAYC2_{locked.niño.nombre}_{locked.created_at.date()}_v{version}.pdf"
-        )
+        filename = f"reporte_DAYC2_{locked.niño.nombre}_{locked.created_at.date()}_v{version}.pdf"
         with open(pdf_path, "rb") as pdf_file:
             report.file.save(filename, File(pdf_file), save=False)
         report.save()
@@ -249,7 +254,12 @@ def generar_pdf_evaluacion(evaluación):
             locked,
             "report_generation",
             [
-                ("VersionedReport", report.id, "Reporte PDF DAYC-2", {"version": version})
+                (
+                    "VersionedReport",
+                    report.id,
+                    "Reporte PDF DAYC-2",
+                    {"version": version},
+                )
             ],
             [
                 ("ScoreResult", result.id, f"Resultado {result.área}", {})

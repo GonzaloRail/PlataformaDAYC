@@ -15,5 +15,7 @@ weasyprint>=60.0
 # Development
 pytest>=7.0
 pytest-django>=4.5
+locust>=2.31
+toxiproxy-python>=0.1.1
 black>=23.0
 flake8>=6.0

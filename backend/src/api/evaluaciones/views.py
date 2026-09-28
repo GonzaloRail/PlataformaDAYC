@@ -44,6 +44,7 @@ from .models import (
 )
 from .storage import inspect_uploaded_evidence
 from src.application.services.provenance_service import provenance_service
+from src.application.services.withdrawal_service import apply_withdrawal
 from src.application.services.operation_context import bind_operation, clear_operation
 from src.application.services.telemetry_service import record_telemetry
 
@@ -375,7 +376,8 @@ def _participant_access(request, evaluación):
 
 def _is_owner_psychologist(request, evaluación):
     return (
-        request.user.is_authenticated and evaluación.professional_id == request.user.id
+        is_approved_professional(request.user)
+        and evaluación.professional_id == request.user.id
     )
 
 
@@ -1078,6 +1080,13 @@ def accept_consent(request, session_code):
         consent_text_version=consentimiento.consent_text_version,
         consent_text_hash=consentimiento.consent_text_hash,
         recorded_by_role=SessionAccessToken.ActorRole.ADULT,
+        purpose=str(request.data.get("purpose") or "DAYC2_EVALUATION")[:120],
+        custodian=str(request.data.get("custodian") or "DAYC2")[:160],
+        presenter=str(request.data.get("presenter") or "DAYC2")[:160],
+        representative=str(request.data.get("representative") or "")[:160],
+        valid_until=evaluación.session_expires_at,
+        device_id=_participant_access(request, evaluación).device_id,
+        session_identifier=evaluación.session_code,
     )
     AssentRecord.objects.create(
         evaluación=evaluación,
@@ -1226,7 +1235,10 @@ def withdraw_session(request, session_code):
         modalities=modalities,
         reason=request.data.get("reason", ""),
         recorded_by_role=access_token.actor_role,
+        retention_action="ERASED",
+        processed_at=timezone.now(),
     )
+    withdrawn_evidence = apply_withdrawal(evaluación, modalities)
     if not is_full_withdrawal:
         consentimiento = getattr(evaluación, "consentimiento", None)
         if consentimiento:
@@ -1253,19 +1265,22 @@ def withdraw_session(request, session_code):
                 recorded_by_role=access_token.actor_role,
             )
         _advance_evaluation_version(evaluación)
-        result = {"evaluacion": _serialize_evaluación(evaluación)}
+        result = {
+            "evaluacion": _serialize_evaluación(evaluación),
+            "withdrawn_evidence": withdrawn_evidence,
+        }
         _apply_operation(operation, result)
         _publish_evaluation_progress(evaluación, operation)
         return Response(result)
     now = timezone.now()
     evaluación.access_tokens.filter(revoked_at__isnull=True).update(revoked_at=now)
-    evaluación.evidencias.filter(retention_expires_at__isnull=True).update(
-        retention_expires_at=now
-    )
     if evaluación.estado != Evaluación.Estado.CANCELLED:
         evaluation_state_machine.transition(evaluación, Evaluación.Estado.CANCELLED)
     _advance_evaluation_version(evaluación)
-    result = {"evaluacion": _serialize_evaluación(evaluación)}
+    result = {
+        "evaluacion": _serialize_evaluación(evaluación),
+        "withdrawn_evidence": withdrawn_evidence,
+    }
     _apply_operation(operation, result)
     _publish_evaluation_progress(evaluación, operation)
     return Response(result)
@@ -1808,6 +1823,11 @@ def descargar_evidencia(request, evidence_id):
     if not evidencia.file:
         return Response(
             {"error": "El archivo físico no existe"}, status=status.HTTP_404_NOT_FOUND
+        )
+    if evidencia.withdrawal_action != "ACTIVE":
+        return Response(
+            {"error": "La evidencia fue retirada y ya no está disponible"},
+            status=status.HTTP_410_GONE,
         )
 
     _audit_evidence_access(request, evidencia, "DOWNLOADED")

@@ -17,9 +17,19 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
     ports:
-      - "5434:5432"
+      - "127.0.0.1:5434:5432"
     volumes:
       - prototipo_dayc_data:/var/lib/postgresql/data
+
+  toxiproxy:
+    image: shopify/toxiproxy:2.1.4
+    container_name: prototipo_dayc_toxiproxy
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8474:8474"
+    expose:
+      - "8474"
+      - "8666"
 
 volumes:
   prototipo_dayc_data:

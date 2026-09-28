@@ -101,7 +101,11 @@ urlpatterns = [
         name="verificar_auditoria_evidencia",
     ),
     path("<uuid:pk>/review/", views.review_overview, name="review_overview"),
-    path("<uuid:pk>/review/assignment/receive/", views.receive_review_assignment, name="receive_review_assignment"),
+    path(
+        "<uuid:pk>/review/assignment/receive/",
+        views.receive_review_assignment,
+        name="receive_review_assignment",
+    ),
     path("<uuid:pk>/review/pending/", views.review_pending, name="review_pending"),
     path(
         "<uuid:pk>/items/<str:item_id>/review/", views.review_item, name="review_item"

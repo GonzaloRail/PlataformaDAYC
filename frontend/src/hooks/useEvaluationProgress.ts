@@ -48,6 +48,18 @@ export function parseProgressMessage(rawMessage: string): ProgressInfo | null {
   }
 }
 
+export function shouldApplyProgressMessage(
+  previous: ProgressInfo | null,
+  next: ProgressInfo,
+  seenEventIds: Set<string>,
+): boolean {
+  if (next.eventId) {
+    if (seenEventIds.has(next.eventId)) return false;
+    seenEventIds.add(next.eventId);
+  }
+  return !previous || next.version >= previous.version;
+}
+
 export const useEvaluationProgress = (
   evaluacionId: string,
   sessionToken?: string,
@@ -57,6 +69,7 @@ export const useEvaluationProgress = (
   const [isConnected, setIsConnected] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
   const progressRef = useRef<ProgressInfo | null>(null);
+  const seenEventIdsRef = useRef(new Set<string>());
   const onRemoteUpdateRef = useRef(onRemoteUpdate);
 
   useEffect(() => {
@@ -129,6 +142,8 @@ export const useEvaluationProgress = (
           const nextProgress = parseProgressMessage(event.data);
           if (!nextProgress) return;
           const previous = progressRef.current;
+          if (!shouldApplyProgressMessage(previous, nextProgress, seenEventIdsRef.current)) return;
+          const hasGap = Boolean(previous && nextProgress.version > previous.version + 1);
           const changed = Boolean(previous && (
             previous.totalItems !== nextProgress.totalItems
             || previous.completedItems !== nextProgress.completedItems
@@ -148,7 +163,7 @@ export const useEvaluationProgress = (
           });
           // The consumer sends a snapshot immediately after connection. It is
           // not a remote mutation and must not trigger a reload loop.
-          if (changed) onRemoteUpdateRef.current?.();
+          if (changed || hasGap) onRemoteUpdateRef.current?.();
         };
 
         ws.onclose = () => {

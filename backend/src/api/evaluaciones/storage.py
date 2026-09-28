@@ -52,7 +52,9 @@ def inspect_uploaded_evidence(uploaded_file, evidence_type):
         "AUDIO": "audio/",
         "VIDEO": "video/",
     }.get(evidence_type)
-    if not media_type or (expected_prefix and not media_type.startswith(expected_prefix)):
+    if not media_type or (
+        expected_prefix and not media_type.startswith(expected_prefix)
+    ):
         raise ValueError("La firma binaria no coincide con el tipo de evidencia")
 
     digest = hashlib.sha256()

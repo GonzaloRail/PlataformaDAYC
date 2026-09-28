@@ -6,8 +6,8 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 
 - [x] PostgreSQL es la fuente canónica y durable prevista.
 - [x] Redis y WebSocket se usan solo para notificaciones, no como fuente de verdad.
-- [ ] Cada operación crítica tiene identidad estable e idempotencia.
-- [ ] No se aplica última escritura gana como regla general.
+- [x] Cada operación crítica tiene identidad estable e idempotencia.
+- [x] No se aplica última escritura gana como regla general.
 - [x] Ningún resultado final se genera sin revisión profesional explícita.
 - [ ] No se ejecutan pruebas con personas antes de las puertas técnicas y éticas.
 - [ ] Cada requisito tiene código, pruebas y evidencia reproducible; la matriz inicial está en `09_matriz_requisito_codigo_prueba_evidencia.md`.
@@ -36,7 +36,7 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 - [x] Django carga todas sus rutas.
 - [x] Las migraciones funcionan desde una base limpia.
 - [x] Frontend y backend compilan.
-- [ ] Todos los fallos existentes están corregidos o documentados con evidencia.
+- [x] Todos los fallos existentes están corregidos o documentados con evidencia.
 - [x] Existe una línea base reproducible con PostgreSQL y Redis mediante Docker Compose.
 
 ## Fase 1: Seguridad, identidad y exclusión diagnóstica
@@ -49,10 +49,10 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 - [x] Crear perfil profesional con estados `PENDING`, `APPROVED`, `SUSPENDED` y `REVOKED`.
 - [x] Exigir aprobación antes de todas las funciones profesionales.
 - [x] Sustituir el uso activo de `psychologist_id` textual por relación referencial `professional`.
-- [ ] Implementar permisos por operación y recurso.
+- [x] Implementar permisos por operación y recurso.
 - [x] Añadir pruebas de acceso cruzado entre profesionales.
 
-**Avance:** las rutas de niños, evaluaciones, revisión, reportes y métricas requieren un perfil `APPROVED`; las rutas de autenticación y participación usan controles separados.
+**Avance:** las rutas de niños, evaluaciones, revisión, reportes y métricas requieren un perfil `APPROVED`; los accesos de propietario también comprueban ese estado y las rutas de participación derivan rol, sesión y dispositivo desde el token emitido.
 
 ### 1.2 Credenciales de participantes
 
@@ -73,7 +73,7 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 - [x] Eliminar contenido diagnóstico de los reportes PDF.
 - [x] Aislar el módulo histórico al retirarlo de `INSTALLED_APPS`.
 - [x] Añadir prueba negativa para confirmar que la API no está publicada.
-- [ ] Definir migración y política de retención para registros diagnósticos históricos.
+- [x] Definir migración y política de retención para registros diagnósticos históricos.
 
 ### 1.4 Seguridad de infraestructura
 
@@ -95,6 +95,8 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 - [x] Redis no es accesible externamente.
 - [ ] No existen evidencias humanas o no verificadas en el repositorio.
 
+**Pendiente externo:** la inspección de archivos y la aprobación del custodio deben realizarse antes de afirmar que no existen evidencias humanas o no verificadas.
+
 ## Fase 2: Gobernanza y derechos de los participantes
 
 **Prioridad:** crítica.
@@ -103,7 +105,7 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 
 - [x] Crear registro histórico de consentimiento por decisión.
 - [x] Guardar versión y hash del texto presentado.
-- [ ] Registrar finalidad, custodio, presentador, representante, vigencia, fecha, dispositivo y sesión.
+- [x] Registrar finalidad, custodio, presentador, representante, vigencia, fecha, dispositivo y sesión.
 - [x] Autorizar o rechazar por separado logs/eventos, capturas/imágenes, audio y video.
 
 ### 2.2 Asentimiento
@@ -126,9 +128,9 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 
 - [x] Implementar retiro parcial y total.
 - [x] Bloquear nuevas capturas para modalidades retiradas.
-- [ ] Cancelar operaciones y transformaciones afectadas.
-- [ ] Aplicar retiro a originales, derivados y exportaciones.
-- [ ] Registrar eliminación, anonimización o conservación justificada.
+- [x] Cancelar operaciones y transformaciones afectadas.
+- [x] Aplicar retiro a originales, derivados y exportaciones.
+- [x] Registrar eliminación, anonimización o conservación justificada.
 - [ ] Probar carreras entre retiro y captura.
 
 ### Puerta de salida
@@ -208,7 +210,7 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 
 - [x] Implementar sincronización incremental por cursor y snapshot canónico.
 - [x] Incluir cursor y versión en WebSocket.
-- [ ] Deduplicar notificaciones y detectar huecos o eventos atrasados.
+- [x] Deduplicar notificaciones y detectar huecos o eventos atrasados.
 - [x] Usar REST como recuperación y no como consistencia primaria.
 - [x] Comparar hash de estado normalizado para convergencia.
 - [x] Mostrar conexión, pendientes, estado por operación, conflictos, fallos y advertencia de cierre.
@@ -293,7 +295,7 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 - [x] Propagar `operation_id` entre frontend, API, inbox, lógica, outbox, worker, WebSocket y almacenamiento.
 - [x] Medir latencia, throughput, errores, backlog, reintentos, conflictos, duplicados, recuperación y convergencia.
 - [x] Medir recursos, completitud de metadatos, linaje, recepción, revisión y cierre.
-- [ ] Incorporar Pytest, Vitest con `fake-indexeddb`, Playwright, Locust, Toxiproxy y servicios reales de PostgreSQL y Redis.
+- [x] Incorporar Pytest, Vitest con `fake-indexeddb`, Playwright, Locust, Toxiproxy y servicios reales de PostgreSQL y Redis.
 - [x] Automatizar operación normal, red lenta, desconexión, reconexión, replay, reordenamiento, omisión, conflictos, reinicios y fallo de almacenamiento.
 - [x] Ejecutar escenarios con 1, 10, 25, 50 y 100 sesiones concurrentes.
 

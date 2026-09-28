@@ -532,6 +532,13 @@ class ConsentRecord(models.Model):
     consent_text_version = models.CharField(max_length=20)
     consent_text_hash = models.CharField(max_length=64, default="")
     recorded_by_role = models.CharField(max_length=20)
+    purpose = models.CharField(max_length=120, default="DAYC2_EVALUATION")
+    custodian = models.CharField(max_length=160, default="DAYC2")
+    presenter = models.CharField(max_length=160, default="DAYC2")
+    representative = models.CharField(max_length=160, default="")
+    valid_until = models.DateTimeField(null=True, blank=True)
+    device_id = models.CharField(max_length=128, default="")
+    session_identifier = models.CharField(max_length=128, default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -587,6 +594,8 @@ class WithdrawalRecord(models.Model):
     modalities = models.JSONField(default=list)
     reason = models.TextField(blank=True)
     recorded_by_role = models.CharField(max_length=20)
+    retention_action = models.CharField(max_length=20, default="ERASED")
+    processed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -631,6 +640,8 @@ class Evidencia(models.Model):
     is_sensitive = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     retention_expires_at = models.DateTimeField(null=True, blank=True)
+    withdrawn_at = models.DateTimeField(null=True, blank=True)
+    withdrawal_action = models.CharField(max_length=20, default="ACTIVE")
     capture_actor = models.CharField(max_length=80, default="UNKNOWN")
     capture_session = models.CharField(max_length=128, default="UNKNOWN")
     capture_task = models.CharField(max_length=128, default="UNKNOWN")
@@ -738,6 +749,8 @@ class EvidenceAsset(models.Model):
     size_bytes = models.PositiveBigIntegerField()
     media_type = models.CharField(max_length=100)
     signature_type = models.CharField(max_length=100)
+    withdrawn_at = models.DateTimeField(null=True, blank=True)
+    withdrawal_action = models.CharField(max_length=20, default="ACTIVE")
     created_at = models.DateTimeField(default=timezone.now, editable=False)
 
     class Meta:
