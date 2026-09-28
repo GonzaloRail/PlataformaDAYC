@@ -178,6 +178,45 @@ def test_evidence_actor_is_derived_from_token(evaluation):
     assert evidence.capture_authorization == "CHILD:child-device"
     assert evidence.capture_custodian == "CHILD_DEVICE"
     assert evidence.capture_quality == "UNSPECIFIED"
+
+
+@pytest.mark.django_db
+def test_withdrawal_race_serializations_erase_prior_capture_and_reject_later_capture(
+    evaluation,
+):
+    """The evaluation lock admits only these two safe capture/withdraw orders."""
+    current, item, _ = evaluation
+    Consentimiento.objects.create(evaluación=current, accepted=True)
+    child_token = ensure_session_token(current, SessionAccessToken.ActorRole.CHILD)
+    adult_token = ensure_session_token(current, SessionAccessToken.ActorRole.ADULT)
+    evidence_url = f"/api/evaluaciones/{current.id}/items/{item.item_id}/evidence/"
+
+    captured = APIClient().post(
+        evidence_url,
+        {"type": "LOG"},
+        format="multipart",
+        **bearer(child_token),
+    )
+    assert captured.status_code == 201
+
+    withdrawn = APIClient().post(
+        f"/api/evaluaciones/session/{current.session_code}/withdraw/",
+        {"reason": "Prueba de carrera"},
+        format="json",
+        **bearer(adult_token),
+    )
+    assert withdrawn.status_code == 200
+    evidence = Evidencia.objects.get(pk=captured.data["id"])
+    assert evidence.withdrawal_action == "ERASED"
+
+    after_withdrawal = APIClient().post(
+        evidence_url,
+        {"type": "LOG"},
+        format="multipart",
+        **bearer(child_token),
+    )
+    assert after_withdrawal.status_code == 403
+    assert Evidencia.objects.filter(evaluación=current).count() == 1
     assert evidence.absence_reason == "NO_FILE_CAPTURED"
 
 

@@ -131,7 +131,7 @@ Llevar el prototipo desde su estado actual hasta una versión verificable contra
 - [x] Cancelar operaciones y transformaciones afectadas.
 - [x] Aplicar retiro a originales, derivados y exportaciones.
 - [x] Registrar eliminación, anonimización o conservación justificada.
-- [ ] Probar carreras entre retiro y captura.
+- [x] Probar carreras entre retiro y captura.
 
 ### Puerta de salida
 
